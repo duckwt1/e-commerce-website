@@ -1,0 +1,107 @@
+
+/*css cho kích thước điẹn thoại*/
+
+.collapse {
+    transition: none !important; /* Giảm thời gian chuyển động */
+}
+
+.navCollapse.collapse.show {
+    background-color: white; /* Màu nền của menu khi mở ra */
+    position: relative; /* Đảm bảo menu đẩy các phần tử khác xuống */
+    width: 100%; /* Đảm bảo menu phủ kín chiều rộng */
+    padding: 1rem;
+}
+
+.custom-hr {
+    border-top: 1px solid #ccc;
+    margin: 0 1rem;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+
+}
+@media  (max-width: 992px) {
+.form-search {
+    padding-top: 20px  !important;
+    padding-bottom: 10px;
+     color: #61dafb;
+    font-size: 20px;
+}
+    :root {
+        --light-color: #23a9d9; /* Light blue color */
+    }
+    .item {
+        font-weight: bold;
+
+    }
+    .item1:hover {
+        background: #b8d6f1;
+
+    }
+
+    .item2 {
+        font-size: 15px;
+    }
+}
+@media  (max-width: 650px) {
+    .item2 {
+        font-size: 8px;
+    }
+    .img {
+        width: 13px;
+        height: 13px;
+    }
+}
+
+.item1 {
+    padding-right: 10px;
+    font-weight: 500;
+
+}
+.item1:hover {
+    text-shadow: 0 0 10px rgb(0, 149, 255), 0 0 20px rgb(0, 149, 255);
+}
+.item:hover {
+    transition: all 0.2s ease-in-out; /* Hiệu ứng chuyển tiếp */
+    font-weight: 900; /* Đậm chữ */
+    color: #0095ff; /* Chữ thành màu đỏ */
+
+    /* Bóng chữ */
+    text-shadow: 0 0 10px rgb(224, 224, 224), 0 0 20px rgb(255, 255, 255);
+
+}
+
+.item2 {
+    font-weight: bold;
+    padding-right: 20px;
+    margin-left:20px;
+    color: #ffffff;
+}
+.item2:hover {
+    transition: all 0.2s ease-in-out; /* Hiệu ứng chuyển tiếp */
+    font-weight: 900; /* Đậm chữ */
+    color: #ececec; /* Chữ thành màu đỏ */
+
+    /* Bóng chữ */
+    text-shadow: 0 0 10px rgb(224, 224, 224), 0 0 20px rgb(255, 255, 255);
+}
+
+
+.custom-hr {
+    border: none; /* Loại bỏ đường viền mặc định */
+    border-top: 1px solid #a19b9b; /* Tạo đường gạch ngang */
+    margin: 20px 0; /* Khoảng cách trên và dưới */
+    width: 95%; /* Chiều rộng của đường */
+    height: 1px;
+}
+
+.sign {
+    color: #0095ff;
+    font-size: 20px;
+}
+
+
