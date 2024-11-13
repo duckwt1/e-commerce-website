@@ -1,20 +1,41 @@
 import React from 'react';
-import Banner from "./components/Banner";
-import Carousel from "./components/Carousel";
+import HomeBanner from "./components/homepage/Homebanner";
+
+import ListProductHome from "./components/homepage/ListProductHome";
+import Carousel from "./components/homepage/subBannerHome";
+
 
 function homepage() {
+    const items = [
+        { icon: "📄", label: "Voucher Up to 1 Million" },
+        { icon: "🚚", label: "DEALHUB Free Shipping" },
+        { icon: "⚡", label: "Sale Hour Hunting" },
+        { icon: "💰", label: "Discount Code only on DEALHUB" },
+        { icon: "💸", label: "Super Cheap DEALHUB" },
+        { icon: "🔥", label: " Style Voucher 30%" },
+        { icon: "🌎", label: "International Goods" },
+        { icon: "🎬", label: "Services & Movie Tickets" }
+    ];
     return (
-        <>
-            <div className='d-md-none d-sm-none d-lg-block'>
-                <Banner/>
-                <div className='d-flex justify-content-center align-items-center pb-4'>
-                    <hr className='w-100 mx-5'/>
+        <div className={'homepage'}>
+
+            <HomeBanner/>
+
+            <div className="menu-container">
+                <h3 className={'menu-title'}>HOT OFFERS ONLY ON DEALHUB</h3>
+                <div className={'menu-items'}>
+                    {items.map((item, index) => (
+                        <div className="menu-item" key={index}>
+                            <div className="menu-icon">{item.icon}</div>
+                            <div className="menu-label">{item.label}</div>
+                        </div>
+                    ))}
                 </div>
             </div>
-            <div className='container'>
-                <Carousel/>
-            </div>
-        </>
+
+        <ListProductHome/>
+
+        </div>
     );
 }
 

@@ -1,5 +1,5 @@
 import React from "react";
-import "../../css/footer.css";
+import './../../css/Footer.css';
 
 
 const Footer = () => {
@@ -7,181 +7,137 @@ const Footer = () => {
     const categories = [
         {
             id: 1,
-            name: 'Đồ Chơi - Mẹ & Bé',
-            products: ['Thời Trang Cho Mẹ Và Bé', 'Đồ chơi', 'Chăm sóc mẹ bầu']
+            name: 'Toys - Mother & Baby',
+            products: ['Fashion for Mother and Baby', 'Toys', 'Maternity Care']
         },
         {
             id: 2,
-            name: 'Thực Phẩm Tươi Sống',
-            products: ['Trái Cây', 'Thịt, Trứng, Cá', 'Rau củ quả']
+            name: 'Fresh Food',
+            products: ['Fruits', 'Meat, Eggs, Fish', 'Vegetables']
         },
         {
             id: 3,
-            name: 'Thời Trang Nữ',
-            products: ['Áo nữ', 'Bộ trang phục', 'Áo khoác nữ']
+            name: 'Women’s Fashion',
+            products: ['Women’s Tops', 'Outfits', 'Women’s Jackets']
         },
         {
             id: 4,
-            name: 'Balo và Vali',
-            products: ['Balo du lịch', 'Túi đựng laptop', 'Vali']
+            name: 'Bags and Luggage',
+            products: ['Travel Backpacks', 'Laptop Bags', 'Suitcases']
         },
         {
             id: 5,
-            name: 'Hàng Quốc Tế',
-            products: ['Nhà Cửa', 'Thời Trang', 'Sách']
+            name: 'International Goods',
+            products: ['Home Goods', 'Fashion', 'Books']
         },
         {
             id: 6,
-            name: 'Đồ Chơi - Mẹ & Bé',
-            products: ['Thời Trang Cho Mẹ Và Bé', 'Đồ chơi', 'Chăm sóc mẹ bầu']
+            name: 'Toys - Mother & Baby',
+            products: ['Fashion for Mother and Baby', 'Toys', 'Maternity Care']
         },
         {
             id: 7,
-            name: 'Thực Phẩm Tươi Sống',
-            products: ['Trái Cây', 'Thịt, Trứng, Cá', 'Rau củ quả']
+            name: 'Fresh Food',
+            products: ['Fruits', 'Meat, Eggs, Fish', 'Vegetables']
         },
         {
             id: 8,
-            name: 'Thời Trang Nữ',
-            products: ['Áo nữ', 'Bộ trang phục', 'Áo khoác nữ']
+            name: 'Women’s Fashion',
+            products: ['Women’s Tops', 'Outfits', 'Women’s Jackets']
         },
         {
             id: 9,
-            name: 'Balo và Vali',
-            products: ['Balo du lịch', 'Túi đựng laptop', 'Vali']
+            name: 'Bags and Luggage',
+            products: ['Travel Backpacks', 'Laptop Bags', 'Suitcases']
         },
         {
             id: 10,
-            name: 'Hàng Quốc Tế',
-            products: ['Nhà Cửa', 'Thời Trang', 'Sách']
-        }
-        ,
+            name: 'International Goods',
+            products: ['Home Goods', 'Fashion', 'Books']
+        },
         {
             id: 11,
-            name: 'Thực Phẩm Tươi Sống',
-            products: ['Trái Cây', 'Thịt, Trứng, Cá', 'Rau củ quả']
+            name: 'Fresh Food',
+            products: ['Fruits', 'Meat, Eggs, Fish', 'Vegetables']
         },
         {
             id: 12,
-            name: 'Thời Trang Nữ',
-            products: ['Áo nữ', 'Bộ trang phục', 'Áo khoác nữ']
+            name: 'Women’s Fashion',
+            products: ['Women’s Tops', 'Outfits', 'Women’s Jackets']
         },
         {
             id: 13,
-            name: 'Balo và Vali',
-            products: ['Balo du lịch', 'Túi đựng laptop', 'Vali']
+            name: 'Bags and Luggage',
+            products: ['Travel Backpacks', 'Laptop Bags', 'Suitcases']
         },
         {
             id: 14,
-            name: 'Hàng Quốc Tế',
-            products: ['Nhà Cửa', 'Thời Trang', 'Sách']
+            name: 'International Goods',
+            products: ['Home Goods', 'Fashion', 'Books']
         },
         {
             id: 15,
-            name: 'Đồ Chơi - Mẹ & Bé',
-            products: ['Thời Trang Cho Mẹ Và Bé', 'Đồ chơi', 'Chăm sóc mẹ bầu']
+            name: 'Toys - Mother & Baby',
+            products: ['Fashion for Mother and Baby', 'Toys', 'Maternity Care']
         },
         {
             id: 16,
-            name: 'Thực Phẩm Tươi Sống',
-            products: ['Trái Cây', 'Thịt, Trứng, Cá', 'Rau củ quả']
+            name: 'Fresh Food',
+            products: ['Fruits', 'Meat, Eggs, Fish', 'Vegetables']
         },
         {
             id: 17,
-            name: 'Thời Trang Nữ',
-            products: ['Áo nữ', 'Bộ trang phục', 'Áo khoác nữ']
+            name: 'Women’s Fashion',
+            products: ['Women’s Tops', 'Outfits', 'Women’s Jackets']
         },
         {
             id: 18,
-            name: 'Balo và Vali',
-            products: ['Balo du lịch', 'Túi đựng laptop', 'Vali']
-        },
-        {
-            id: 19,
-            name: 'Hàng Quốc Tế',
-            products: ['Nhà Cửa', 'Thời Trang', 'Sách']
+            name: 'Bags and Luggage',
+            products: ['Travel Backpacks', 'Laptop Bags', 'Suitcases']
         }
+
     ];
     return (
-        <footer className='footer text-center ' style={{background: '#ffffff'}}>
+        <footer className='footer text-center ' >
             {/* <!-- Grid container --> */}
-            <div className='container-fluid' style={{paddingTop: '20px'}}>
+            <div className='container-fluid' style={{padding:'0'}}>
                 {/* <!-- Section: Social media --> */}
-                <section className='social mb-4' style={{marginTop: '1rem'}}>
-                    {/* <!-- Facebook --> */}
-                    <a className='btn btn-outline-dark btn-floating m-1 me-3' href='#!' role='button'>
-                        <i className='fab fa-facebook-f'></i>
-                    </a>
-
-                    {/* <!-- Twitter --> */}
-                    <a className='btn btn-outline-dark btn-floating m-1 me-3' href='#!' role='button'>
-                        <i className='fab fa-twitter'></i>
-                    </a>
-
-                    {/* <!-- Google --> */}
-                    <a className='btn btn-outline-dark btn-floating m-1 me-3' href='#!' role='button'>
-                        <i className='fab fa-google'></i>
-                    </a>
-
-                    {/* <!-- Instagram --> */}
-                    <a className='btn btn-outline-dark btn-floating m-1 me-3' href='#!' role='button'>
-                        <i className='fab fa-instagram'></i>
-                    </a>
-
-                    {/* <!-- Linkedin --> */}
-                    <a className='btn btn-outline-dark btn-floating m-1 me-3 ' href='#!' role='button'>
-                        <i className='fab fa-linkedin-in'></i>
-                    </a>
-
-                    {/* <!-- Github --> */}
-                    <a className='btn btn-outline-dark btn-floating m-1' href='#!' role='button'>
-                        <i className='fab fa-github'></i>
-                    </a>
-
-                    <div className="custom-hr-none"></div>
-
-
-                </section>
                 {/* <!-- Section: Social media --> */}
 
                 {/* <!-- Section: Form --> */}
-                <section className='dangki' style={{marginTop: '3rem'}}>
-                    <form action=''>
-                        {/* <!--Grid row--> */}
-                        <div className='row d-flex justify-content-center' style={{marginBottom: '4rem'}}>
-                            <div className='col-auto me-2'>
-                                <p className='pt-2 text-dark'>
-                                    <strong>Đăng ký nhận bản tin</strong>
-                                </p>
+                <section className="newsletter-footer">
+                    <div className={"container-fluid"}>
+                        <div className={"row"}>
+                            <div className={"subcrise col-lg-7 col-md-12"}>
+                                <p className={"p1"} style={{color:'#fff', fontSize:'20px', fontFamily:'revert'}}>$20 discount for your first order </p>
+                                <h5 className={"pb-2"} style={{color:'#fff', fontSize:'44px', fontFamily:'sans-serif',fontWeight:'inherit'}}>Join our newsletter and get...</h5>
+                                <div className={"subcriseContent"}>
+                                <p className={"p1"} style={{color:'#fff', fontSize:'20px',fontFamily:'revert',}}>Join our email subscription now to get updates on
+                                    promotions and coupons.
+                                    Stay up to date with the latest news and
+                                    products</p>
                             </div>
-
-                            <div className='col-md-5 col-12'>
-                                {/* <!-- Email input --> */}
-                                <div className=' form-dark mb-4'>
+                                <form className={"d-flex"}>
                                     <input
-                                        type='email'
-                                        id='form5Example21'
-                                        className='form-control'
-                                        placeholder='Nhập Email'
+                                        type="email"
+                                        id="email"
+                                        name="email"
+                                        placeholder="Enter your email"
+                                        className={"form-control me-2"}
                                     />
-                                </div>
+                                    <button type="submit" className={"btn btn-primary"}>Subscribe</button>
+                                </form>
                             </div>
-
-                            <div className='col-auto ms-2'>
-                                {/* <!-- Submit button --> */}
-                                <button
-                                    type='button' className='btn btn-outline-dark mb-4'>Đăng ký
-                                </button>
+                            <div className={"col-lg-5 col-md-12"}>
+                                <img src={"https://fullstack-ecommerce.netlify.app/static/media/newsletter.5931358dd220a40019fc.png"} alt="footerbanner" className={"w-100"}/>
                             </div>
                         </div>
-                        {/* <!--Grid row--> */}
-                    </form>
+                    </div>
                 </section>
+
                 {/* <!-- Section: Form --> */}
 
                 {/* <!-- Section: Links --> */}
-
-                <div className="custom-hr"></div>
 
 
                 <section className='section2 d-flex justify-content-center align-items-center' style={{}}>
@@ -190,65 +146,53 @@ const Footer = () => {
                         <div className="row">
 
                             <div className="div22 col-lg-3 col-md-6 mb-3 ">
-                                <h5 className={"pb-3"}>Hỗ trợ khách hàng</h5>
+                                <h5 className={"pb-3"}>Customer Support</h5>
                                 <ul className="list-unstyled">
                                     <li>Hotline: <strong>1900-6035</strong></li>
-                                    <li>(1000 đ/phút, 8-21h kể cả T7, CN)</li>
-                                    <li>Các câu hỏi thường gặp</li>
-                                    <li>Gửi yêu cầu hỗ trợ</li>
-                                    <li>Hướng dẫn đặt hàng</li>
-                                    <li>Phương thức vận chuyển</li>
-                                    <li>Chính sách kiểm hàng</li>
-                                    <li>Chính sách đổi trả</li>
-                                    <li>Hướng dẫn trả góp</li>
-                                    <li>Chính sách hàng nhập khẩu</li>
-                                    <li>Hỗ trợ khách hàng: hotro@tiki.vn</li>
+                                    <li>(1000 VND/min, 8 AM - 9 PM including Saturday, Sunday)</li>
+                                    <li>Frequently Asked Questions</li>
+                                    <li>Submit a Support Request</li>
+                                    <li>Order Guide</li>
+                                    <li>Shipping Methods</li>
+                                    <li>Check Order Policy</li>
+                                    <li>Return Policy</li>
+                                    <li>Installment Payment Guide</li>
+                                    <li>Imported Goods Policy</li>
+                                    <li>Customer Support: hotro@DEALHUB.vn</li>
                                 </ul>
-
                             </div>
 
-
                             <div className="div22 col-lg-3 col-md-6 mb-3 ">
-                                <h5 className={"pb-3"}>Về Tiki</h5>
+                                <h5 className={"pb-3"}>About DEALHUB</h5>
                                 <ul className="list-unstyled">
-                                    <li>Giới thiệu Tiki</li>
-                                    <li>Tiki Blog</li>
-                                    <li>Tuyển dụng</li>
-                                    <li>Chính sách bảo mật thanh toán</li>
-                                    <li>Chính sách bảo mật thông tin cá nhân</li>
-                                    <li>Chính sách giải quyết khiếu nại</li>
-                                    <li>Điều khoản sử dụng</li>
-                                    <li>Giới thiệu Tiki Xu</li>
-                                    <li>Tiếp thị liên kết cùng Tiki</li>
-                                    <li>Bán hàng doanh nghiệp</li>
+                                    <li>About DEALHUB</li>
+                                    <li>DEALHUB Blog</li>
+                                    <li>Recruitment</li>
+                                    <li>Payment Privacy Policy</li>
+                                    <li>Personal Information Privacy Policy</li>
+                                    <li>Complaint Resolution Policy</li>
+                                    <li>Terms of Use</li>
+                                    <li>Introduction to DEALHUB Xu</li>
+                                    <li>Affiliate Marketing with DEALHUB</li>
+                                    <li>Business Sales</li>
                                 </ul>
                             </div>
 
-
                             <div className="div22 col-lg-3 col-md-6 mb-3 ">
-                                <h5 className={"pb-3"}>Hợp tác và liên kết</h5>
+                                <h5 className={"pb-3"}>Collaboration and Partnership</h5>
                                 <ul className="list-unstyled">
-                                    <li>Quy chế hoạt động Sàn GDTMĐT</li>
-                                    <li>Bán hàng cùng Tiki</li>
+                                    <li>Regulations of E-commerce Platform Operations</li>
+                                    <li>Sell with DEALHUB</li>
                                 </ul>
-                                <h5 className={'pt-2'}>Chứng nhận bởi</h5>
-                                <img src={"./chungnhanboi.png"} alt="Chứng nhận 1" className="me-2"/>
-
+                                <h5 className={'pt-4 pb-2'}>Certified by</h5>
+                                <img src={"./chungnhanboi.png"} alt="Certification 1" className="me-2"/>
                             </div>
 
-
                             <div className="div22 col-lg-3 col-md-6 mb-3 ">
-                                <h5 className={"pb-3"}>Phương thức thanh toán</h5>
-                                {/*<img src="..." alt="Visa" className="me-2"/>*/}
-                                {/*<img src="..." alt="MasterCard" className="me-2"/>*/}
-                                {/*<img src="..." alt="JCB" className="me-2"/>*/}
-                                {/*<img src="..." alt="MoMo" className="me-2"/>*/}
-                                {/*<img src="..." alt="ZaloPay" className="me-2"/>*/}
-                                {/*<img src="..." alt="ATM" className="me-2"/>*/}
-                                {/*<img src="..." alt="VNPay" className="me-2"/>*/}
+                                <h5 className={"pb-3"}>Payment Methods</h5>
                                 <img src={"./paymentmethod.png"} alt="payment" className="me-2"/>
-                                <h5 className="mt-3">Dịch vụ giao hàng</h5>
-                                <img src="/tikinow.png" alt="TikiNOW"/>
+                                <h5 className="mt-3 pb-2">Delivery Service</h5>
+                                <img src="/tikinow.png" alt="DEALHUBNOW"/>
                             </div>
 
 
@@ -262,32 +206,26 @@ const Footer = () => {
             <div className="custom-hr"></div>
 
             {/* <!-- Section: Links --> */}
-            <div className='container-fluid'>
+            <div className='container-fluid f3'>
                 <div className='row'>
                     {/* Cột nội dung văn bản */}
                     <div className='div3 col-lg-6 col-md-12 mb-4 '>
-                        <h3 className={"h31"}>Tiki - Thật nhanh, thật chất lượng, thật rẻ</h3>
+                        <h3 className={"h31"}>DEALHUB - Fast, Quality, Affordable</h3>
                         <p className={"p31"}>
-                            Tiki có tất cả. Với hàng triệu sản phẩm từ các thương hiệu, cửa hàng uy tín, hàng nghìn loại
-                            mặt hàng từ Điện thoại
-                            smartphone tới Rau củ quả tươi, kèm theo dịch vụ giao hàng siêu tốc TikiNOW, Tiki mang đến
-                            cho bạn một
-                            trải nghiệm mua sắm online bắt đầu bằng chữ tín. Thêm vào đó, ở Tiki bạn có thể dễ dàng sử
-                            dụng vô vàn
-                            các tiện ích khác như mua thẻ cào, thanh toán hoá đơn điện nước, các dịch vụ bảo hiểm.
+                            DEALHUB has it all. With millions of products from reputable brands and stores,
+                            thousands of items ranging from smartphones to fresh fruits and vegetables, along with the super-fast delivery service DEALHUBNOW,
+                            DEALHUB offers you an online shopping experience that starts with trust.
+                            Moreover, at DEALHUB, you can easily access a myriad of other conveniences,
+                            such as purchasing prepaid cards, paying electricity and water bills, and various insurance services.
                         </p>
                         <p className={"p31"}>
-                            Khuyến mãi, ưu đãi tràn ngập. Bạn muốn săn giá sốc, Tiki có giá sốc mỗi ngày cho bạn! Bạn là
-                            tín đồ của các thương hiệu, các cửa hàng
-                            Official chính hãng đang chờ đón bạn. Không cần săn mã freeship, vì Tiki đã có hàng triệu
-                            sản phẩm trong
-                            chương trình Freeship+, không giới hạn lượt đặt, tiết kiệm thời gian vàng bạc của bạn. Mua
-                            thêm gói
-                            TikiNOW tiết kiệm để nhận 100% free ship 2h & trong ngày, hoặc mua gói TikiNOW cao cấp để
-                            nhận được 100%
-                            freeship, áp dụng cho 100% sản phẩm, 100% tỉnh thành Việt Nam. Bạn muốn tiết kiệm hơn nữa?
-                            Đã có
-                            TikiCARD, thẻ tín dụng Tiki hoàn tiền 15% trên mọi giao dịch (tối đa hoàn 600k/tháng).
+                            Promotions and deals are abundant. If you want to hunt for great prices,
+                            DEALHUB has shocking prices every day just for you! If you are a fan of official brands and stores, they are waiting for you.
+                            No need to search for free shipping codes, as DEALHUB already offers millions of products in the Freeship+ program, with no limit on orders,
+                            saving you valuable time. Buy the DEALHUBNOW savings package to receive 100% free shipping within 2 hours and the same day,
+                            or purchase the premium DEALHUBNOW package to get 100% free shipping applicable to 100% of products in all provinces of Vietnam.
+                            Want to save even more? DEALHUBCARD is available,
+                            a credit card that offers a 15% cashback on all transactions (with a maximum cashback of 600,000 VND per month).
                         </p>
                     </div>
 
@@ -312,12 +250,12 @@ const Footer = () => {
                 <div className="catelogies container-fluid">
                     <div className="row">
                         {categories.map((category) => (
-                            <div className="col-lg-2 col-md-4 col-sm-4 " key={category.id}>
-                                <h5 className={'pb-2 pt-4'} style={{color:"#36abff", fontWeight:"600"}}>{category.name}</h5>
+                            <div className="col-lg-2 col-md-4 col-sm-6 col-xs-2" key={category.id}>
+                                <h5 className={'pb-2 pt-4'} style={{color:"#f3ab2b", fontWeight:"600"}}>{category.name}</h5>
                                 <ul className="list-unstyled">
                                     {category.products.map((product, index) => (
                                         <li key={index}>
-                                            <a href="#" >{product}</a>
+                                            <a href="#" style={{color:"#e0dddd"}}>{product}</a>
                                         </li>
                                     ))}
                                 </ul>
@@ -329,12 +267,12 @@ const Footer = () => {
             {/* <!-- Copyright --> */}
             <div
                 className='text-center p-3 '
-                style={{backgroundColor: "#36abff", width: '100%', height: 'fit-content'}}
+                style={{backgroundColor: "#131a22", width: '100%', height: 'fit-content'}}
             >
                 © 2023 Copyright
-                <span className='text-dark text-decoration-underline'>
+                <span className='text-light text-decoration-underline'>
 					{" "}
-                    bookstore GIT
+                    DEALHUB
 				</span>
             </div>
             {/* <!-- Copyright --> */}
