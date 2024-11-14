@@ -3,10 +3,11 @@ import { jwtDecode } from "jwt-decode";
 interface JwtPayload {
     exp: number;
     sub: string;
-    avatar?: string;
-    lastName?: string;
-    id?: string;
-    role?: string;
+    role: string;
+    id: number;
+    email: string;
+    status: boolean;
+    iat: number;
 }
 
 export function isTokenExpired(token: string) {
@@ -30,21 +31,21 @@ export function isToken() {
     return false;
 }
 
-export function getAvatarByToken() {
-    const token = localStorage.getItem('token');
-    if (token) {
-        const decodedToken = jwtDecode<JwtPayload>(token);
-        return decodedToken.avatar;
-    }
-}
+// export function getAvatarByToken() {
+//     const token = localStorage.getItem('token');
+//     if (token) {
+//         const decodedToken = jwtDecode<JwtPayload>(token);
+//         return decodedToken.avatar;
+//     }
+// }
 
-export function getLastNameByToken() {
-    const token = localStorage.getItem('token');
-    if (token) {
-        const decodedToken = jwtDecode<JwtPayload>(token);
-        return decodedToken.lastName;
-    }
-}
+// export function getNameByToken() {
+//     const token = localStorage.getItem('token');
+//     if (token) {
+//         const decodedToken = jwtDecode<JwtPayload>(token);
+//         return decodedToken.name;
+//     }
+// }
 
 export function getUsernameByToken() {
     const token = localStorage.getItem('token');

@@ -52,9 +52,8 @@ export default function Header() {
                                 </a>
                             </li>
                             <li className="nav-user nav-item d-flex">
-                                <a className="nav-link me-2" href="#">
-                                    <FaUserCircle size={30} color={'#9d0606'}/>
-                                </a>
+                                <Link to={"/login"} className="nav-link me-2"> <FaUserCircle size={30} color={'#9d0606'}/></Link>
+
                             </li>
                         </ul>
                     </div>

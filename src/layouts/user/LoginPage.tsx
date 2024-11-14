@@ -20,7 +20,7 @@ const LoginPage: React.FC<LoginPageProps> = () => {
 	const navigate = useNavigate();
 	const { isLoggedIn, setLoggedIn } = useAuth();
 
-	const [username, setUsername] = useState("");
+	const [email, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
 
@@ -33,28 +33,37 @@ const LoginPage: React.FC<LoginPageProps> = () => {
 	const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 
-		const loginRequest = { username, password };
+		const loginRequest = { email, password };
 
-		fetch(endpointBE + "/user/authenticate", {
+		fetch("http://localhost:8080/auth/login", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify(loginRequest),
 		})
-			.then((response) => response.ok ? response.json() : Promise.reject())
+			.then((response) => {
+				if (response.ok) {
+					return response.json();
+				} else {
+					toast.error("Incorrect username or password.");
+					console.log(response);
+					return Promise.reject("Login failed");
+				}
+			})
 			.then(async (data) => {
 				const { jwtToken } = data;
 				const decodedToken = jwtDecode<JwtPayload>(jwtToken);
 
-				if (!decodedToken.enabled) {
-					toast.warning("Your account is not activated or has been disabled.");
-					return;
-				}
+					// if (!decodedToken.enabled) {
+				// 	toast.warning("Your account is not activated or has been disabled.");
+				// 	return;
+				// }
 
 				toast.success("Login successful");
-				setLoggedIn(true);
+				console.log(jwtToken)
 				localStorage.setItem("token", jwtToken);
+				setLoggedIn(true);
 
 				const cartData: string | null = localStorage.getItem("cart");
 				let cart: CartItemModel[] = cartData ? JSON.parse(cartData) : [];
@@ -75,7 +84,7 @@ const LoginPage: React.FC<LoginPageProps> = () => {
 					setCartList(cart);
 				}
 
-				navigate(decodedToken.role === "ADMIN" ? "/admin/dashboard" : "/");
+				navigate(decodedToken.role === "ROLE_ADMIN" ? "/admin/dashboard" : "/");
 			})
 			.catch(() => {
 				setError("Incorrect username or password.");

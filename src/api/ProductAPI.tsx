@@ -48,7 +48,7 @@ async function getProduct(endpoint: string): Promise<resultInterface> {
 }
 
 export async function getHotProduct(): Promise<resultInterface> {
-    const endpoint: string = "http://localhost:8081/books";
+    const endpoint: string = "http://localhost:8080/api/product";
     return getProduct(endpoint);
 }
 
