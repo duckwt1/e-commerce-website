@@ -23,7 +23,7 @@ const HotProductList: React.FC<HotProductListProps> = (props) => {
             .catch((error) => {
                 setLoading(false);
                 setErroring(error.message);
-                console.error('Error fetching hot books:', error);
+                console.error('Error fetching hot products:', error);
             });
     }, []);
 
@@ -88,8 +88,8 @@ const HotProductList: React.FC<HotProductListProps> = (props) => {
             </div>
             <div className="row">
                 {productList.map((product) => (
-                    <div key={product.idBook} className="col-md-3 mb-4">
-                        <ProductProps key={product.idBook} product={product} />
+                    <div key={product.productId} className="col-md-3 mb-4">
+                        <ProductProps key={product.productId} product={product} />
                     </div>
                 ))}
             </div>

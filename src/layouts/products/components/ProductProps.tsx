@@ -48,26 +48,26 @@
                         </div>
                     )}
                     <ProductDialog product={product} open={open} onClose={handleClose} />
-                    {product.discountPercent !== 0 && (
+                    {product.listPrice?  - product.sellPrice > 0 && (
                         <h4 className="my-0 d-inline-block position-absolute end-0" style={{top: "15px"}}>
                             {product.quantity === 0 ? (
                                 <span className="badge bg-danger">Hết hàng</span>
                             ) : (
-                                <span className="badge bg-primary">{product.discountPercent}%</span>
+                                <span className="badge bg-primary">{product.listPrice - product.sellPrice}%</span>
                             )}
                         </h4>
-                    )}
-                    <Link to={`/book/${product.idBook}`}>
-                        <img src={product.thumbnail} className="card-img-top mt-3" alt={product.nameBook} style={{ height: "250px" }}
+                    ) : null}
+                    <Link to={`api/product/${product.productId}`}>
+                        <img src={product.thumbnail} className="card-img-top mt-3" alt={product.name} style={{ height: "250px" }}
                         />
                     </Link>
                     <div className="card-body">
-                        <Link to={`/book/${product.idBook}`} style={{ textDecoration: "none" }}>
+                        <Link to={`api/product/${product.productId}`} style={{ textDecoration: "none" }}>
                             <h5 className="card-title product-name fixed-height">
-                                <Tooltip title={product.nameBook ?? ''} arrow>
+                                <Tooltip title={product.name ?? ''} arrow>
                                         <span>
 
-                                                <TextEllipsis text={product.nameBook + ""} limit={50} />
+                                                <TextEllipsis text={product.name + ""} limit={50} />
 
                                         </span>
                                 </Tooltip>
@@ -78,11 +78,11 @@
                                 <span className="discounted-price text-danger">
                                     <strong style={{fontSize: "22px"}}>{product.sellPrice?.toLocaleString()}đ</strong>
                                 </span>
-                                {product.discountPercent !== 0 && (
+                                {product.listPrice?-product.sellPrice > 0 && (
                                     <span className="original-price ms-3 small fw-bolder">
                                         <del>{product.listPrice?.toLocaleString()}đ</del>
                                     </span>
-                                )}
+                                ) : null}
                             </div>
                             <span className="ms-2" style={{ fontSize: "12px", color: "#aaa" }}>
                                 Đã bán {product.soldQuantity}

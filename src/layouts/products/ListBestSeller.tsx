@@ -103,8 +103,8 @@ const ListBestSeller: React.FC = () => {
 
             <Slider {...settings}>
                 {products.map((product: ProductModel) => (
-                    <div key={product.idBook} className="slider-item col-md-3 mb-4">
-                        <ProductProps key={product.idBook} product={product} />
+                    <div key={product.productId} className="slider-item col-md-3 mb-4">
+                        <ProductProps key={product.productId} product={product} />
                     </div>
                 ))}
             </Slider>

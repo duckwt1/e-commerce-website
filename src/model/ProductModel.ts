@@ -1,37 +1,35 @@
-import GenreModel from "./GenreModel";
-
-
 class ProductModel {
-    id?: any;
-    idBook: number;
-    nameBook?: string; // Có thể NULL
-    author?: string;
-    isbn?: string;
-    description?: string;
-    listPrice: number;
+    productId: number;
+    name: string;
+    description: string;
+    avgRating: number;
+    listPrice: number | null;
     sellPrice: number;
-    quantity?: number;
-    avgRating?: number;
-    soldQuantity?: number;
-    discountPercent?: number;
-    thumbnail?: string;
-    relatedImg?: string[];
-    idGenres?: number[];
-    genresList?: GenreModel[];
-    isFavorited?: boolean;
+    quantity: number;
+    soldQuantity: number;
+    thumbnail: string;
+    relatedImg: string[];
 
-    constructor(idBook: number, nameBook: string, author: string, isbn: string, description: string, listPrice: number, sellPrice: number, quantity: number, avgRating: number, soldQuantity: number, discountPercent: number, thumbnail: string, relatedImg: string[]) {
-        this.idBook = idBook;
-        this.nameBook = nameBook;
-        this.author = author;
-        this.isbn = isbn;
+    constructor(
+        productId: number,
+        name: string,
+        description: string,
+        avgRating: number,
+        listPrice: number | null,
+        sellPrice: number,
+        quantity: number,
+        soldQuantity: number,
+        thumbnail: string,
+        relatedImg: string[]
+    ) {
+        this.productId = productId;
+        this.name = name;
         this.description = description;
+        this.avgRating = avgRating;
         this.listPrice = listPrice;
         this.sellPrice = sellPrice;
         this.quantity = quantity;
-        this.avgRating = avgRating;
         this.soldQuantity = soldQuantity;
-        this.discountPercent = discountPercent;
         this.thumbnail = thumbnail;
         this.relatedImg = relatedImg;
     }

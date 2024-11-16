@@ -1,16 +1,14 @@
 class ImageModel {
-   idImage: number;
-   nameImage?: string;
-   thumbnail?: boolean;
-   urlImage?: string;
-   dataImage?: string;
+   id: number;
+   urlImage: string;
+   name: string | null;
+   isThumbnail: boolean | null;
 
-   constructor(idImage: number, nameImage: string, thumbnail: boolean, urlImage: string, dataImage: string) {
-      this.idImage = idImage;
-      this.nameImage = nameImage;
-      this.thumbnail = thumbnail;
+   constructor(id: number, urlImage: string, name: string | null, isThumbnail: boolean | null) {
+      this.id = id;
       this.urlImage = urlImage;
-      this.dataImage = dataImage;
+      this.name = name;
+      this.isThumbnail = isThumbnail;
    }
 }
 

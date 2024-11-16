@@ -7,7 +7,7 @@ import {
 	TextField,
 } from "@mui/material";
 import React, { FormEvent, useEffect, useState } from "react";
-import { BookHorizontal } from "../products/components/BookHorizontalProps";
+import { BookHorizontal } from "../products/components/ProductHorizontalProps";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CartItemModel from "../../model/CartItemModel";
 import { get1User } from "../../api/UserApi";
@@ -72,7 +72,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = (props) => {
 
 		props.cartList.forEach((cartItem) => {
 			booksRequest.push({
-				book: cartItem.book,
+				book: cartItem.product,
 				quantity: cartItem.quantity,
 			});
 		});

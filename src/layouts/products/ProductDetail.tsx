@@ -29,6 +29,7 @@ import {getProductById} from "../../api/ProductAPI";
 import {getGenreByIdBook} from "../../api/GenreApi";
 import {Carousel} from "react-responsive-carousel";
 import ReactSimpleImageViewer from "react-simple-image-viewer";
+import ProductModel from "../../model/ProductModel";
 
 interface BookDetailProps {}
 
@@ -37,28 +38,28 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 	const { setTotalCart, cartList } = useCartItem();
 
 	// Lấy mã sách từ url
-	const { idBook } = useParams();
-	let idBookNumber: number = 0;
+	const { idProduct } = useParams();
+	let idProductNumber: number = 0;
 
 	// Ép kiểu về number
 	try {
-		idBookNumber = parseInt(idBook + "");
-		if (Number.isNaN(idBookNumber)) {
-			idBookNumber = 0;
+		idProductNumber = parseInt(idProduct + "");
+		if (Number.isNaN(idProductNumber)) {
+			idProductNumber = 0;
 		}
 	} catch (error) {
 		console.error("Error: " + error);
 	}
 
 	// Khai báo biến
-	const [book, setBook] = useState<BookModel | null>(null);
+	const [product, setProduct] = useState<ProductModel | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [erroring, setErroring] = useState(null);
 	// Lấy sách ra
 	useEffect(() => {
-		getProductById(idBookNumber)
+		getProductById(idProductNumber)
 			.then((response) => {
-				setBook(response);
+				setProduct(response);
 				setLoading(false);
 			})
 			.catch((error) => {
@@ -70,7 +71,7 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 	// Lấy ra thể loại của sách
 	const [genres, setGenres] = useState<GenreModel[] | null>(null);
 	useEffect(() => {
-		getGenreByIdBook(idBookNumber).then((response) => {
+		getGenreByIdBook(idProductNumber).then((response) => {
 			setGenres(response.genreList);
 		});
 	}, []);
@@ -78,7 +79,7 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 	// Lấy ra hình ảnh của sách
 	const [images, setImages] = useState<ImageModel[] | null>(null);
 	useEffect(() => {
-		getAllImageByProduct(idBookNumber)
+		getAllImageByProduct(idProductNumber)
 			.then((response) => {
 				setImages(response);
 			})
@@ -90,7 +91,7 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 	const [quantity, setQuantity] = useState(1);
 	// Xử lý tăng số lượng
 	const add = () => {
-		if (quantity < (book?.quantity ? book?.quantity : 1)) {
+		if (quantity < (product?.quantity ? product?.quantity : 1)) {
 			setQuantity(quantity + 1);
 		}
 	};
@@ -103,21 +104,21 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 	};
 
 	// Xử lý thêm sản phẩm vào giỏ hàng
-	const handleAddProduct = async (newBook: BookModel) => {
+	const handleAddProduct = async (newProduct: ProductModel) => {
 		// cái isExistBook này sẽ tham chiếu đến cái cart ở trên, nên khi update thì cart nó cũng update theo
-		let isExistBook = cartList.find(
-			(cartItem) => cartItem.book.idBook === newBook.idBook
+		let isExistProduct = cartList.find(
+			(cartItem) => cartItem.product.productId === newProduct.productId
 		);
 		// Thêm 1 sản phẩm vào giỏ hàng
-		if (isExistBook) {
+		if (isExistProduct) {
 			// nếu có rồi thì sẽ tăng số lượng
-			isExistBook.quantity += quantity;
+			isExistProduct.quantity += quantity;
 
 			// Lưu vào db
 			if (isToken()) {
 				const request = {
-					idCart: isExistBook.idCart,
-					quantity: isExistBook.quantity,
+					idCart: isExistProduct.idCart,
+					quantity: isExistProduct.quantity,
 				};
 				const token = localStorage.getItem("token");
 				fetch(endpointBE + `/cart-item/update-item`, {
@@ -136,7 +137,7 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 					const request = [
 						{
 							quantity: quantity,
-							book: newBook,
+							product: newProduct,
 							idUser: getIdUserByToken(),
 						},
 					];
@@ -158,7 +159,7 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 						cartList.push({
 							idCart: idCart,
 							quantity: quantity,
-							book: newBook,
+							product: newProduct,
 						});
 					}
 				} catch (error) {
@@ -167,7 +168,7 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 			} else {
 				cartList.push({
 					quantity: quantity,
-					book: newBook,
+					product: newProduct,
 				});
 			}
 		}
@@ -185,7 +186,7 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 	let imageList: string[] = [];
 	if (images !== undefined && images !== null) {
 		imageList = images.map((image) => {
-			return image.urlImage || image.dataImage;
+			return image.urlImage || image.urlImage;
 		}) as string[];
 	}
 
@@ -202,10 +203,10 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 	const [isCheckout, setIsCheckout] = useState(false);
 	const [cartItem, setCartItem] = useState<CartItemModel[]>([]);
 	const [totalPriceProduct, setTotalPriceProduct] = useState(0);
-	function handleBuyNow(newBook: BookModel) {
-		setCartItem([{ quantity, book: newBook }]);
+	function handleBuyNow(newProduct: ProductModel) {
+		setCartItem([{ quantity, product: newProduct }]);
 		setIsCheckout(!isCheckout);
-		setTotalPriceProduct(newBook.sellPrice * quantity);
+		setTotalPriceProduct(newProduct.sellPrice * quantity);
 	}
 
 	if (loading) {
@@ -242,7 +243,7 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 		);
 	}
 
-	if (book === null) {
+	if (product === null) {
 		return (
 			<div>
 				<h1>Sách không tồn tại </h1>
@@ -275,8 +276,8 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 											<img
 												alt=''
 												src={
-													image.dataImage
-														? image.dataImage
+													image.urlImage
+														? image.urlImage
 														: image.urlImage
 												}
 											/>
@@ -297,7 +298,7 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 								)}
 							</div>
 							<div className='col-lg-8 col-md-8 col-sm-12 px-5'>
-								<h2>{book.nameBook}</h2>
+								<h2>{product.name}</h2>
 								<div className='d-flex align-items-center'>
 									<p className='me-5'>
 										Thể loại:{" "}
@@ -306,7 +307,7 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 										</strong>
 									</p>
 									<p className='ms-5'>
-										Tác giả: <strong>{book.author}</strong>
+										SELLER: <strong>{"Seller name"}</strong>
 									</p>
 								</div>
 								<div className='d-flex align-items-center'>
@@ -317,7 +318,7 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 										{/*/>*/}
 
 										<p className='text-danger ms-2 mb-0'>
-											({book.avgRating})
+											({product.avgRating})
 										</p>
 									</div>
 									<div className='d-flex align-items-center'>
@@ -335,24 +336,24 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 											Đã bán
 										</span>
 										<span className='fw-bold ms-2'>
-											{book.soldQuantity}
+											{product.soldQuantity}
 										</span>
 									</div>
 								</div>
 								<div className='price'>
 									<span className='discounted-price text-danger me-3'>
 										<strong style={{ fontSize: "32px" }}>
-											{book.sellPrice?.toLocaleString()}đ
+											{product.sellPrice?.toLocaleString()}đ
 										</strong>
 									</span>
 									<span className='original-price small me-3'>
 										<strong>
-											<del>{book.listPrice?.toLocaleString()}đ</del>
+											<del>{product.listPrice?.toLocaleString()}đ</del>
 										</strong>
 									</span>
 									<h4 className='my-0 d-inline-block'>
 										<span className='badge bg-danger'>
-											{book.discountPercent}%
+											{product.quantity === 0 ? "Hết hàng" : ""}
 										</span>
 									</h4>
 								</div>
@@ -386,11 +387,11 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 									{/*	reduce={reduce}*/}
 									{/*/>*/}
 									<span className='ms-4'>
-										{book.quantity} sản phẩm có sẵn
+										{product.quantity} sản phẩm có sẵn
 									</span>
 								</div>
 								<div className='mt-4 d-flex align-items-center'>
-									{book.quantity === 0 ? (
+									{product.quantity === 0 ? (
 										<Button
 											variant='outlined'
 											size='large'
@@ -406,7 +407,7 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 												size='large'
 												startIcon={<ShoppingCartOutlined />}
 												className='me-3'
-												onClick={() => handleAddProduct(book)}
+												onClick={() => handleAddProduct(product)}
 											>
 												Thêm vào giỏ hàng
 											</Button>
@@ -414,7 +415,7 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 												variant='contained'
 												size='large'
 												className='ms-3'
-												onClick={() => handleBuyNow(book)}
+												onClick={() => handleBuyNow(product)}
 											>
 												Mua ngay
 											</Button>
@@ -427,7 +428,7 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 					<div className='container p-4 bg-white my-3 rounded'>
 						<h5 className='my-3'>Mô tả sản phẩm</h5>
 						<hr />
-						<TextEllipsis text={book.description + ""} limit={1000} />
+						<TextEllipsis text={product.description + ""} limit={1000} />
 					</div>
 					<div className='container p-4 bg-white my-3 rounded'>
 						<h5 className='my-3'>Khách hàng đánh giá</h5>

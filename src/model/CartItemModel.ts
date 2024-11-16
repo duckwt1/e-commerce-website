@@ -3,13 +3,13 @@ import ProductModel from "./ProductModel";
 class CartItemModel {
    idCart?: any;
    quantity: number;
-   book: ProductModel;
+   product: ProductModel;
    idUser?: number;
    review?: boolean;
 
-   constructor(quantity: number, book: ProductModel) {
+   constructor(quantity: number, product: ProductModel) {
       this.quantity = quantity;
-      this.book = book;
+      this.product = product;
    }
 }
 

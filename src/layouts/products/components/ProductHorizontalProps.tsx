@@ -12,7 +12,7 @@ import { FadeModal } from "../../utils/FadeModal";
 import { Link } from "react-router-dom";
 import TextEllipsis from "./TextEllipsis";
 
-interface BookHorizontalProps {
+interface ProductHorizontalProps {
 	cartItem: CartItemModel;
 	type?: any;
 	idOrder?: number;
@@ -20,7 +20,7 @@ interface BookHorizontalProps {
 	statusOrder?: string;
 }
 
-export const BookHorizontal: React.FC<BookHorizontalProps> = (props) => {
+export const BookHorizontal: React.FC<ProductHorizontalProps> = (props) => {
 	// Mở/Đóng modal
 	const [openModal, setOpenModal] = React.useState(false);
 	const handleOpenModal = () => setOpenModal(true);
@@ -31,19 +31,19 @@ export const BookHorizontal: React.FC<BookHorizontalProps> = (props) => {
 	const [imageList, setImageList] = useState<ImageModel[]>([]);
 	// Lấy ảnh ra từ BE
 	useEffect(() => {
-		getAllImageByProduct(props.cartItem.book.idBook)
+		getAllImageByProduct(props.cartItem.product.productId)
 			.then((response) => {
 				setImageList(response);
 			})
 			.catch((error) => {
 				console.log(error);
 			});
-	}, [props.cartItem.book.idBook]);
+	}, [props.cartItem.product.productId]);
 	// Loading ảnh thumbnail
 	let dataImage;
 	if (imageList[0]) {
-		const thumbnail = imageList.filter((i) => i.thumbnail);
-		dataImage = thumbnail[0].urlImage || thumbnail[0].dataImage;
+		const thumbnail = imageList.filter((i) => i.isThumbnail);
+		dataImage = thumbnail[0].urlImage;
 	}
 	return (
 		<div className='row'>
@@ -52,17 +52,17 @@ export const BookHorizontal: React.FC<BookHorizontalProps> = (props) => {
 					<img
 						src={dataImage}
 						className='card-img-top'
-						alt={props.cartItem.book.nameBook}
+						alt={props.cartItem.product.name}
 						style={{ width: "100px" }}
 					/>
 					<div className='d-flex flex-column pb-2'>
-						<Tooltip title={props.cartItem.book.nameBook} arrow>
+						<Tooltip title={props.cartItem.product.name} arrow>
 							<Link
-								to={`/book/${props.cartItem.book.idBook}`}
+								to={`/book/${props.cartItem.product.productId}`}
 								className='d-inline text-black'
 							>
 								<TextEllipsis
-									text={props.cartItem.book.nameBook + " "}
+									text={props.cartItem.product.name + " "}
 									limit={100}
 								/>
 							</Link>
@@ -70,7 +70,7 @@ export const BookHorizontal: React.FC<BookHorizontalProps> = (props) => {
 						<div className='mt-auto'>
 							<span className='discounted-price text-danger'>
 								<strong style={{ fontSize: "22px" }}>
-									{props.cartItem.book.sellPrice.toLocaleString()}đ
+									{props.cartItem.product.sellPrice.toLocaleString()}đ
 								</strong>
 							</span>
 							<span
@@ -78,7 +78,7 @@ export const BookHorizontal: React.FC<BookHorizontalProps> = (props) => {
 								style={{ color: "#000" }}
 							>
 								<del>
-									{props.cartItem.book.listPrice.toLocaleString()}đ
+									{props.cartItem.product.listPrice? props.cartItem.product.listPrice.toLocaleString(): 0}đ
 								</del>
 							</span>
 						</div>
@@ -92,7 +92,7 @@ export const BookHorizontal: React.FC<BookHorizontalProps> = (props) => {
 				<span className='text-danger'>
 					<strong>
 						{(
-							props.cartItem.quantity * props.cartItem.book.sellPrice
+							props.cartItem.quantity * props.cartItem.product.sellPrice
 						).toLocaleString()}
 						đ
 					</strong>

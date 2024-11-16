@@ -2,18 +2,24 @@ import { endpointBE } from "../layouts/utils/Constant";
 import ImageModel from "../model/ImageModel";
 import { request } from "./Request";
 
-async function getBookImage(endpoint: string): Promise<ImageModel[]> {
-    // Gọi phương thức request()
+async function getProductImage(endpoint: string): Promise<ImageModel[]> {
     const response = await request(endpoint);
 
-    return response._embedded.images.map((imageData: any) => ({
-        ...imageData,
-    }));
+    if (!response || !Array.isArray(response)) {
+        throw new Error("Response does not contain a valid array of images");
+    }
+
+    return response.map((image: any) => {
+        return new ImageModel(
+            image.id,
+            image.urlImage,
+            image.name,
+            image.isThumbnail
+        );
+    });
 }
 
-export async function getAllImageByProduct(idBook: number): Promise<ImageModel[]> {
-    // Xác định endpoint
-    const endpoint: string = endpointBE + `/books/${idBook}/listImages`;
-
-    return getBookImage(endpoint);
+export async function getAllImageByProduct(productId: number): Promise<ImageModel[]> {
+    const endpoint: string = `${endpointBE}/api/product/${productId}/images`;
+    return getProductImage(endpoint);
 }

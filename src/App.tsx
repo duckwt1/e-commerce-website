@@ -13,6 +13,7 @@ import { CartItemProvider } from './layouts/utils/CartItemContext';
 import { AuthProvider } from "./layouts/utils/AuthContext";
 import { ConfirmProvider } from "material-ui-confirm";
 import ProductDetail from "./layouts/products/ProductDetail";
+import {getAllImageByProduct} from "./api/ImageAPI";
 
 const MyRoutes = () => {
     const [reloadAvatar, setReloadAvatar] = useState(0);
@@ -50,6 +51,16 @@ const MyRoutes = () => {
 const listHideHeaderFooter = ['/login', '/register', '/forgot-password'];
 const hideHeaderFooter = listHideHeaderFooter.includes(location.pathname);
 
+
+
+//tesst
+    getAllImageByProduct(1).then((images) => {
+        const imageUrls = images.map(image => image.urlImage);
+        console.log("All image URLs:", imageUrls);
+    }).catch(error => {
+        console.error("Error fetching images:", error);
+    });
+
     return (
         <div className="App">
             {!hideHeaderFooter && (
@@ -60,7 +71,7 @@ const hideHeaderFooter = listHideHeaderFooter.includes(location.pathname);
             )}
             <Routes>
                 <Route path="/" element={<Homepage />} />
-                <Route path='/book/:idBook' element={<ProductDetail />} />
+                <Route path='/api/products/:productId' element={<ProductDetail />} />
                 <Route path="/policy" element={<PolicyPage />} />
                 <Route path='/register' element={<RegisterPage />} />
                 <Route path='/login' element={<LoginPage />} />

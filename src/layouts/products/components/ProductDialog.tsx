@@ -91,11 +91,11 @@ const ProductDialog: React.FC<ProductDialogProps> = ({ product, open, onClose })
 
     return (
         <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title" maxWidth="md" fullWidth>
-            <DialogTitle id="form-dialog-title"> <h4 className={"mb-0 font-weight-bold"}>{product.nameBook}</h4></DialogTitle>
+            <DialogTitle id="form-dialog-title"> <h4 className={"mb-0 font-weight-bold"}>{product.name}</h4></DialogTitle>
             <DialogContent>
                 <div className="d-flex flex-column align-items-lg-start">
                     <div className="d-flex align-items-center">
-                        <span>author : {product.author}</span>
+                        <span>Seller : sellername</span>
                         <span className={"me-3 ms-3"}>|</span>
                         <Rating name="read-only" value={product.avgRating} size={"small"} readOnly precision={0.5} />
                     </div>
@@ -112,7 +112,7 @@ const ProductDialog: React.FC<ProductDialogProps> = ({ product, open, onClose })
                                     <div key={index} className={"zoomSliderSmall"}>
                                         <img
                                             src={img}
-                                            alt={product.nameBook}
+                                            alt={product.name}
                                             style={{width: "50%", height: "50%"}}
                                             onClick={() => setSelectedImage(img)}
                                         />
@@ -127,12 +127,12 @@ const ProductDialog: React.FC<ProductDialogProps> = ({ product, open, onClose })
                                 color: "red",
                                 fontSize: "25px",
                                 fontWeight: "bold"
-                            }}>{product.sellPrice.toLocaleString()} VND</span>
+                            }}> {product.sellPrice?.toLocaleString() ?? "0"} VND</span>
                             <span className={"ms-3"} style={{
                                 textDecoration: "line-through",
                                 color: "#999"
-                            }}>{product.listPrice.toLocaleString()}VND</span>
-                            <span className={"ms-3"} style={{color: "green"}}>Save {product.discountPercent}%</span>
+                            }}>{product.listPrice?.toLocaleString()??"0"}VND</span>
+                            <span className={"ms-3"} style={{color: "green"}}>Save {product.sellPrice && product.listPrice ? ((product.listPrice - product.sellPrice) / product.listPrice * 100).toFixed(0) : 0}%</span>
                         </p>
                         <p>
                             <span>

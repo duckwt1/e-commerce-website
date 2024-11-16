@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-// import BookCartProps from "./components/ProductCartProps";
 import { Button } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -15,7 +14,7 @@ const ProductCartList: React.FC<BookCartListProps> = () => {
 
 	useEffect(() => {
 		const total = cartList.reduce((totalPrice, cartItem) => {
-			return totalPrice + cartItem.quantity * cartItem.book.sellPrice;
+			return totalPrice + cartItem.quantity * cartItem.product.sellPrice;
 		}, 0);
 		setTotalPriceProduct(total);
 		setTotalCart(cartList.length);
@@ -25,7 +24,7 @@ const ProductCartList: React.FC<BookCartListProps> = () => {
 	// Xử lý xoá sách
 	function handleRemoveBook(idBook: number) {
 		const newCartList = cartList.filter(
-			(cartItem) => cartItem.book.idBook !== idBook
+			(cartItem) => cartItem.product.productId !== idBook
 		);
 		localStorage.setItem("cart", JSON.stringify(newCartList));
 		setCartList(newCartList);
