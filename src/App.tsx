@@ -14,6 +14,8 @@ import { AuthProvider } from "./layouts/utils/AuthContext";
 import { ConfirmProvider } from "material-ui-confirm";
 import ProductDetail from "./layouts/products/ProductDetail";
 import {getAllImageByProduct} from "./api/ImageAPI";
+import ActiveAccount from "./layouts/user/ActiveAccount";
+import {ForgotPassword} from "./layouts/user/ForgotPassword";
 
 const MyRoutes = () => {
     const [reloadAvatar, setReloadAvatar] = useState(0);
@@ -75,6 +77,8 @@ const hideHeaderFooter = listHideHeaderFooter.includes(location.pathname);
                 <Route path="/policy" element={<PolicyPage />} />
                 <Route path='/register' element={<RegisterPage />} />
                 <Route path='/login' element={<LoginPage />} />
+                <Route path='/activate-account/:email/:activationCode' element={<ActiveAccount/>}></Route>
+                <Route path="/forgot-password" element={<ForgotPassword/>} />
             </Routes>
             {showScrollButton && (
                 <button onClick={scrollToTop} className="scroll-to-top">

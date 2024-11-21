@@ -16,42 +16,55 @@ const ActiveAccount: React.FC = () => {
 		if (isLoggedIn) {
 			navigation("/");
 		}
-	}, []);
+	}, [isLoggedIn, navigation]); // Added isLoggedIn and navigation to dependencies
 
 	const [enabled, setEnabled] = useState(false);
 	const [isLoading, setLoading] = useState(false);
 	const [notifications, setNotifications] = useState("");
-	const { email } = useParams();
-	const { activationCode } = useParams();
+	const { email, activationCode } = useParams(); // Combined useParams for better readability
 
 	useEffect(() => {
 		if (email && activationCode) {
 			handleActiveAccount();
 		}
-	}, []);
+	}, [email, activationCode]); // Added email and activationCode to dependencies
 
 	const handleActiveAccount = async () => {
+		setLoading(true); // Set loading to true immediately
 		try {
-			const url =
-				endpointBE +
-				`/user/active-account?email=${email}&activationCode=${activationCode}`;
+			const url = `${endpointBE}/auth/activate-account?email=${email}&code=${activationCode}`;
 			const response = await fetch(url, { method: "GET" });
 
 			if (response.ok) {
 				setEnabled(true);
-				setLoading(true);
+				setNotifications("Tài khoản kích hoạt thành công."); // Success message
 			} else {
-				setNotifications(response.text + "");
-				setLoading(true);
+				const errorText = await response.text(); // Await response text
+				setNotifications(errorText);
+				setEnabled(false);
 			}
 		} catch (error) {
 			console.log("Lỗi kích hoạt: " + error);
+			setNotifications("Có lỗi xảy ra trong quá trình kích hoạt."); // General error message
 			setEnabled(false);
-			setLoading(true);
+		} finally {
+			setLoading(false); // Ensure loading is set to false after the operation
 		}
 	};
 
 	if (isLoading) {
+		return (
+			<div>
+				<div className='container bg-light my-3 rounded-3 p-4'>
+					<h1 className='text-center text-black'>KÍCH HOẠT TÀI KHOẢN</h1>
+					<div className='d-flex align-items-center justify-content-center flex-column p-5'>
+						{/* Display loading state */}
+						<h2>Đang kích hoạt tài khoản...</h2>
+					</div>
+				</div>
+			</div>
+		);
+	} else {
 		return (
 			<div>
 				<div className='container bg-light my-3 rounded-3 p-4'>
@@ -85,15 +98,6 @@ const ActiveAccount: React.FC = () => {
 							</>
 						)}
 					</div>
-				</div>
-			</div>
-		);
-	} else {
-		return (
-			<div>
-				<div className='container bg-light my-3 rounded-3 p-4'>
-					<h1 className='text-center text-black'>KÍCH HOẠT TÀI KHOẢN</h1>
-					<div className='d-flex align-items-center justify-content-center flex-column p-5'></div>
 				</div>
 			</div>
 		);

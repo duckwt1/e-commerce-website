@@ -1,15 +1,17 @@
-import { Button, TextField } from "@mui/material";
+import {Box, Button, TextField, Typography} from "@mui/material";
 import React, { FormEvent, useEffect, useState } from "react";
 import { endpointBE } from "../utils/Constant";
 import { toast } from "react-toastify";
 import useScrollToTop from "../../hooks/ScrollToTop";
 import { useAuth } from "../utils/AuthContext";
-import { useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import "./../../css/Login-Register.css";
+import {GoogleLogin, GoogleOAuthProvider} from "@react-oauth/google";
 
 export const ForgotPassword: React.FC = () => {
 	useScrollToTop(); // Mỗi lần vào component này thì sẽ ở trên cùng
 
-	const { isLoggedIn } = useAuth();
+	const {isLoggedIn} = useAuth();
 	const navigation = useNavigate();
 
 	useEffect(() => {
@@ -19,15 +21,16 @@ export const ForgotPassword: React.FC = () => {
 	});
 
 	const [email, setEmail] = useState("");
+
 	function handleSubmit(event: FormEvent<HTMLFormElement>): void {
 		event.preventDefault();
 		toast.promise(
-			fetch(endpointBE + "/user/forgot-password", {
-				method: "PUT",
+			fetch(endpointBE + "/auth/forgot-password?email=" + email, {
+				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({ email }),
+				body: JSON.stringify({email}),
 			})
 				.then((response) => {
 					if (response.ok) {
@@ -44,42 +47,52 @@ export const ForgotPassword: React.FC = () => {
 					toast.error("Gửi thất bại");
 					console.log(error);
 				}),
-			{ pending: "Đang trong quá trình xử lý ..." }
+			{pending: "Đang trong quá trình xử lý ..."}
 		);
 	}
 
 	return (
-		<div
-			className='container my-5 py-4 rounded-5 shadow-5 bg-light'
-			style={{ width: "450px" }}
-		>
-			<h1 className='text-center'>QUÊN MẬT KHẨU</h1>
-			<form
-				onSubmit={handleSubmit}
-				className='form'
-				style={{ padding: "0 20px" }}
-			>
-				<TextField
-					fullWidth
-					required={true}
-					id='outlined-required'
-					label='Email'
-					placeholder='Nhập email'
-					value={email}
-					onChange={(e: any) => setEmail(e.target.value)}
-					className='input-field'
-				/>
-				<div className='text-center my-3'>
-					<Button
-						fullWidth
-						variant='outlined'
-						type='submit'
-						sx={{ padding: "10px" }}
-					>
-						Lấy lại mật khẩu
-					</Button>
+		<GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
+			<div className="video-background">
+				<video autoPlay muted loop playsInline className="position-absolute " style={{zIndex: -1, width: "100%" }}>
+					<source src="/background_video.mp4" type="video/mp4"/>
+				</video>
+				<div className="d-flex justify-content-center align-items-center h-100 forgot-pass-container">
+
+					<div className="bg-white p-4 rounded shadow" style={{maxWidth: "500px", width: "100%", opacity: 0.9}}>
+
+						<img src="/logo.png" alt="logo" className="logo" style={{width: '90px', height: '80px'}}/>
+						<h2 style={{color: "#880a0a"}}>Forgot Your Password?</h2>
+
+						<form onSubmit={handleSubmit}>
+							<div className="mb-3">
+								<input
+									type="email"
+									className="form-control"
+									id="outlined-required"
+									placeholder="Enter your email"
+									value={email}
+									onChange={(e) => setEmail(e.target.value)}
+									required
+								/>
+							</div>
+							<button type="submit" className="btn btn-primary w-100 mb-3">Reset Password</button>
+						</form>
+						<Link key="login" to="/login">
+							<p className="text-center back " style={{cursor: "pointer"}}>
+								Back to Sign In
+							</p>
+						</Link>
+
+						<p>Or continue with social account</p>
+						{/*<GoogleLogin*/}
+						{/*	onSuccess={handleGoogleLoginSuccess}*/}
+
+						{/*/>*/}
+
+					</div>
 				</div>
-			</form>
-		</div>
+			</div>
+		</GoogleOAuthProvider>
 	);
 };
