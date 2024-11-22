@@ -17,6 +17,11 @@ import {getAllImageByProduct} from "./api/ImageAPI";
 import {getProductById} from "./api/ProductAPI";
 import {ForgotPassword} from "./layouts/user/ForgotPassword";
 import ProfilePage from "./layouts/user/ProfilePage";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import ResetPassword from "./layouts/user/ResetPassword";
+import ChangePassword from "./layouts/user/ChangePassword";
+import ActiveAccount from "./layouts/user/ActiveAccount";
 
 const MyRoutes = () => {
     const [reloadAvatar, setReloadAvatar] = useState(0);
@@ -51,8 +56,8 @@ const MyRoutes = () => {
     };
 
     // Kiểm tra URL hiện tại để không hiển thị Header và Footer trên trang đăng nhập
-const listHideHeaderFooter = ['/login', '/register', '/forgot-password'];
-const hideHeaderFooter = listHideHeaderFooter.includes(location.pathname);
+    const listHideHeaderFooter = ['/login', '/register', '/forgot-password', '/change-password'];
+    const hideHeaderFooter = listHideHeaderFooter.includes(location.pathname);
 
 
 
@@ -63,16 +68,20 @@ const hideHeaderFooter = listHideHeaderFooter.includes(location.pathname);
                 <>
                     <div className={`header ${isHeaderVisible ? 'visible' : 'hidden'}`}><Header /></div>
                     <div className={`navbar ${isSticky ? 'sticky' : ''}`} style={{ padding: '0' }}><Navigation /></div>
+
                 </>
             )}
             <Routes>
                 <Route path="/" element={<Homepage />} />
-                <Route path='products/:productId' element={<ProductDetail />} />
+                <Route path='products/:idProduct' element={<ProductDetail />} />
                 <Route path="/policy" element={<PolicyPage />} />
                 <Route path='/register' element={<RegisterPage />} />
                 <Route path='/login' element={<LoginPage />} />
                 <Route path ='/forgot-password' element={<ForgotPassword />} />
                 <Route path='/profile' element={<ProfilePage setReloadAvatar={setReloadAvatar} />}/>
+                <Route path={'/reset-password/:code'}  element={<ResetPassword/>}></Route>
+                <Route path={'/change-password'} element={<ChangePassword/>}></Route>
+                <Route path='/activate-account/:email/:activationCode' element={<ActiveAccount/>}></Route>
             </Routes>
             {showScrollButton && (
                 <button onClick={scrollToTop} className="scroll-to-top">
@@ -90,6 +99,7 @@ function App() {
             <CartItemProvider>
                 <ConfirmProvider>
                     <Router>
+                        <ToastContainer />
                         <MyRoutes />
                     </Router>
                 </ConfirmProvider>

@@ -26,12 +26,12 @@ export const ForgotPassword: React.FC = () => {
 	});
 
 	const [email, setEmail] = useState("");
-
+	console.log(email);
 	function handleSubmit(event: FormEvent<HTMLFormElement>): void {
 		event.preventDefault();
 		toast.promise(
-			fetch(endpointBE + "/api/forgot-password", {
-				method: "PUT",
+			fetch(endpointBE + "/auth/forgot-password?email=" + email, {
+				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
 				},

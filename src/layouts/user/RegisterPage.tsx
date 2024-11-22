@@ -77,6 +77,8 @@ const RegisterPage: React.FC = () => {
 			phoneNumber
 		);
 
+		console.log(isUsernameValid, isEmailValid, isPassword, isRepeatPassword, isPhoneNumberValid);
+
 		if (
 			isUsernameValid &&
 			isEmailValid &&
@@ -166,86 +168,86 @@ const RegisterPage: React.FC = () => {
 				</video>
 				<div className='container container-signup py-4 rounded-5 shadow-5 bg-light w-50'>
 
-						<h1 className='text-center' style={{color: "#880a0a", fontWeight: "600"}}>REGISTER </h1>
+					<h1 className='text-center' style={{color: "#880a0a", fontWeight: "600"}}>REGISTER </h1>
 
-						<form onSubmit={handleSubmit} className='form'>
-							<div className='row px-2'>
-								<div className='col-lg-6 col-md-12 col-12'>
-									<label>Username</label>
-									<input
-										type="text" className={"input-username c95"}
-										placeholder="Enter your username"
-										required
-										onChange={(e) => setUserName(e.target.value)}
-									/>
+					<form onSubmit={handleSubmit} className='form'>
+						<div className='row px-2'>
+							<div className='col-lg-6 col-md-12 col-12'>
+								<label>Username</label>
+								<input
+									type="text" className={"input-username c95"}
+									placeholder="Enter your username"
+									required
+									onChange={(e) => setUserName(e.target.value)}
+								/>
 
-									<label>Password</label>
-									<input
-										type="password" className={"c95"}
-										placeholder="Enter your password"
-										required
-										onChange={(e) => setPassword(e.target.value)}
-									/>
+								<label>Password</label>
+								<input
+									type="password" className={"c95"}
+									placeholder="Enter your password"
+									required
+									onChange={(e) => setPassword(e.target.value)}
+								/>
 
-									<label>Repeat Password</label>
-									<input
-										type="password" className={"c95"}
-										placeholder="Repeat your password"
-										required
-										onChange={(e) => setRepeatPassword(e.target.value)}
-									/>
-								</div>
-								<div className='col-lg-6 col-md-12 col-12'>
-									<label>First Name</label>
-									<input
-										type="text"
-										placeholder="Enter your first name"
-										required
-										onChange={(e) => setFirstName(e.target.value)}
-									/>
-									<label>Last Name</label>
-									<input
-										type="text"
-										placeholder="Enter your last name"
-										required
-										onChange={(e) => setLastName(e.target.value)}
-									/>
-									<label>Phone Number</label>
-									<input
-										type="text"
-										placeholder="Enter your phone number"
-										required
-										onBlur={(e: any) => {
-											checkPhoneNumber(setErrorPhoneNumber, e.target.value);
-										}}
-										onChange={(e) => setPhoneNumber(e.target.value)}
-									/>
-								</div>
-								<div>
-									<label>Email</label>
-									<input
-										type="email"
-										placeholder="Enter your email"
-										required
-										onChange={(e) => setEmail(e.target.value)}
-									/>
-								</div>
+								<label>Repeat Password</label>
+								<input
+									type="password" className={"c95"}
+									placeholder="Repeat your password"
+									required
+									onChange={(e) => setRepeatPassword(e.target.value)}
+								/>
 							</div>
-							<div className='d-flex justify-content-end mt-2 px-3'>
+							<div className='col-lg-6 col-md-12 col-12'>
+								<label>First Name</label>
+								<input
+									type="text"
+									placeholder="Enter your first name"
+									required
+									onChange={(e) => setFirstName(e.target.value)}
+								/>
+								<label>Last Name</label>
+								<input
+									type="text"
+									placeholder="Enter your last name"
+									required
+									onChange={(e) => setLastName(e.target.value)}
+								/>
+								<label>Phone Number</label>
+								<input
+									type="text"
+									placeholder="Enter your phone number"
+									required
+									onBlur={(e: any) => {
+										checkPhoneNumber(setErrorPhoneNumber, e.target.value);
+									}}
+									onChange={(e) => setPhoneNumber(e.target.value)}
+								/>
+							</div>
+							<div>
+								<label>Email</label>
+								<input
+									type="email"
+									placeholder="Enter your email"
+									required
+									onChange={(e) => setEmail(e.target.value)}
+								/>
+							</div>
+						</div>
+						<div className='d-flex justify-content-end mt-2 px-3'>
 							<span>
 								Already have an account? <Link to={"/login"} className={"log-in"}>Sign In</Link>
 							</span>
-							</div>
-							<div className='btn loading-button text-center my-3'>
-								<Button fullWidth type='submit' sx={{padding: "10px", color: '#fff'}}>
-									Register
-								</Button>
-							</div>
-						</form>
-					</div>
+						</div>
+						<div className='loading-button text-center my-3'>
+							<Button fullWidth type='submit' sx={{padding: "10px", color: '#fff'}}>
+								Register
+							</Button>
+						</div>
+					</form>
 				</div>
+			</div>
 		</GoogleOAuthProvider>
-);
+	);
 };
 
 export default RegisterPage;
