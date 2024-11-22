@@ -85,7 +85,7 @@ const RegisterPage: React.FC = () => {
 			isPhoneNumberValid
 		) {
 			try {
-				const endpoint = endpointBE + "/user/register";
+				const endpoint = endpointBE + "/auth/register";
 
 				const response = await toast.promise(
 					fetch(endpoint, {
@@ -105,6 +105,8 @@ const RegisterPage: React.FC = () => {
 					}),
 					{ pending: "Processing..." }
 				);
+
+				console.log(response + "response");
 
 				if (response.ok) {
 					toast.success("Account registration successful.");

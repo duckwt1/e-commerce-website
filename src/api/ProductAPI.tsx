@@ -198,15 +198,15 @@ export async function getBookByIdCartItem(idCart: number): Promise<ProductModel 
     }
 }
 
-export async function getTotalNumberOfBooks(): Promise<number> {
-    const endpoint = `${endpointBE}/book/get-total`;
-    try {
-        const response = await requestAdmin(endpoint);
-        if (response) {
-            return response;
-        }
-    } catch (error) {
-        throw new Error("Lỗi không gọi được endpoint lấy tổng cuốn sách\n" + error);
-    }
-    return 0;
-}
+// export async function getTotalNumberOfBooks(): Promise<number> {
+//     const endpoint = `${endpointBE}/book/get-total`;
+//     try {
+//         const response = await requestAdmin(endpoint);
+//         if (response) {
+//             return response;
+//         }
+//     } catch (error) {
+//         throw new Error("Lỗi không gọi được endpoint lấy tổng cuốn sách\n" + error);
+//     }
+//     return 0;
+// }
