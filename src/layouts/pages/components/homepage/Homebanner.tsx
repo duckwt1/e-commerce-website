@@ -57,12 +57,12 @@ const HomeBanner=() => {
                 </div>
                 <div className={'item'}>
                     <img
-                        src="https://res.cloudinary.com/dy2p0n2xc/image/upload/v1729664746/1729664746011_New_Project_6.jpg"
-                        alt="Snow" className={'w-100'}/>
+                        src="https://naveencollection.in/cdn/shop/files/Orange_Red_Flash_Sale_9.9_Promotion_Banner.png?v=1700890056&width=1100"
+                        alt="tech" className={'w-100'} style={{height:"50%"}}/>
                 </div>
                 <div className={'item'}>
                     <img
-                        src="https://res.cloudinary.com/dy2p0n2xc/image/upload/v1729664784/1729664783845_New_Project_11.jpg"
+                        src="https://cf.shopee.com.my/file/13de85bbf7f6c7f14a1bd0b8fe6b2de1"
                         alt="Snow" className={'w-100'}/>
                 </div>
 

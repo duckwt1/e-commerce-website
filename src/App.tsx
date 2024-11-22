@@ -14,6 +14,9 @@ import { AuthProvider } from "./layouts/utils/AuthContext";
 import { ConfirmProvider } from "material-ui-confirm";
 import ProductDetail from "./layouts/products/ProductDetail";
 import {getAllImageByProduct} from "./api/ImageAPI";
+import {getProductById} from "./api/ProductAPI";
+import {ForgotPassword} from "./layouts/user/ForgotPassword";
+import ProfilePage from "./layouts/user/ProfilePage";
 
 const MyRoutes = () => {
     const [reloadAvatar, setReloadAvatar] = useState(0);
@@ -53,13 +56,6 @@ const hideHeaderFooter = listHideHeaderFooter.includes(location.pathname);
 
 
 
-//tesst
-    getAllImageByProduct(1).then((images) => {
-        const imageUrls = images.map(image => image.urlImage);
-        console.log("All image URLs:", imageUrls);
-    }).catch(error => {
-        console.error("Error fetching images:", error);
-    });
 
     return (
         <div className="App">
@@ -71,10 +67,12 @@ const hideHeaderFooter = listHideHeaderFooter.includes(location.pathname);
             )}
             <Routes>
                 <Route path="/" element={<Homepage />} />
-                <Route path='/api/products/:productId' element={<ProductDetail />} />
+                <Route path='products/:productId' element={<ProductDetail />} />
                 <Route path="/policy" element={<PolicyPage />} />
                 <Route path='/register' element={<RegisterPage />} />
                 <Route path='/login' element={<LoginPage />} />
+                <Route path ='/forgot-password' element={<ForgotPassword />} />
+                <Route path='/profile' element={<ProfilePage setReloadAvatar={setReloadAvatar} />}/>
             </Routes>
             {showScrollButton && (
                 <button onClick={scrollToTop} className="scroll-to-top">

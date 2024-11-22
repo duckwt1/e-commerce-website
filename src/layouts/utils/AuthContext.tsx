@@ -1,31 +1,28 @@
-import React, { createContext, useContext, useState } from "react";
-import { isToken } from './JwtService';
-
-interface AuthContextProps {
-	children: React.ReactNode;
-}
-
-interface AuthContextType {
-	isLoggedIn: boolean;
-	setLoggedIn: any;
-}
+// src/layouts/utils/AuthContext.tsx
+import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { AuthContextType } from './AuthContextType';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<AuthContextProps> = (props) => {
-	const [isLoggedIn, setLoggedIn] = useState(isToken());
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const [user, setUser] = useState<{ name: string; avatarUrl: string } | null>(null);
+
+	const setLoggedIn = (loggedIn: boolean) => {
+		setIsLoggedIn(loggedIn);
+	};
 
 	return (
-		<AuthContext.Provider value={{ isLoggedIn, setLoggedIn }}>
-			{props.children}
+		<AuthContext.Provider value={{ isLoggedIn, setLoggedIn, user }}>
+			{children}
 		</AuthContext.Provider>
 	);
 };
 
-export const useAuth = (): AuthContextType => {
+export const useAuth = () => {
 	const context = useContext(AuthContext);
 	if (!context) {
-		throw new Error("Lỗi context");
+		throw new Error('useAuth must be used within an AuthProvider');
 	}
 	return context;
 };

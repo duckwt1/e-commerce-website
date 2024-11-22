@@ -39,7 +39,7 @@ export async function getAllUserRole(): Promise<UserModel[]> {
    return data;
 }
 
-export async function get1User(idUser: any): Promise<UserModel> {
+export async function getOneUser(idUser: any): Promise<UserModel> {
    const endpoint = endpointBE + `/users/${idUser}`;
    const responseUser = await request(endpoint);
    const responseRole = await getRoleByIdUser(idUser);
@@ -66,4 +66,47 @@ export async function getUserByIdReview(idReview: number): Promise<UserModel> {
    const endpoint: string = endpointBE + `/reviews/${idReview}/user`;
 
    return getUser(endpoint);
+}
+
+
+
+
+export async function get1User(idUser: any): Promise<UserModel> {
+   const token = localStorage.getItem('token');
+   if (!token) {
+      throw new Error('No token found');
+   }
+
+   const endpoint = `${endpointBE}/users/${idUser}`;
+   const responseUser = await fetch(endpoint, {
+      method: 'GET',
+      headers: {
+         'Authorization': `Bearer ${token}`,
+         'Content-Type': 'application/json',
+      },
+   });
+
+   if (!responseUser.ok) {
+      const errorText = await responseUser.text();
+      throw new Error(`Error: ${responseUser.status} ${responseUser.statusText} - ${errorText}`);
+   }
+
+   const userData = await responseUser.json();
+   const responseRole = await getRoleByIdUser(idUser);
+
+   const user: UserModel = {
+      idUser: userData.idUser,
+      avatar: userData.avatar,
+      dateOfBirth: userData.dateOfBirth,
+      deliveryAddress: userData.deliveryAddress,
+      email: userData.email,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      gender: userData.gender,
+      phoneNumber: userData.phoneNumber,
+      username: userData.username,
+      role: responseRole.idRole,
+   };
+
+   return user;
 }

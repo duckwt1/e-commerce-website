@@ -234,7 +234,7 @@ const RegisterPage: React.FC = () => {
 								Already have an account? <Link to={"/login"} className={"log-in"}>Sign In</Link>
 							</span>
 							</div>
-							<div className='loading-button text-center my-3'>
+							<div className='btn loading-button text-center my-3'>
 								<Button fullWidth type='submit' sx={{padding: "10px", color: '#fff'}}>
 									Register
 								</Button>

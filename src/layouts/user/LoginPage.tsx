@@ -12,9 +12,9 @@ import { getCartAllByIdUser } from "../../api/CartApi";
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import "./../../css/Login-Register.css";
 
-interface LoginPageProps {}
 
-const LoginPage: React.FC<LoginPageProps> = () => {
+
+const LoginPage: React.FC = () => {
 	useScrollToTop();
 	const { setTotalCart, setCartList } = useCartItem();
 	const navigate = useNavigate();
@@ -142,10 +142,7 @@ const LoginPage: React.FC<LoginPageProps> = () => {
 			});
 	};
 
-	const handleGoogleLoginFailure = (error: any) => {
-		console.error("Google login error:", error);
-		toast.error("Google login failed.");
-	};
+
 
 	return (
 		<GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
@@ -153,8 +150,8 @@ const LoginPage: React.FC<LoginPageProps> = () => {
 				<video autoPlay muted loop playsInline>
 					<source src="/background_video.mp4" type="video/mp4"/>
 				</video>
-				<div className="login-container">
-					<div className="login-card">
+				<div className="login-container ">
+					<div className="login-card ">
 						<img src="/logo.png" alt="logo" className="logo" style={{width: '90px', height: '80px'}}/>
 						<h2 style={{color:"#880a0a"}}>Sign In</h2>
 						<form className="login-form" onSubmit={handleSubmit}>
@@ -163,8 +160,8 @@ const LoginPage: React.FC<LoginPageProps> = () => {
 							<label>Password</label>
 							<input type="password" placeholder="Enter your password" required onChange={(e) => setPassword(e.target.value)}/>
 
-							<a href="/forgot-password" className="forgot-password">Forgot Password?</a>
-							<button type="submit" className="sign-in-button">Sign In</button>
+							<Link to="/forgot-password" className="forgot-password">Forgot password?</Link>
+							<button type="submit" className="btn sign-in-button">Sign In</button>
 						</form>
 						<span>
 							Don't have an account? <Link to="/register" className={"sign-up"}>Sign Up</Link>

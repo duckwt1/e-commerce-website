@@ -1,20 +1,11 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import BookModel from "../../model/ProductModel";
-
+import ProductModel from "../../model/ProductModel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-// import SelectQuantity from "./components/select-quantity/SelectQuantity";
 import Button from "@mui/material/Button";
 import { ShoppingCartOutlined } from "@mui/icons-material";
-// import Comment from "./components/comment/Comment";
-// import TextEllipsis from "./components/text-ellipsis/TextEllipsis";
-// import { getGenreByIdBook } from "../../api/GenreApi";
-import GenreModel from "../../model/GenreModel";
 import ImageModel from "../../model/ImageModel";
-// import RatingStar from "./components/rating/Rating";
 import React from "react";
-
 import { toast } from "react-toastify";
 import { endpointBE } from "../utils/Constant";
 import { getIdUserByToken, isToken } from "../utils/JwtService";
@@ -23,25 +14,20 @@ import { Skeleton } from "@mui/material";
 import CartItemModel from "../../model/CartItemModel";
 import { CheckoutPage } from "../pages/CheckoutPage";
 import useScrollToTop from "../../hooks/ScrollToTop";
-import {getAllImageByProduct} from "../../api/ImageAPI";
+import { getAllImageByProduct } from "../../api/ImageAPI";
 import TextEllipsis from "./components/TextEllipsis";
-import {getProductById} from "../../api/ProductAPI";
-import {getGenreByIdBook} from "../../api/GenreApi";
-import {Carousel} from "react-responsive-carousel";
+import { getProductById } from "../../api/ProductAPI";
+import { Carousel } from "react-responsive-carousel";
 import ReactSimpleImageViewer from "react-simple-image-viewer";
-import ProductModel from "../../model/ProductModel";
 
 interface BookDetailProps {}
 
 const ProductDetail: React.FC<BookDetailProps> = (props) => {
-	useScrollToTop(); // Mỗi lần vào component này thì sẽ ở trên cùng
+	useScrollToTop();
 	const { setTotalCart, cartList } = useCartItem();
-
-	// Lấy mã sách từ url
 	const { idProduct } = useParams();
 	let idProductNumber: number = 0;
 
-	// Ép kiểu về number
 	try {
 		idProductNumber = parseInt(idProduct + "");
 		if (Number.isNaN(idProductNumber)) {
@@ -51,14 +37,14 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 		console.error("Error: " + error);
 	}
 
-	// Khai báo biến
 	const [product, setProduct] = useState<ProductModel | null>(null);
 	const [loading, setLoading] = useState(true);
-	const [erroring, setErroring] = useState(null);
-	// Lấy sách ra
+	const [erroring, setErroring] = useState<string | null>(null);
+
 	useEffect(() => {
 		getProductById(idProductNumber)
 			.then((response) => {
+				console.log("Product response:", response);
 				setProduct(response);
 				setLoading(false);
 			})
@@ -66,55 +52,39 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 				setLoading(false);
 				setErroring(error.message);
 			});
-	}, []);
+	}, [idProductNumber]);
 
-	// Lấy ra thể loại của sách
-	const [genres, setGenres] = useState<GenreModel[] | null>(null);
-	useEffect(() => {
-		getGenreByIdBook(idProductNumber).then((response) => {
-			setGenres(response.genreList);
-		});
-	}, []);
-
-	// Lấy ra hình ảnh của sách
 	const [images, setImages] = useState<ImageModel[] | null>(null);
 	useEffect(() => {
 		getAllImageByProduct(idProductNumber)
 			.then((response) => {
+				console.log("Images response:", response);
 				setImages(response);
 			})
 			.catch((error) => {
 				console.error(error);
 			});
-	}, []);
+	}, [idProductNumber]);
 
 	const [quantity, setQuantity] = useState(1);
-	// Xử lý tăng số lượng
 	const add = () => {
 		if (quantity < (product?.quantity ? product?.quantity : 1)) {
 			setQuantity(quantity + 1);
 		}
 	};
 
-	// Xử lý giảm số lượng
 	const reduce = () => {
 		if (quantity > 1) {
 			setQuantity(quantity - 1);
 		}
 	};
 
-	// Xử lý thêm sản phẩm vào giỏ hàng
 	const handleAddProduct = async (newProduct: ProductModel) => {
-		// cái isExistBook này sẽ tham chiếu đến cái cart ở trên, nên khi update thì cart nó cũng update theo
 		let isExistProduct = cartList.find(
 			(cartItem) => cartItem.product.productId === newProduct.productId
 		);
-		// Thêm 1 sản phẩm vào giỏ hàng
 		if (isExistProduct) {
-			// nếu có rồi thì sẽ tăng số lượng
 			isExistProduct.quantity += quantity;
-
-			// Lưu vào db
 			if (isToken()) {
 				const request = {
 					idCart: isExistProduct.idCart,
@@ -131,7 +101,6 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 				}).catch((err) => console.log(err));
 			}
 		} else {
-			// Lưu vào db
 			if (isToken()) {
 				try {
 					const request = [
@@ -172,14 +141,11 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 				});
 			}
 		}
-		// Lưu vào localStorage
 		localStorage.setItem("cart", JSON.stringify(cartList));
-		// Thông báo toast
 		toast.success("Thêm vào giỏ hàng thành công");
 		setTotalCart(cartList.length);
 	};
 
-	// Viewer hình ảnh
 	const [currentImage, setCurrentImage] = useState(0);
 	const [isViewerOpen, setIsViewerOpen] = useState(false);
 
@@ -246,7 +212,7 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 	if (product === null) {
 		return (
 			<div>
-				<h1>Sách không tồn tại </h1>
+				<h1>Sản phẩm không tồn tại </h1>
 			</div>
 		);
 	}
@@ -303,7 +269,7 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 									<p className='me-5'>
 										Thể loại:{" "}
 										<strong>
-											{genres?.map((genre) => genre.nameGenre + " ")}
+											{/*{genres?.map((genre) => genre.nameGenre + " ")}*/}
 										</strong>
 									</p>
 									<p className='ms-5'>
@@ -312,49 +278,44 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 								</div>
 								<div className='d-flex align-items-center'>
 									<div className='d-flex align-items-center'>
-										{/*<RatingStar*/}
-										{/*	readonly={true}*/}
-										{/*	ratingPoint={book.avgRating}*/}
-										{/*/>*/}
-
 										<p className='text-danger ms-2 mb-0'>
 											({product.avgRating})
 										</p>
 									</div>
 									<div className='d-flex align-items-center'>
-										<span className='mx-3 mb-1 text-secondary'>
-											|
-										</span>
+                                        <span className='mx-3 mb-1 text-secondary'>
+                                            |
+                                        </span>
 									</div>
 									<div className='d-flex align-items-end justify-content-center '>
-										<span
+                                        <span
 											style={{
 												color: "rgb(135,135,135)",
 												fontSize: "16px",
 											}}
 										>
-											Đã bán
-										</span>
+                                            Đã bán
+                                        </span>
 										<span className='fw-bold ms-2'>
-											{product.soldQuantity}
-										</span>
+                                            {product.soldQuantity}
+                                        </span>
 									</div>
 								</div>
 								<div className='price'>
-									<span className='discounted-price text-danger me-3'>
-										<strong style={{ fontSize: "32px" }}>
-											{product.sellPrice?.toLocaleString()}đ
-										</strong>
-									</span>
+                                    <span className='discounted-price text-danger me-3'>
+                                        <strong style={{ fontSize: "32px" }}>
+                                            {product.sellPrice?.toLocaleString()}đ
+                                        </strong>
+                                    </span>
 									<span className='original-price small me-3'>
-										<strong>
-											<del>{product.listPrice?.toLocaleString()}đ</del>
-										</strong>
-									</span>
+                                        <strong>
+                                            <del>{product.listPrice?.toLocaleString()}đ</del>
+                                        </strong>
+                                    </span>
 									<h4 className='my-0 d-inline-block'>
-										<span className='badge bg-danger'>
-											{product.quantity === 0 ? "Hết hàng" : ""}
-										</span>
+                                        <span className='badge bg-danger'>
+                                            {product.quantity === 0 ? "Hết hàng" : ""}
+                                        </span>
 									</h4>
 								</div>
 								<div className='mt-3'>
@@ -365,8 +326,8 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 											className='ms-3 text-primary'
 											style={{ cursor: "pointer" }}
 										>
-											Thay đổi
-										</span>
+                                            Thay đổi
+                                        </span>
 									</p>
 									<div className='d-flex align-items-center mt-3'>
 										<img
@@ -379,16 +340,9 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 								</div>
 								<div className='d-flex align-items-center mt-3'>
 									<strong className='me-5'>Số lượng: </strong>
-									{/*<SelectQuantity*/}
-									{/*	max={book.quantity}*/}
-									{/*	quantity={quantity}*/}
-									{/*	setQuantity={setQuantity}*/}
-									{/*	add={add}*/}
-									{/*	reduce={reduce}*/}
-									{/*/>*/}
 									<span className='ms-4'>
-										{product.quantity} sản phẩm có sẵn
-									</span>
+                                        {product.quantity} sản phẩm có sẵn
+                                    </span>
 								</div>
 								<div className='mt-4 d-flex align-items-center'>
 									{product.quantity === 0 ? (
@@ -433,7 +387,6 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 					<div className='container p-4 bg-white my-3 rounded'>
 						<h5 className='my-3'>Khách hàng đánh giá</h5>
 						<hr />
-						{/*<Comment idBook={idBookNumber} />*/}
 					</div>
 				</>
 			) : (

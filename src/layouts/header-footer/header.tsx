@@ -7,6 +7,7 @@ import {RiRefund2Fill} from "react-icons/ri";
 import {PiShippingContainerBold} from "react-icons/pi";
 import {IoMdCart} from "react-icons/io";
 import {Link, Route} from "react-router-dom";
+import UserMenu from "./components/UserMenu";
 export default function Header() {
     return (
         <nav className="header navbar navbar-expand-lg navbar-light bg-light" style={{paddingBottom: '0', paddingTop: '0'}}>
@@ -52,8 +53,8 @@ export default function Header() {
                                 </a>
                             </li>
                             <li className="nav-user nav-item d-flex">
-                                <Link to={"/login"} className="nav-link me-2"> <FaUserCircle size={30} color={'#9d0606'}/></Link>
-
+                                {/*<Link to={"/profile"} className="nav-link me-2"> <FaUserCircle size={30} color={'#9d0606'}/></Link>*/}
+                                <UserMenu/>
                             </li>
                         </ul>
                     </div>

@@ -397,6 +397,12 @@ nav .navPart2 .subcategory-item a:hover {
   padding: 0 10px; /* Tạo khoảng cách giữa các banner */
   border-radius: 30px;
 }
+.homeBannerSection .item img {
+  width: 80%; /* Đảm bảo hình ảnh chiếm hết chiều ngang */
+  height: 500px; /* Đặt chiều cao cố định (bạn có thể thay đổi theo nhu cầu) */
+    object-fit: cover; /* Đảm bảo hình ảnh không bị méo */
+
+}
 
 .bannerImage {
   border-radius: 30px; /* Bo tròn góc */

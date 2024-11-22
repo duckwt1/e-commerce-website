@@ -47,7 +47,6 @@ async function getProduct(endpoint: string): Promise<resultInterface> {
                 return product;
             }
             const responseImg = await getAllImageByProduct(product.productId);
-            console.log("responseImg for productId", product.productId, ":", responseImg);
 
             const thumbnail = responseImg.find(image => image.isThumbnail === true)?.urlImage || "default_thumbnail.jpg";
             const relatedImg = responseImg.map(image => image.urlImage);
@@ -141,32 +140,26 @@ export async function searchBook(keySearch?: string, idGenre?: number, filter?: 
 }
 
 export async function getProductById(productId: number): Promise<ProductModel | null> {
-    let productResponse: ProductModel = {
-        productId: 0,
-        name: "",
-        description: "",
-        avgRating: NaN,
-        listPrice: null,
-        sellPrice: NaN,
-        quantity: NaN,
-        soldQuantity: NaN,
-        thumbnail: "",
-        relatedImg: []
-    }
-    const endpoint = endpointBE + `/books/${productId}`;
+    const endpoint = `${endpointBE}/api/product/${productId}`;
     try {
         const response = await request(endpoint);
 
         if (response) {
-            productResponse = response;
-            const responseImg = await getAllImageByProduct(response.idBook);
-            const thumbnail = responseImg.filter(image => image.isThumbnail);
-            return {
-                ...productResponse,
-                thumbnail: thumbnail[0].urlImage,
+            const productResponse: ProductModel = {
+                productId: response.id,
+                name: response.name,
+                description: response.description,
+                avgRating: response.avgRating || NaN,
+                listPrice: response.listPrice,
+                sellPrice: response.sellPrice,
+                quantity: response.quantity,
+                soldQuantity: response.soldQuantity || NaN,
+                thumbnail: response.images.find((image: any) => image.isThumbnail)?.urlImage || "",
+                relatedImg: response.images.map((image: any) => image.urlImage)
             };
+            return productResponse;
         } else {
-            throw new Error("Sách không tồn tại");
+            throw new Error("Product does not exist");
         }
 
     } catch (error) {
@@ -174,6 +167,7 @@ export async function getProductById(productId: number): Promise<ProductModel | 
         return null;
     }
 }
+
 
 export async function getBookByIdCartItem(idCart: number): Promise<ProductModel | null> {
     const endpoint = `${endpointBE}/cart-items/${idCart}/book`;

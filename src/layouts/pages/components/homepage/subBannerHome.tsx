@@ -6,28 +6,28 @@ import "slick-carousel/slick/slick-theme.css";
 
 const images = [
     {
-        src: "https://res.cloudinary.com/dy2p0n2xc/image/upload/v1729910145/1729910145238_New_Project_22.jpg",
+        src: "https://res.cloudinary.com/dkgonwhvj/image/upload/v1731428252/1731428250193_New_Project_2.jpg",
         title: "Get the Best Mobile",
         description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
         buttonText: "Order Now",
         buttonLink: "#",
     },
     {
-        src: "https://res.cloudinary.com/dy2p0n2xc/image/upload/v1729058266/1729058263591_New_Project_9.jpg",
+        src: "https://res.cloudinary.com/dkgonwhvj/image/upload/v1731428239/1731428237761_New_Project_3.jpg",
         title: "New Arrivals Just for You",
         description: "For online order - 30% OFF",
         buttonText: "Shop Now",
         buttonLink: "#",
     },
     {
-        src: "https://res.cloudinary.com/dy2p0n2xc/image/upload/v1729058247/1729058244370_New_Project_18.jpg",
+        src: "https://res.cloudinary.com/dkgonwhvj/image/upload/v1731428266/1731428264319_New_Project_9.jpg",
         title: "Kids Fashion Sale",
         description: "Stylish & Trendy Fashion",
         buttonText: "Buy Now",
         buttonLink: "#",
     },
     {
-        src: "https://res.cloudinary.com/dy2p0n2xc/image/upload/v1729520258/1729520257674_New_Project_19.jpg",
+        src: "https://res.cloudinary.com/dkgonwhvj/image/upload/v1731428226/1731428223813_New_Project_20.jpg",
         title: "Kids Fashion Sale",
         description: "Stylish & Trendy Fashion",
         buttonText: "Buy Now",

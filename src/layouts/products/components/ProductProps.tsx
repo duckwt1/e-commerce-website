@@ -57,12 +57,12 @@
                             )}
                         </h4>
                     ) : null}
-                    <Link to={`api/product/${product.productId}`}>
+                    <Link to={`/products/${product.productId}`}>
                         <img src={product.thumbnail} className="card-img-top mt-3" alt={product.name} style={{ height: "250px" }}
                         />
                     </Link>
                     <div className="card-body">
-                        <Link to={`api/product/${product.productId}`} style={{ textDecoration: "none" }}>
+                        <Link to={`/products/${product.productId}`} style={{ textDecoration: "none" }}>
                             <h5 className="card-title product-name fixed-height">
                                 <Tooltip title={product.name ?? ''} arrow>
                                         <span>
