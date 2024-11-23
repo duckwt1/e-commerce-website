@@ -1,7 +1,7 @@
 class UserModel {
    id?: any;
    idUser: number;
-   dateOfBirth: Date;
+   birthDate: Date;
    deliveryAddress: string;
    purchaseAddress?: string;
    email: string;
@@ -10,7 +10,7 @@ class UserModel {
    gender: string;
    password?: string;
    phoneNumber: string;
-   username: string;
+   name: string;
    avatar: string;
    role?: number;
 
@@ -26,7 +26,7 @@ class UserModel {
       phoneNumber: string,
       username: string, avatar: string) {
       this.idUser = idUser;
-      this.dateOfBirth = dateOfBirth;
+      this.birthDate = dateOfBirth;
       this.deliveryAddress = deliveryAddress;
       this.purchaseAddress = purchaseAddress;
       this.email = email;
@@ -35,7 +35,7 @@ class UserModel {
       this.gender = gender;
       this.password = password;
       this.phoneNumber = phoneNumber;
-      this.username = username;
+      this.name = username;
       this.avatar = avatar;
    }
 }

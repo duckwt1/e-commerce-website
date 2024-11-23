@@ -21,14 +21,14 @@ export async function getAllUserRole(): Promise<UserModel[]> {
          const user: UserModel = {
             idUser: userData.idUser,
             avatar: userData.avatar,
-            dateOfBirth: userData.dateOfBirth,
+            birthDate: userData.dateOfBirth,
             deliveryAddress: userData.deliveryAddress,
             email: userData.email,
             firstName: userData.firstName,
             lastName: userData.lastName,
             gender: userData.gender,
             phoneNumber: userData.phoneNumber,
-            username: userData.username,
+            name: userData.username,
             role: roleData.nameRole,
          };
          return user;
@@ -47,14 +47,14 @@ export async function getOneUser(idUser: any): Promise<UserModel> {
    const user: UserModel = {
       idUser: responseUser.idUser,
       avatar: responseUser.avatar,
-      dateOfBirth: responseUser.dateOfBirth,
+      birthDate: responseUser.dateOfBirth,
       deliveryAddress: responseUser.deliveryAddress,
       email: responseUser.email,
       firstName: responseUser.firstName,
       lastName: responseUser.lastName,
       gender: responseUser.gender,
       phoneNumber: responseUser.phoneNumber,
-      username: responseUser.username,
+      name: responseUser.username,
       role: responseRole.idRole,
    };
 
@@ -67,9 +67,6 @@ export async function getUserByIdReview(idReview: number): Promise<UserModel> {
 
    return getUser(endpoint);
 }
-
-
-
 
 export async function get1User(idUser: any): Promise<UserModel> {
    const token = localStorage.getItem('token');
@@ -92,19 +89,20 @@ export async function get1User(idUser: any): Promise<UserModel> {
    }
 
    const userData = await responseUser.json();
-   const responseRole = await getRoleByIdUser(idUser);
+   // const responseRole = await getRoleByIdUser(idUser);
+   const responseRole = await getRoleByIdUser(userData.idUser);
 
    const user: UserModel = {
       idUser: userData.idUser,
       avatar: userData.avatar,
-      dateOfBirth: userData.dateOfBirth,
+      birthDate: userData.dateOfBirth,
       deliveryAddress: userData.deliveryAddress,
       email: userData.email,
       firstName: userData.firstName,
       lastName: userData.lastName,
       gender: userData.gender,
       phoneNumber: userData.phoneNumber,
-      username: userData.username,
+      name: userData.username,
       role: responseRole.idRole,
    };
 

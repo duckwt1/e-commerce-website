@@ -25,7 +25,7 @@ import OrderTable from "./components/OrderTable";
 import { FadeModal } from "../utils/FadeModal";
 
 import { get1User } from "../../api/UserApi";
-import { getIdUserByToken } from "../utils/JwtService";
+import {getEmailByToken, getIdUserByToken} from "../utils/JwtService";
 import UserModel from "../../model/UserModel";
 import { endpointBE } from "../utils/Constant";
 import { toast } from "react-toastify";
@@ -34,15 +34,15 @@ import CheckIcon from "@mui/icons-material/Check";
 import { useAuth } from "../utils/AuthContext";
 import { useNavigate } from "react-router-dom";
 import useScrollToTop from "../../hooks/ScrollToTop";
+import {jwtDecode} from "jwt-decode";
 // import { OrderForm } from "../../admin/order/OrderForm";
-
 
 interface ProfilePageProps {
 	setReloadAvatar: any;
 }
 
 const ProfilePage: React.FC<ProfilePageProps> = (props) => {
-	useScrollToTop(); // Mỗi lần vào component này thì sẽ ở trên cùng
+	useScrollToTop(); // Scroll to top each time this component is accessed
 
 	const { isLoggedIn } = useAuth();
 	const navigation = useNavigate();
@@ -53,10 +53,10 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
 		}
 	});
 
-	// Các biến thông tin cá nhân
+	// Personal information variables
 	const [user, setUser] = useState<UserModel>({
 		idUser: 0,
-		dateOfBirth: new Date(),
+		birthDate: new Date(),
 		deliveryAddress: "",
 		purchaseAddress: "",
 		email: "",
@@ -65,7 +65,7 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
 		gender: "",
 		password: "",
 		phoneNumber: "",
-		username: "",
+		name: "",
 		avatar: "",
 	});
 	const [newPassword, setNewPassword] = useState("");
@@ -73,46 +73,83 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
 	const [dataAvatar, setDataAvatar] = useState("");
 	const [previewAvatar, setPreviewAvatar] = useState("");
 
-	// reload lại component order table
+	// Reload order table component
 	const [keyCountReload, setKeyCountReload] = useState(0);
 
-	// Xử lý order table
+	// Handle order table
 	const [id, setId] = useState(0);
 	const [openModal, setOpenModal] = React.useState(false);
 	const handleOpenModal = () => setOpenModal(true);
 	const handleCloseModal = () => setOpenModal(false);
 
-	// Các biến trạng thái
+	// State variables
 	const [modifiedStatus, setModifiedStatus] = useState(false);
 	const [isUploadAvatar, setIsUploadAvatar] = useState(false);
 
-	// Các biến thông báo lỗi
+	// Error message variables
 	const [errorPhoneNumber, setErrorPhoneNumber] = useState("");
 	const [errorNewPassword, setErrorNewPassword] = useState("");
 	const [errorRepeatPassword, setErrorRepeatPassword] = useState("");
 
-	// Lấy data user lên
+	// Fetch user data
 	useEffect(() => {
-		const idUser = getIdUserByToken();
-		get1User(idUser)
-			.then((response) => {
-				setUser({
-					...response,
-					dateOfBirth: new Date(response.dateOfBirth),
+		const token = localStorage.getItem("token");
+
+		if (token) {
+			const email = getEmailByToken();  // Get email from token
+			console.log("Email: " + email);
+
+			// Fetch user data by email
+			fetchUserByEmail(email)
+				.then((userData) => {
+					console.log("dateOfBirth: " + userData.birthDate);
+					// Safely handle dateOfBirth, ensuring it's a valid date
+					let validDateOfBirth = new Date(userData.birthDate + "T00:00:00Z");
+					if (isNaN(validDateOfBirth.getTime())) {
+						validDateOfBirth = new Date();
+					}
+
+					setUser({
+						...userData,
+						birthDate: validDateOfBirth,
+					});
+
+					setPreviewAvatar(userData.avatar);
+					console.log("User data loaded:", userData);
+				})
+				.catch((error) => {
+					console.error("Failed to fetch user data:", error);
 				});
-				setPreviewAvatar(response.avatar);
-				console.log("user already login: " + response);
-			})
-			.catch((error) => console.log(error));
+		} else {
+			console.log("No token found in localStorage");
+		}
 	}, []);
 
-	// Xử lý change só điện thoại
+	// Fetch user data by email
+	async function fetchUserByEmail(email: string | undefined): Promise<UserModel> {
+		const endpoint = `${endpointBE}/auth/get-user?email=${email}`;
+		console.log("Endpoint: " + endpoint);
+		const response = await fetch(endpoint, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+
+		if (!response.ok) {
+			const errorText = await response.text();
+			throw new Error(`Error: ${response.status} ${response.statusText} - ${errorText}`);
+		}
+		return response.json();
+	}
+
+	// Handle phone number change
 	const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setUser({ ...user, phoneNumber: e.target.value });
 		setErrorPhoneNumber("");
 	};
 
-	// Xử lý upload hình ảnh (preview)
+	// Handle image upload (preview)
 	function handleImageUpload(event: React.ChangeEvent<HTMLInputElement>) {
 		const inputElement = event.target as HTMLInputElement;
 
@@ -137,21 +174,58 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
 		}
 	}
 
-	// Xử lý ngày sinh
+	function handleSubmitAvatar() {
+		const token = localStorage.getItem("token");
+		const formData = new FormData(); // Create a FormData object
+		formData.append("file", dataAvatar); // Append the image data
+		formData.append("name", user.name); // Append the name or any other identifier
+
+		toast.promise(
+			fetch(endpointBE + "/api/upload", {
+				method: "POST",
+				headers: {
+					Authorization: `Bearer ${token}`,
+					// No need to set 'Content-Type' header, it will be set automatically
+				},
+				body: formData,
+			})
+				.then((response) => {
+					if (response.ok) {
+						return response.text();
+					}
+					throw new Error('Network response was not ok.');
+				})
+				.then((imageUrl) => {
+					toast.success("Cập nhật ảnh đại diện thành công");
+					setPreviewAvatar(imageUrl); // Update the preview with the new avatar URL
+					setIsUploadAvatar(false);
+					props.setReloadAvatar(Math.random());
+				})
+				.catch((error) => {
+					toast.error("Cập nhật ảnh đại diện thất bại");
+					setPreviewAvatar(user.avatar);
+					setIsUploadAvatar(false);
+					console.log(error);
+				}),
+			{ pending: "Đang trong quá trình xử lý ..." }
+		);
+	}
+
+	// Handle date of birth change
 	const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const dateString = e.target.value;
-		// Chuyển đổi chuỗi thành đối tượng Date
+		// Convert string to Date object
 		const dateObject = new Date(dateString);
 		if (!isNaN(dateObject.getTime())) {
-			// Nếu là một ngày hợp lệ, cập nhật state
+			// If valid date, update state
 			setUser({
 				...user,
-				dateOfBirth: dateObject,
+				birthDate: dateObject,
 			});
 		}
 	};
 
-	// Xử lý change password
+	// Handle password change
 	const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setNewPassword(e.target.value);
 		setErrorNewPassword("");
@@ -164,13 +238,13 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
 		setErrorRepeatPassword("");
 	};
 
-	// Xử lý TABS
+	// Handle TABS
 	const [value, setValue] = React.useState("1");
 	const handleChange = (event: React.SyntheticEvent, newValue: string) => {
 		setValue(newValue);
 	};
 
-	// Xử lý khi form submit (thay đổi thông tin)
+	// Handle form submit (update information)
 	function handleSubmit(event: FormEvent<HTMLFormElement>): void {
 		event.preventDefault();
 		const token = localStorage.getItem("token");
@@ -185,72 +259,72 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
 					idUser: getIdUserByToken(),
 					firstName: user.firstName,
 					lastName: user.lastName,
-					dateOfBirth: user.dateOfBirth,
+					dateOfBirth: user.birthDate,
 					phoneNumber: user.phoneNumber,
 					deliveryAddress: user.deliveryAddress,
 					gender: user.gender,
 				}),
 			})
 				.then((response) => {
-					toast.success("Cập nhật thông tin thành công");
+					toast.success("Profile updated successfully");
 					setModifiedStatus(!modifiedStatus);
 				})
 				.catch((error) => {
-					toast.error("Cập nhật thông tin thất bại");
+					toast.error("Profile update failed");
 					setModifiedStatus(!modifiedStatus);
 					console.log(error);
 				}),
-			{ pending: "Đang trong quá trình xử lý ..." }
+			{ pending: "Processing..." }
 		);
 	}
 
-	// Xử lý khi thay đổi avatar (thay đổi avatar)
-	function handleSubmitAvatar() {
-		const token = localStorage.getItem("token");
-		toast.promise(
-			fetch(endpointBE + "/user/change-avatar", {
-				method: "PUT",
-				headers: {
-					Authorization: `Bearer ${token}`,
-					"content-type": "application/json",
-				},
-				body: JSON.stringify({
-					idUser: getIdUserByToken(),
-					avatar: dataAvatar,
-				}),
-			})
-				.then((response) => {
-					if (response.ok) {
-						return response.json();
-					}
-				})
-				.then((data) => {
-					const { jwtToken } = data;
-					localStorage.setItem("token", jwtToken);
+	// Handle avatar change
+	// function handleSubmitAvatar() {
+	// 	const token = localStorage.getItem("token");
+	// 	toast.promise(
+	// 		fetch(endpointBE + "/user/change-avatar", {
+	// 			method: "PUT",
+	// 			headers: {
+	// 				Authorization: `Bearer ${token}`,
+	// 				"content-type": "application/json",
+	// 			},
+	// 			body: JSON.stringify({
+	// 				idUser: getIdUserByToken(),
+	// 				avatar: dataAvatar,
+	// 			}),
+	// 		})
+	// 			.then((response) => {
+	// 				if (response.ok) {
+	// 					return response.json();
+	// 				}
+	// 			})
+	// 			.then((data) => {
+	// 				const { jwtToken } = data;
+	// 				localStorage.setItem("token", jwtToken);
+	//
+	// 				toast.success("Avatar updated successfully");
+	// 				setPreviewAvatar(previewAvatar);
+	// 				setIsUploadAvatar(false);
+	// 				props.setReloadAvatar(Math.random());
+	// 			})
+	// 			.catch((error) => {
+	// 				toast.error("Avatar update failed");
+	// 				setPreviewAvatar(user.avatar);
+	// 				setIsUploadAvatar(false);
+	// 				console.log(error);
+	// 			}),
+	// 		{ pending: "Processing..." }
+	// 	);
+	// }
 
-					toast.success("Cập nhật ảnh đại diện thành công");
-					setPreviewAvatar(previewAvatar);
-					setIsUploadAvatar(false);
-					props.setReloadAvatar(Math.random());
-				})
-				.catch((error) => {
-					toast.error("Cập nhật ảnh đại diện thất bại");
-					setPreviewAvatar(user.avatar);
-					setIsUploadAvatar(false);
-					console.log(error);
-				}),
-			{ pending: "Đang trong quá trình xử lý ..." }
-		);
-	}
-
-	// Xử lý khi form sumbit (thay đổi mật khẩu)
+	// Handle form submit (change password)
 	function handleSubmitChangePassword(
 		event: FormEvent<HTMLFormElement>
 	): void {
 		event.preventDefault();
 
 		if (errorNewPassword.length > 0 || errorRepeatPassword.length > 0) {
-			toast.warning("Xem lại mật khẩu vừa nhập");
+			toast.warning("Please review the entered password");
 			return;
 		}
 
@@ -269,15 +343,15 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
 			.then((response) => {
 				setNewPassword("");
 				setRepeatPassword("");
-				toast.success("Đổi mật khẩu thành công");
+				toast.success("Password changed successfully");
 			})
 			.catch((error) => {
 				console.log(error);
-				toast.error("Thay đổi mật khẩu không thành công");
+				toast.error("Password change failed");
 			});
 	}
 
-	// Khúc này chủ yếu nếu mà không đăng nhập mà cố tình vào thì sẽ không render component ra
+	// If not logged in, do not render the component
 	if (!isLoggedIn) {
 		return <></>;
 	}
@@ -288,9 +362,9 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
 				<Grid item sm={12} md={12} lg={3}>
 					<div className='bg-light rounded py-3 me-lg-2 me-md-0 me-sm-0'>
 						<div className='d-flex align-items-center justify-content-center flex-column'>
-							<Avatar style={{ fontSize: "50px" }} alt={user.lastName.toUpperCase()}
-								src={previewAvatar}
-								sx={{ width: 100, height: 100 }}
+							<Avatar style={{ fontSize: "50px" }} alt={user.name}
+									src={previewAvatar}
+									sx={{ width: 100, height: 100 }}
 							/>
 							{!isUploadAvatar ? (
 								<Button
@@ -318,7 +392,7 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
 										}}
 										color='error'
 									>
-										Huỷ
+										Cancel
 									</Button>
 									<Button
 										className='mt-4 ms-2'
@@ -328,7 +402,7 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
 										color='success'
 										onClick={handleSubmitAvatar}
 									>
-										Thay đổi
+										Change
 									</Button>
 								</div>
 							)}
@@ -350,9 +424,9 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
 										onChange={handleChange}
 										aria-label='lab API tabs example'
 									>
-										<Tab label='Thông tin cá nhân' value='1' />
-										<Tab label='Đơn hàng' value='2' />
-										<Tab label='Đổi mật khẩu' value='3' />
+										<Tab label='Personal Information' value='1' />
+										<Tab label='Orders' value='2' />
+										<Tab label='Change Password' value='3' />
 									</TabList>
 								</Box>
 								<TabPanel value='1'>
@@ -370,7 +444,7 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
 												}}
 											>
 												<Tooltip
-													title='Chỉnh sửa thông tin'
+													title='Edit Information'
 													placement='bottom-end'
 												>
 													<Button
@@ -390,67 +464,66 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
 										)}
 										<div className='row'>
 											<div className='col-sm-12 col-md-6 col-lg-4'>
-												<TextField required fullWidth label='ID'
-													value={user.idUser} disabled={true} className='input-field'
-													InputProps={{readOnly: true,}}/>
-												<TextField required fullWidth label='Họ đệm'
-													value={user.firstName}
-													onChange={(e) => setUser({
-														...user,
-														firstName: e.target.value,
-														})
-													} disabled={modifiedStatus ? false : true} className='input-field'/>
+												{/*<TextField required fullWidth label='ID'*/}
+												{/*		   value={user.idUser} disabled={true} className='input-field'*/}
+												{/*		   InputProps={{ readOnly: true, }} />*/}
+												<TextField required fullWidth label='First Name'
+														   value={user.firstName}
+														   onChange={(e) => setUser({
+															   ...user,
+															   firstName: e.target.value,
+														   })
+														   } disabled={modifiedStatus ? false : true} className='input-field' />
 												<TextField fullWidth
-													error={errorPhoneNumber.length > 0 ? true : false}
-													helperText={errorPhoneNumber}
-													required={true}
-													label='Số điện thoại'
-													placeholder='Nhập số điện thoại'
-													value={user.phoneNumber}
-													onChange={handlePhoneNumberChange}
-													onBlur={(e) => {
-														checkPhoneNumber(
-															setErrorPhoneNumber,
-															e.target.value
-														);
-													}}
-													disabled={modifiedStatus ? false : true}
-													className='input-field'
+														   error={errorPhoneNumber.length > 0 ? true : false}
+														   helperText={errorPhoneNumber}
+														   required={true}
+														   label='Phone Number'
+														   placeholder='Enter phone number'
+														   value={user.phoneNumber}
+														   onChange={handlePhoneNumberChange}
+														   onBlur={(e) => {
+															   checkPhoneNumber(
+																   setErrorPhoneNumber,
+																   e.target.value
+															   );
+														   }}
+														   disabled={modifiedStatus ? false : true}
+														   className='input-field'
 												/>
 											</div>
 											<div className='col-sm-12 col-md-6 col-lg-4'>
-												<TextField required fullWidth label='Tên tài khoản'
-													value={user.username} disabled={true} className='input-field'
+												<TextField required fullWidth label='Username'
+														   value={user.name} disabled={true} className='input-field'
 												/>
-												<TextField required fullWidth label='Tên' value={user.lastName}
-													onChange={(e) =>
-														setUser({...user, lastName: e.target.value,
-														})
-													}
-													disabled={modifiedStatus ? false : true} className='input-field'
+												<TextField required fullWidth label='Last Name' value={user.lastName}
+														   onChange={(e) =>
+															   setUser({ ...user, lastName: e.target.value, })
+														   }
+														   disabled={modifiedStatus ? false : true} className='input-field'
 												/>
-												<TextField required fullWidth label='Địa chỉ giao hàng' value={user.deliveryAddress}
-													onChange={(e) =>
-														setUser({...user, deliveryAddress: e.target.value,})}
-													disabled={modifiedStatus ? false : true}
-													className='input-field'
+												<TextField required fullWidth label='Delivery Address' value={user.deliveryAddress}
+														   onChange={(e) =>
+															   setUser({ ...user, deliveryAddress: e.target.value, })}
+														   disabled={modifiedStatus ? false : true}
+														   className='input-field'
 												/>
 											</div>
 											<div className='col-sm-12 col-md-6 col-lg-4'>
 												<TextField required fullWidth label='Email' value={user.email} className='input-field'
-													disabled={true} InputProps={{readOnly: true,}}/>
-												<TextField required fullWidth className='input-field' label='Ngày sinh'
-													style={{ width: "100%" }} type='date' value={
-														user.dateOfBirth
-															.toISOString()
-															.split("T")[0]
-													}
-													onChange={handleDateChange}
-													disabled={modifiedStatus ? false : true}
+														   disabled={true} InputProps={{ readOnly: true, }} />
+												<TextField required fullWidth className='input-field' label='Date of Birth'
+														   style={{ width: "100%" }} type='date' value={
+													user.birthDate
+														.toISOString()
+														.split("T")[0]
+												}
+														   onChange={handleDateChange}
+														   disabled={modifiedStatus ? false : true}
 												/>
 												<FormControl>
 													<FormLabel id='demo-row-radio-buttons-group-label'>
-														Giới tính
+														Gender
 													</FormLabel>
 													<RadioGroup
 														row
@@ -470,7 +543,7 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
 															}
 															value='M'
 															control={<Radio />}
-															label='Nam'
+															label='Male'
 														/>
 														<FormControlLabel
 															disabled={
@@ -478,7 +551,7 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
 															}
 															value='F'
 															control={<Radio />}
-															label='Nữ'
+															label='Female'
 														/>
 													</RadioGroup>
 												</FormControl>
@@ -492,7 +565,7 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
 													type='submit'
 													sx={{ width: "50%", padding: "10px" }}
 												>
-													Lưu và thay đổi
+													Save Changes
 												</Button>
 											</div>
 										)}
@@ -530,9 +603,9 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
 											error={
 												errorNewPassword.length > 0 ? true : false
 											}
-											helperText={errorNewPassword} required={true} fullWidth type='password' label='Mật khẩu mới'
-											placeholder='Nhập mật khẩu mới' value={newPassword} onChange={handlePasswordChange}
-											onBlur={(e) => {checkPassword(setErrorNewPassword, e.target.value);
+											helperText={errorNewPassword} required={true} fullWidth type='password' label='New Password'
+											placeholder='Enter new password' value={newPassword} onChange={handlePasswordChange}
+											onBlur={(e) => { checkPassword(setErrorNewPassword, e.target.value);
 											}}
 											className='input-field'
 										/>
@@ -543,8 +616,8 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
 											required={true}
 											fullWidth
 											type='password'
-											label='Xác nhận mật khẩu mới'
-											placeholder='Nhập lại mật khẩu mới'
+											label='Confirm New Password'
+											placeholder='Re-enter new password'
 											value={repeatPassword}
 											onChange={handleRepeatPasswordChange}
 											onBlur={(e) => {
@@ -563,7 +636,7 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
 												type='submit'
 												sx={{ width: "50%", padding: "10px" }}
 											>
-												Lưu và thay đổi
+												Save Changes
 											</Button>
 										</div>
 									</form>

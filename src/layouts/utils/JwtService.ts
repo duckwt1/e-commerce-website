@@ -62,6 +62,15 @@ export function getIdUserByToken() {
     }
 }
 
+export function getEmailByToken(): string | undefined {
+    const token = localStorage.getItem("token");
+    if (token) {
+        const decodedToken = jwtDecode<{ email?: string }>(token);
+        return decodedToken.email;
+    }
+    return undefined;
+}
+
 export function getRoleByToken() {
     const token = localStorage.getItem('token');
     if (token) {
