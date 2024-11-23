@@ -67,7 +67,7 @@ export async function getAllProduct(size?: number, page?: number): Promise<resul
         size = 8;
     }
 
-    const endpoint: string = `${endpointBE}/books?sort=idBook,desc&size=${size}&page=${page}`;
+    const endpoint: string = `${endpointBE}/api/product?sort=idProduct,desc&size=${size}&page=${page}`;
     return getProduct(endpoint);
 }
 
@@ -97,19 +97,19 @@ export async function get3BestSellerBooks(): Promise<ProductModel[]> {
     return newBookList;
 }
 
-export async function searchBook(keySearch?: string, idGenre?: number, filter?: number, size?: number, page?: number): Promise<resultInterface> {
+export async function searchProduct(keySearch?: string, idGenre?: number, filter?: number, size?: number, page?: number): Promise<resultInterface> {
     if (keySearch) {
         keySearch = keySearch.trim();
     }
 
     const optionsShow = `size=${size}&page=${page}`;
-    let endpoint: string = `${endpointBE}/books?${optionsShow}`;
+    let endpoint: string = `${endpointBE}/api/product?${optionsShow}`;
 
     let filterEndpoint = '';
     if (filter === 1) {
-        filterEndpoint = "sort=nameBook";
+        filterEndpoint = "sort=nameProduct";
     } else if (filter === 2) {
-        filterEndpoint = "sort=nameBook,desc";
+        filterEndpoint = "sort=nameProduct,desc";
     } else if (filter === 3) {
         filterEndpoint = "sort=sellPrice";
     } else if (filter === 4) {
@@ -119,20 +119,20 @@ export async function searchBook(keySearch?: string, idGenre?: number, filter?: 
     }
 
     if (keySearch !== '') {
-        endpoint = `${endpointBE}/books/search/findByNameBookContaining?nameBook=${keySearch}&${optionsShow}&${filterEndpoint}`;
+        endpoint = `${endpointBE}/api/product/search/findByNameBookContaining?nameProduct=${keySearch}&${optionsShow}&${filterEndpoint}`;
     }
 
     if (idGenre !== undefined) {
         if (keySearch === '' && idGenre > 0) {
-            endpoint = `${endpointBE}/books/search/findByListGenres_idGenre?idGenre=${idGenre}&${optionsShow}&${filterEndpoint}`;
+            endpoint = `${endpointBE}/api/product/search/findByListGenres_idGenre?idGenre=${idGenre}&${optionsShow}&${filterEndpoint}`;
         }
 
         if (keySearch !== '' && idGenre > 0) {
-            endpoint = `${endpointBE}/books/search/findByNameBookContainingAndListGenres_idGenre?nameBook=${keySearch}&idGenre=${idGenre}&${optionsShow}&${filterEndpoint}`;
+            endpoint = `${endpointBE}/api/product/search/findByNameBookContainingAndListGenres_idGenre?nameBook=${keySearch}&idGenre=${idGenre}&${optionsShow}&${filterEndpoint}`;
         }
 
         if (keySearch === '' && (idGenre === 0 || typeof (idGenre) === 'string')) {
-            endpoint = `${endpointBE}/books?${optionsShow}&${filterEndpoint}`;
+            endpoint = `${endpointBE}/api/product?${optionsShow}&${filterEndpoint}`;
         }
     }
 

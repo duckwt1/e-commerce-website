@@ -22,6 +22,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import ResetPassword from "./layouts/user/ResetPassword";
 import ChangePassword from "./layouts/user/ChangePassword";
 import ActiveAccount from "./layouts/user/ActiveAccount";
+import FilterPage from './layouts/pages/FilterPage';
 
 const MyRoutes = () => {
     const [reloadAvatar, setReloadAvatar] = useState(0);
@@ -72,6 +73,8 @@ const MyRoutes = () => {
                 </>
             )}
             <Routes>
+                <Route path='/search/:idGenreParam' element={<FilterPage />}/>
+                <Route path='/search' element={<FilterPage />} />
                 <Route path="/" element={<Homepage />} />
                 <Route path='products/:idProduct' element={<ProductDetail />} />
                 <Route path="/policy" element={<PolicyPage />} />

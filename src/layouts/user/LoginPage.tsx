@@ -161,7 +161,7 @@ const LoginPage: React.FC = () => {
 							<input type="password" placeholder="Enter your password" required onChange={(e) => setPassword(e.target.value)}/>
 
 							<Link to="/forgot-password" className="forgot-password">Forgot password?</Link>
-							<button type="submit" className="btn sign-in-button">Sign In</button>
+							<button type="submit" className="btn-login sign-in-button">Sign In</button>
 						</form>
 						<span>
 							Don't have an account? <Link to="/register" className={"sign-up"}>Sign Up</Link>
