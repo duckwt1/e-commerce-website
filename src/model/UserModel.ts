@@ -2,11 +2,11 @@ class UserModel {
    id?: any;
    idUser: number;
    birthDate: Date;
-   deliveryAddress: string;
+   address: string;
    purchaseAddress?: string;
    email: string;
-   firstName: string;
-   lastName: string;
+   firstname: string;
+   lastname: string;
    gender: string;
    password?: string;
    phoneNumber: string;
@@ -27,11 +27,11 @@ class UserModel {
       username: string, avatar: string) {
       this.idUser = idUser;
       this.birthDate = dateOfBirth;
-      this.deliveryAddress = deliveryAddress;
+      this.address = deliveryAddress;
       this.purchaseAddress = purchaseAddress;
       this.email = email;
-      this.firstName = firstName;
-      this.lastName = lastName;
+      this.firstname = firstName;
+      this.lastname = lastName;
       this.gender = gender;
       this.password = password;
       this.phoneNumber = phoneNumber;

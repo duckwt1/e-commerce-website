@@ -55,9 +55,9 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = (props) => {
 		get1User(idUser)
 			.then((response) => {
 				setUser(response);
-				setFullName(response.firstName + " " + response.lastName);
+				setFullName(response.firstname + " " + response.lastname);
 				setPhoneNumber(response.phoneNumber);
-				setDeliveryAddress(response.deliveryAddress);
+				setDeliveryAddress(response.address);
 			})
 			.catch((error) => {
 				console.log(error);
