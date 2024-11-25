@@ -3,7 +3,6 @@ class UserModel {
    idUser: number;
    birthDate: Date;
    address: string;
-   purchaseAddress?: string;
    email: string;
    firstname: string;
    lastname: string;
@@ -28,7 +27,6 @@ class UserModel {
       this.idUser = idUser;
       this.birthDate = dateOfBirth;
       this.address = deliveryAddress;
-      this.purchaseAddress = purchaseAddress;
       this.email = email;
       this.firstname = firstName;
       this.lastname = lastName;

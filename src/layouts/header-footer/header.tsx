@@ -6,9 +6,15 @@ import {FaShippingFast, FaUserCircle} from "react-icons/fa";
 import {RiRefund2Fill} from "react-icons/ri";
 import {PiShippingContainerBold} from "react-icons/pi";
 import {IoMdCart} from "react-icons/io";
-import {Link, Route} from "react-router-dom";
+import {Link, Route, useNavigate} from "react-router-dom";
 import UserMenu from "./components/UserMenu";
+import {useCartItem} from "../utils/CartItemContext";
+import {useAuth} from "../utils/AuthContext";
+import {isToken} from "../utils/JwtService";
 export default function Header() {
+    const { totalCart, setTotalCart, setCartList } = useCartItem();
+    const { setLoggedIn } = useAuth();
+    const navigate = useNavigate();
     return (
         <nav className="header navbar navbar-expand-lg navbar-light bg-light" style={{paddingBottom: '0', paddingTop: '0'}}>
             <div className="top1 container-fluid d-flex justify-content-center align-items-center"
@@ -19,9 +25,9 @@ export default function Header() {
             </div>
 
             <div className="container-fluid" style={{background: '#ffffff'}}>
-                <a className="navbar-brand ms-5" href="#">
+                <Link className="navbar-brand ms-5" to="/">
                     <img src="/logo.png" alt="logo" style={{width: '70px'}}/>
-                </a>
+                </Link>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -38,23 +44,36 @@ export default function Header() {
                     {/* UL list aligned to the right */}
                     <div className={"d-flex justify-content-end"} style={{width: '60%', marginRight: '-3%'}}>
                         <ul className="navitems navbar-nav  mb-2 mb-lg-0">
-                            <li className="nav-1 nav-item d-flex align-items-center">
-                                <Link className="nav-link-text" to="/">HOME</Link>
-                            </li>
+
                             <li className="nav-2 nav-item d-flex align-items-center">
                                 <Link className="nav-link-text" to="/policy">POLICY</Link>
                             </li>
                             <li className="nav-3 me-3 nav-item d-flex align-items-center">
                                 <a className="nav-link-text last"  style={{color:'#da1313'}}>ABOUT</a>
                             </li>
-                            <li className="nav-cart nav-item d-flex align-items-center">
-                                <a className="nav-link ms-4 me-1" href="#" >
-                                    <IoMdCart size={30} color={'#8a0b0b'}/>
-                                </a>
-                            </li>
+                            {/*<li className="nav-cart nav-item d-flex align-items-center">*/}
+                            {/*    <a className="nav-link ms-4 me-1" href="#" >*/}
+                            {/*        <IoMdCart size={30} color={'#8a0b0b'}/>*/}
+                            {/*    </a>*/}
+                            {/*</li>*/}
+                            {/* <!-- Shopping Cart --> */}
+                            <Link className='text-reset  nav-link ms-4 me-1' to='/cart'>
+                                        <IoMdCart size={30} color={'#306b94'}/>
+                                <span className='badge rounded-pill badge-notification bg-danger'>
+							{totalCart ? totalCart : ""}
+						</span>
+                            </Link>
+
                             <li className="nav-user nav-item d-flex">
                                 {/*<Link to={"/profile"} className="nav-link me-2"> <FaUserCircle size={30} color={'#9d0606'}/></Link>*/}
-                                <UserMenu/>
+                                {isToken() && (
+                                    <UserMenu />
+                                )}
+                                {!isToken() && (
+                                    <a href="#" className="nav-link me-2" onClick={() => navigate("/login")}>
+                                        <FaUserCircle size={30} color={'#9d0606'}/>
+                                    </a>
+                                )}
                             </li>
                         </ul>
                     </div>

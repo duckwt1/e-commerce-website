@@ -14,12 +14,23 @@
 /* Sidebar title */
 .filter-sidebar h5 {
     font-weight: bold;
-    font-size: 16px;
+    font-size: 18px;
     margin-bottom: 20px;
     text-transform: uppercase;
     color: #333;
 }
+.filter-sidebar input {
+    margin-top:7px;
+}
 
+.title-filter {
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    color: #333;
+
+}
 /* Filter options */
 .filter-sidebar input[type="radio"] {
     margin-right: 10px;
@@ -54,6 +65,7 @@
     border-color: #007bff;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
+
 
 /* Ratings filter */
 .filter-sidebar label[for*="rating"] {
@@ -108,3 +120,9 @@
     color: #fff;
     border-color: #007bff;
 }
+
+
+
+
+
+

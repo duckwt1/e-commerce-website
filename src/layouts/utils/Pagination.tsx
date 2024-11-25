@@ -54,7 +54,7 @@ const Pagination: React.FC<PaginationInterface> = (props) => {
 	}
 
 	return (
-		<nav aria-label='Page navigation example' className='mt-5 fs-5'>
+		<nav aria-label='Page navigation example' className='mt-5 ' style={{background:"transparent"}}>
 			<ul className='pagination justify-content-center'>
 				<li
 					className={

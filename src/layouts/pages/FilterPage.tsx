@@ -43,7 +43,7 @@ const FilterPage: React.FC<FilterPageProps> = (props) => {
 
 	return (
 		<>
-			<div className='container-book container bg-light my-3 py-3 px-5'>
+			<div className='container-fluid toolFilter ' >
 				<ToolFilter
 					size={size}
 					setSize={setSize}

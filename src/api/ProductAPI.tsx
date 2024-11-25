@@ -2,6 +2,10 @@ import { endpointBE } from '../layouts/utils/Constant';
 import ProductModel from '../model/ProductModel';
 import { getAllImageByProduct } from './ImageAPI';
 import { request, requestAdmin } from './Request';
+import {getCategoryByIdProduct} from "./CategoryAPI";
+import categoryModel from "../model/CategoryModel";
+
+
 
 interface resultInterface {
     productList: ProductModel[];
@@ -23,8 +27,10 @@ async function getProduct(endpoint: string): Promise<resultInterface> {
         const sellPrice = productData.sellPrice;
         const quantity = productData.quantity;
         const soldQuantity = productData.soldQuantity;
+        const discountPercent = productData.discount_percent;
         const thumbnail = "";
         const relatedImg: string[] = [];
+        const categoryList: categoryModel[] = [];
 
         return new ProductModel(
             productId,
@@ -36,7 +42,10 @@ async function getProduct(endpoint: string): Promise<resultInterface> {
             quantity,
             soldQuantity,
             thumbnail,
-            relatedImg
+            relatedImg,
+            categoryList,
+            discountPercent
+
         );
     });
 
@@ -47,7 +56,6 @@ async function getProduct(endpoint: string): Promise<resultInterface> {
                 return product;
             }
             const responseImg = await getAllImageByProduct(product.productId);
-
             const thumbnail = responseImg.find(image => image.isThumbnail === true)?.urlImage || "default_thumbnail.jpg";
             const relatedImg = responseImg.map(image => image.urlImage);
 
@@ -143,7 +151,7 @@ export async function getProductById(productId: number): Promise<ProductModel | 
     const endpoint = `${endpointBE}/api/product/${productId}`;
     try {
         const response = await request(endpoint);
-
+            console.log(response);
         if (response) {
             const productResponse: ProductModel = {
                 productId: response.id,
@@ -155,7 +163,9 @@ export async function getProductById(productId: number): Promise<ProductModel | 
                 quantity: response.quantity,
                 soldQuantity: response.soldQuantity || NaN,
                 thumbnail: response.images.find((image: any) => image.isThumbnail)?.urlImage || "",
-                relatedImg: response.images.map((image: any) => image.urlImage)
+                relatedImg: response.images.map((image: any) => image.urlImage),
+                categoryList: [],
+                discountPercent: response.discount_percent,
             };
             return productResponse;
         } else {
@@ -169,7 +179,7 @@ export async function getProductById(productId: number): Promise<ProductModel | 
 }
 
 
-export async function getBookByIdCartItem(idCart: number): Promise<ProductModel | null> {
+export async function getProductByIdCartItem(idCart: number): Promise<ProductModel | null> {
     const endpoint = `${endpointBE}/cart-items/${idCart}/book`;
 
     try {
@@ -178,15 +188,17 @@ export async function getBookByIdCartItem(idCart: number): Promise<ProductModel 
         if (response) {
             return {
                 productId: response.product_id,
-                name: response.product_name,
-                description: response.book_description,
-                avgRating: response.book_avg_rating,
-                sellPrice: response.book_sell_price,
-                listPrice: response.book_list_price,
-                quantity: response.book_quantity,
-                soldQuantity: response.book_sold_quantity,
+                name: response.name,
+                description: response.description,
+                avgRating: response.avgRating,
+                sellPrice: response.sell_price,
+                listPrice: response.list_price,
+                quantity: response.quantity,
+                soldQuantity: response.soldQuantity,
                 thumbnail: "", // Sẽ được cập nhật sau
-                relatedImg: []
+                relatedImg: [],
+                categoryList: [],
+                discountPercent: response.discount_percent,
             };
         } else {
             throw new Error("Sách không tồn tại");
@@ -210,3 +222,48 @@ export async function getBookByIdCartItem(idCart: number): Promise<ProductModel 
 //     }
 //     return 0;
 // }
+
+
+
+// Lấy sách theo id (lấy thumbnail, ảnh liên quan, thể loại)
+export async function getProductByIdAllInformation(idProduct: number): Promise<ProductModel | null> {
+    let productResponse: ProductModel = {
+        productId: 0,
+        name: "",
+        description: "",
+        listPrice: NaN,
+        sellPrice: NaN,
+        quantity: NaN,
+        avgRating: NaN,
+        soldQuantity: NaN,
+        thumbnail: "",
+        relatedImg: [],
+        categoryList: [],
+        discountPercent: NaN,
+    };
+
+    try {
+        const response = await getProductById(idProduct);
+
+        if (response) {
+            productResponse = response;
+
+            const imagesList = await getAllImageByProduct(response.productId);
+            const thumbnail = imagesList.find((image) => image.isThumbnail)?.urlImage || "default_thumbnail.jpg";
+            const relatedImg = imagesList.map((image) => !image.isThumbnail ? image.urlImage : null).filter(Boolean) as string[];
+            productResponse = { ...productResponse, relatedImg, thumbnail };
+
+            const cateList = await getCategoryByIdProduct(response.productId);
+            const categoryList = cateList.categoryList.map((category) => ({ idCategory: category.idCategory, name: category.name }));
+            productResponse = { ...productResponse, categoryList };
+
+            return productResponse;
+        } else {
+            throw new Error("Product does not exist");
+        }
+
+    } catch (error) {
+        console.error('Error: ', error);
+        return null;
+    }
+}

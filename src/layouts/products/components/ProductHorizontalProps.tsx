@@ -20,7 +20,7 @@ interface ProductHorizontalProps {
 	statusOrder?: string;
 }
 
-export const BookHorizontal: React.FC<ProductHorizontalProps> = (props) => {
+export const ProductHorizontal: React.FC<ProductHorizontalProps> = (props) => {
 	// Mở/Đóng modal
 	const [openModal, setOpenModal] = React.useState(false);
 	const handleOpenModal = () => setOpenModal(true);

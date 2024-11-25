@@ -1,7 +1,7 @@
 import { endpointBE } from "../layouts/utils/Constant";
 import { getIdUserByToken } from "../layouts/utils/JwtService";
 import CartItemModel from "../model/CartItemModel";
-import { getBookByIdCartItem } from "./ProductAPI";
+import { getProductByIdCartItem } from "./ProductAPI";
 import { request } from "./Request";
 
 export async function getCartAllByIdUser(): Promise<CartItemModel[]> {
@@ -12,7 +12,7 @@ export async function getCartAllByIdUser(): Promise<CartItemModel[]> {
 
       if (cartResponse) {
          const cartsResponseList: CartItemModel[] = await Promise.all(cartResponse._embedded.cartItems.map(async (item: any) => {
-            const bookResponse = await getBookByIdCartItem(item.idCart);
+            const bookResponse = await getProductByIdCartItem(item.idCart);
             return { ...item, book: bookResponse };
          }));
          return cartsResponseList;

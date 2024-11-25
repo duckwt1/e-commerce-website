@@ -35,6 +35,8 @@ import {useAuth} from "../utils/AuthContext";
 import {useNavigate} from "react-router-dom";
 import useScrollToTop from "../../hooks/ScrollToTop";
 import {jwtDecode} from "jwt-decode";
+import FavoriteProductsList from "../products/FavoriteProductsList";
+import {OrderForm} from "../../admin/components/order/OrderForm";
 
 // import { OrderForm } from "../../admin/order/OrderForm";
 
@@ -59,7 +61,6 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
         idUser: 0,
         birthDate: new Date(),
         address: "",
-        purchaseAddress: "",
         email: "",
         firstname: "",
         lastname: "",
@@ -395,112 +396,168 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
                                         <Tab label='Personal Information' value='1'/>
                                         <Tab label='Orders' value='2'/>
                                         <Tab label='Change Password' value='3'/>
+                                        <Tab label='Whishlist' value='4'/>
                                     </TabList>
                                 </Box>
-                                <TabPanel value='1'>
+                                <TabPanel value="1">
                                     <form
                                         onSubmit={handleSubmit}
-                                        className='form position-relative'
-                                        style={{padding: "0 20px"}}
+                                        className="form position-relative"
+                                        style={{ padding: "0 20px" }}
                                     >
                                         {!modifiedStatus && (
                                             <div
-                                                className='text-end my-3 position-absolute'
+                                                className="text-end my-3 position-absolute"
                                                 style={{
                                                     bottom: "0",
                                                     right: "0",
                                                 }}
                                             >
-                                                <Tooltip
-                                                    title='Edit Information'
-                                                    placement='bottom-end'
-                                                >
+                                                <Tooltip title="Edit Information" placement="top-end">
                                                     <Button
-                                                        variant='contained'
-                                                        type='button'
-                                                        className='rounded-pill'
-                                                        onClick={() =>
-                                                            setModifiedStatus(!modifiedStatus)
-                                                        }
+                                                        variant="contained"
+                                                        type="button"
+                                                        className="rounded-pill"
+                                                        onClick={() => setModifiedStatus(!modifiedStatus)}
+                                                        style={{ position: "absolute", top: "-340px", right: "10px" }}
                                                     >
-                                                        <EditOutlined
-                                                            sx={{width: "24px"}}
-                                                        />
+                                                        <EditOutlined sx={{ width: "24px" }} />
                                                     </Button>
                                                 </Tooltip>
+
                                             </div>
                                         )}
-                                        <div className='row'>
-                                            <div className='col-sm-12 col-md-6 col-lg-4'>
-                                                {/*<TextField required fullWidth label='ID'*/}
-                                                {/*		   value={user.idUser} disabled={true} className='input-field'*/}
-                                                {/*		   InputProps={{ readOnly: true, }} />*/}
-                                                <TextField required fullWidth label='First Name'
-                                                           value={user.firstname}
-                                                           onChange={(e) => setUser({
-                                                               ...user,
-                                                               firstname: e.target.value,
-                                                           })
-                                                           } disabled={modifiedStatus ? false : true}
-                                                           className='input-field'/>
-                                                <TextField fullWidth
-                                                           error={errorPhoneNumber.length > 0 ? true : false}
-                                                           helperText={errorPhoneNumber}
-                                                           required={true}
-                                                           label='Phone Number'
-                                                           placeholder='Enter phone number'
-                                                           value={user.phoneNumber}
-                                                           onChange={handlePhoneNumberChange}
-                                                           onBlur={(e) => {
-                                                               checkPhoneNumber(
-                                                                   setErrorPhoneNumber,
-                                                                   e.target.value
-                                                               );
-                                                           }}
-                                                           disabled={modifiedStatus ? false : true}
-                                                           className='input-field'
-                                                />
+                                        <div className="row">
+                                            <div className="col-sm-12 col-md-6 col-lg-4">
+                                                <div className="form-group">
+                                                    <label style={{textAlign:"start", fontWeight:"bold", fontSize:"15px", color:"red"}}>ID</label>
+                                                    <input
+                                                        type="text"
+                                                        style={{ background: "transparent", marginBottom: "10px" }}
+                                                        required
+                                                        value={user.idUser}
+                                                        disabled={true}
+                                                        className="input-field form-control mb-4"
+                                                        readOnly
+                                                    />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label style={{textAlign:"start", fontWeight:"bold", fontSize:"15px", color:"red"}}>First Name</label>
+                                                    <input
+                                                        type="text"
+                                                        style={{ background: "transparent", marginBottom: "10px" }}
+                                                        required
+                                                        value={user.firstname}
+                                                        onChange={(e) =>
+                                                            setUser({
+                                                                ...user,
+                                                                firstname: e.target.value,
+                                                            })
+                                                        }
+                                                        disabled={!modifiedStatus}
+                                                        className="input-field form-control"
+                                                    />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label style={{textAlign:"start", fontWeight:"bold", fontSize:"15px", color:"red"}}>Phone Number</label>
+                                                    <input
+                                                        type="text"
+                                                        style={{ background: "transparent", marginBottom: "10px" }}
+                                                        required
+                                                        value={user.phoneNumber}
+                                                        onChange={handlePhoneNumberChange}
+                                                        onBlur={(e) => {
+                                                            checkPhoneNumber(setErrorPhoneNumber, e.target.value);
+                                                        }}
+                                                        disabled={!modifiedStatus}
+                                                        className="input-field form-control"
+                                                        placeholder="Enter phone number"
+                                                    />
+                                                    {errorPhoneNumber && (
+                                                        <div className="text-danger">{errorPhoneNumber}</div>
+                                                    )}
+                                                </div>
                                             </div>
-                                            <div className='col-sm-12 col-md-6 col-lg-4'>
-                                                <TextField required fullWidth label='Username'
-                                                           value={user.name} disabled={true} className='input-field'
-                                                />
-                                                <TextField required fullWidth label='Last Name' value={user.lastname}
-                                                           onChange={(e) =>
-                                                               setUser({...user, lastname: e.target.value,})
-                                                           }
-                                                           disabled={modifiedStatus ? false : true}
-                                                           className='input-field'
-                                                />
-                                                <TextField required fullWidth label='Address' value={user.address}
-                                                           onChange={(e) =>
-                                                               setUser({...user, address: e.target.value,})}
-                                                           disabled={modifiedStatus ? false : true}
-                                                           className='input-field'
-                                                />
+                                            <div className="col-sm-12 col-md-6 col-lg-4">
+                                                <div className="form-group">
+                                                    <label style={{textAlign:"start", fontWeight:"bold", fontSize:"15px", color:"red"}}>Username</label>
+                                                    <input
+                                                        type="text"
+                                                        style={{ background: "transparent", marginBottom: "10px" }}
+                                                        required
+                                                        value={user.name}
+                                                        disabled={true}
+                                                        className="input-field form-control"
+                                                    />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label style={{textAlign:"start", fontWeight:"bold", fontSize:"15px", color:"red"}}>Last Name</label>
+                                                    <input
+                                                        type="text"
+                                                        style={{ background: "transparent", marginBottom: "10px" }}
+                                                        required
+                                                        value={user.lastname}
+                                                        onChange={(e) =>
+                                                            setUser({
+                                                                ...user,
+                                                                lastname: e.target.value,
+                                                            })
+                                                        }
+                                                        disabled={!modifiedStatus}
+                                                        className="input-field form-control"
+                                                    />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label style={{textAlign:"start", fontWeight:"bold", fontSize:"15px", color:"red"}}>Address</label>
+                                                    <input
+                                                        type="text"
+                                                        style={{ background: "transparent", marginBottom: "10px" }}
+                                                        required
+                                                        value={user.address}
+                                                        onChange={(e) =>
+                                                            setUser({
+                                                                ...user,
+                                                                address: e.target.value,
+                                                            })
+                                                        }
+                                                        disabled={!modifiedStatus}
+                                                        className="input-field form-control"
+                                                    />
+                                                </div>
                                             </div>
-                                            <div className='col-sm-12 col-md-6 col-lg-4'>
-                                                <TextField required fullWidth label='Email' value={user.email}
-                                                           className='input-field'
-                                                           disabled={true} InputProps={{readOnly: true,}}/>
-                                                <TextField required fullWidth className='input-field'
-                                                           label='Date of Birth'
-                                                           style={{width: "100%"}} type='date' value={
-                                                    user.birthDate
-                                                        .toISOString()
-                                                        .split("T")[0]
-                                                }
-                                                           onChange={handleDateChange}
-                                                           disabled={modifiedStatus ? false : true}
+                                            <div className="col-sm-12 col-md-6 col-lg-4">
+                                                <div className="form-group">
+                                                    <label style={{textAlign:"start", fontWeight:"bold", fontSize:"15px", color:"red"}}>Email</label>
+                                                    <input
+                                                        type="email"
+                                                        style={{ background: "transparent", marginBottom: "10px" }}
+                                                        required
+                                                        value={user.email}
+                                                        className="input-field form-control"
+                                                        disabled={true}
+                                                        readOnly
+                                                    />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label style={{textAlign:"start", fontWeight:"bold", fontSize:"15px", color:"red"}}>Date of Birth</label>
+                                                    <input
+                                                        type="date"
+                                                        style={{ background: "transparent", marginBottom: "10px" }}
+                                                        required
+                                                        value={user.birthDate.toISOString().split("T")[0]}
+                                                        onChange={handleDateChange}
+                                                        disabled={!modifiedStatus}
+                                                        className="input-field form-control"
                                                 />
+                                                </div>
                                                 <FormControl>
-                                                    <FormLabel id='demo-row-radio-buttons-group-label'>
+                                                    <FormLabel id="demo-row-radio-buttons-group-label">
                                                         Gender
                                                     </FormLabel>
                                                     <RadioGroup
                                                         row
-                                                        aria-labelledby='demo-row-radio-buttons-group-label'
-                                                        name='row-radio-buttons-group'
+                                                        aria-labelledby="demo-row-radio-buttons-group-label"
+                                                        name="row-radio-buttons-group"
                                                         value={user.gender}
                                                         onChange={(e) =>
                                                             setUser({
@@ -510,32 +567,28 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
                                                         }
                                                     >
                                                         <FormControlLabel
-                                                            disabled={
-                                                                modifiedStatus ? false : true
-                                                            }
-                                                            value='M'
-                                                            control={<Radio/>}
-                                                            label='Male'
+                                                            disabled={!modifiedStatus}
+                                                            value="M"
+                                                            control={<Radio />}
+                                                            label="Male"
                                                         />
                                                         <FormControlLabel
-                                                            disabled={
-                                                                modifiedStatus ? false : true
-                                                            }
-                                                            value='F'
-                                                            control={<Radio/>}
-                                                            label='Female'
+                                                            disabled={!modifiedStatus}
+                                                            value="F"
+                                                            control={<Radio />}
+                                                            label="Female"
                                                         />
                                                     </RadioGroup>
                                                 </FormControl>
                                             </div>
                                         </div>
                                         {modifiedStatus && (
-                                            <div className='text-center my-3'>
+                                            <div className="text-center my-3">
                                                 <Button
                                                     fullWidth
-                                                    variant='outlined'
-                                                    type='submit'
-                                                    sx={{width: "50%", padding: "10px"}}
+                                                    variant="outlined"
+                                                    type="submit"
+                                                    sx={{ width: "50%", padding: "10px" }}
                                                 >
                                                     Save Changes
                                                 </Button>
@@ -557,12 +610,12 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
                                         handleOpen={handleOpenModal}
                                         handleClose={handleCloseModal}
                                     >
-                                        {/*<OrderForm*/}
-                                        {/*	id={id}*/}
-                                        {/*	setKeyCountReload={setKeyCountReload}*/}
-                                        {/*	handleCloseModal={handleCloseModal}*/}
-                                        {/*	option='view-customer'*/}
-                                        {/*/>*/}
+                                        <OrderForm
+                                        	id={id}
+                                        	setKeyCountReload={setKeyCountReload}
+                                        	handleCloseModal={handleCloseModal}
+                                        	option='view-customer'
+                                        />
                                     </FadeModal>
                                 </TabPanel>
                                 <TabPanel value='3'>
@@ -615,6 +668,13 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
                                             </Button>
                                         </div>
                                     </form>
+                                </TabPanel>
+
+
+                                <TabPanel value='4'>
+                                    <div>
+                                        <FavoriteProductsList />
+                                    </div>
                                 </TabPanel>
                             </TabContext>
                         </Box>
