@@ -12,7 +12,7 @@ class UserModel {
    phoneNumber: string;
    name: string;
    avatar: string;
-   role?: number;
+   role?: string;
 
    constructor(idUser: number,
       dateOfBirth: Date,

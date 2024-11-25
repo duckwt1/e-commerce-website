@@ -25,7 +25,7 @@ import OrderTable from "./components/OrderTable";
 import {FadeModal} from "../utils/FadeModal";
 
 import {get1User} from "../../api/UserApi";
-import {getEmailByToken, getIdUserByToken} from "../utils/JwtService";
+import {getEmailByToken, getIdUserByToken, getRoleByToken} from "../utils/JwtService";
 import UserModel from "../../model/UserModel";
 import {endpointBE} from "../utils/Constant";
 import {toast} from "react-toastify";
@@ -68,11 +68,13 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
         phoneNumber: "",
         name: "",
         avatar: "",
+        role: "",
     });
     const [newPassword, setNewPassword] = useState("");
     const [repeatPassword, setRepeatPassword] = useState("");
     const [dataAvatar, setDataAvatar] = useState<File | null>(null);
     const [previewAvatar, setPreviewAvatar] = useState<string>("");
+    const [isShopCreated, setIsShopCreated] = useState(false); // Trạng thái shop đã được tạo
 
 
     // Reload order table component
@@ -93,18 +95,24 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
     const [errorNewPassword, setErrorNewPassword] = useState("");
     const [errorRepeatPassword, setErrorRepeatPassword] = useState("");
 
+    // Register shop
+    const [shopName, setShopName] = useState("");
+    const [shopAddress, setShopAddress] = useState("");
+    const [shopContact, setShopContact] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+
     // Fetch user data
     useEffect(() => {
         const token = localStorage.getItem("token");
 
         if (token) {
-            const email = getEmailByToken();  // Get email from token
-            console.log("Email: " + email);
+            const email = getEmailByToken();
+            const role = getRoleByToken();
+            console.log("Role: " + role);
 
             // Fetch user data by email
             fetchUserByEmail(email)
                 .then((userData) => {
-                    console.log("dateOfBirth: " + userData.birthDate);
                     // Safely handle dateOfBirth, ensuring it's a valid date
                     let validDateOfBirth = new Date(userData.birthDate + "T00:00:00Z");
                     if (isNaN(validDateOfBirth.getTime())) {
@@ -114,6 +122,7 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
                     setUser({
                         ...userData,
                         birthDate: validDateOfBirth,
+                        role: role,
                     });
 
                     setPreviewAvatar(userData.avatar);
@@ -319,6 +328,63 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
             });
     }
 
+    function handleRegisterShop(event: FormEvent<HTMLFormElement>): void {
+        event.preventDefault(); // Prevent the default form submission
+
+        // Basic validation
+        if (!shopName || !shopAddress || !shopContact) {
+            setErrorMessage("Please fill in all fields.");
+            return;
+        }
+
+        const token = localStorage.getItem("token");
+        const shopData = {
+            email: user.email,
+            name: shopName,
+            address: shopAddress,
+            "phoneNumber": shopContact,
+        };
+
+        console.log("Shop data:", shopData);
+
+        toast.promise(
+            fetch(endpointBE + "/auth/register-shop", {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(shopData),
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        console.log("Response: " + response);
+                        throw new Error("Failed to register shop");
+                    }
+                    return response.text();
+                })
+                .then((data) => {
+                    toast.success("Shop registered successfully!");
+                    // Optionally reset the form or update the state
+                    setShopName("");
+                    setShopAddress("");
+                    setShopContact("");
+                })
+                .catch((error) => {
+                    toast.error("Error: " + error.message);
+                    console.error(error);
+                }),
+            {pending: "Registering shop..."}
+        );
+    }
+
+    const visibleTabs = {
+        order: user.role == "ROLE_USER" ? false : true,
+        isShopCreated : user.role == "ROLE_SELLER" ? false : true,
+
+    };
+
+
     // If not logged in, do not render the component
     if (!isLoggedIn) {
         return <></>;
@@ -393,8 +459,12 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
                                         aria-label='lab API tabs example'
                                     >
                                         <Tab label='Personal Information' value='1'/>
-                                        <Tab label='Orders' value='2'/>
                                         <Tab label='Change Password' value='3'/>
+                                        <Tab label='Order' value='2'/>
+                                        <Tab label='Register Shop' value='4'/>
+                                        {/*{user.role == "ROLE_USER" && <Tab label='Order' value='2'/>}*/}
+                                        {/*{visibleTabs.isShopCreated && <Tab label='Register Shop' value='4'/>}*/}
+                                        {/*{user.role == "ROLE_SELLER" && <Tab label='Shop Management' value='5'/>}*/}
                                     </TabList>
                                 </Box>
                                 <TabPanel value='1'>
@@ -612,6 +682,43 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
                                                 sx={{width: "50%", padding: "10px"}}
                                             >
                                                 Save Changes
+                                            </Button>
+                                        </div>
+                                    </form>
+                                </TabPanel>
+                                <TabPanel value='4'>
+
+                                    <form onSubmit={handleRegisterShop}>
+                                        <TextField
+                                            label="Shop Name"
+                                            value={shopName}
+                                            onChange={(e) => setShopName(e.target.value)}
+                                            required
+                                            fullWidth
+                                        />
+                                        <TextField
+                                            label="Shop Address"
+                                            value={shopAddress}
+                                            onChange={(e) => setShopAddress(e.target.value)}
+                                            required
+                                            fullWidth
+                                        />
+                                        <TextField
+                                            label="Contact Number"
+                                            value={shopContact}
+                                            onChange={(e) => setShopContact(e.target.value)}
+                                            required
+                                            fullWidth
+                                        />
+                                        {errorMessage && <p style={{color: "red"}}>{errorMessage}</p>}
+                                        <div className='text-center my-3'>
+                                            <Button
+                                                fullWidth
+                                                variant='outlined'
+                                                type='submit'
+                                                sx={{width: "50%", padding: "10px"}}
+                                            >
+                                                Register Now
                                             </Button>
                                         </div>
                                     </form>

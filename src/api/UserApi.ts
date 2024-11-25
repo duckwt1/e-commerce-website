@@ -55,7 +55,7 @@ export async function getOneUser(idUser: any): Promise<UserModel> {
       gender: responseUser.gender,
       phoneNumber: responseUser.phoneNumber,
       name: responseUser.username,
-      role: responseRole.idRole,
+      role: responseRole.nameRole,
    };
 
    return user;
@@ -103,7 +103,7 @@ export async function get1User(idUser: any): Promise<UserModel> {
       gender: userData.gender,
       phoneNumber: userData.phoneNumber,
       name: userData.username,
-      role: responseRole.idRole,
+      role: responseRole.nameRole,
    };
 
    return user;
