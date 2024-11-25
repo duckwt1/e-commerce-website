@@ -7,6 +7,7 @@ import { FaHeart } from "react-icons/fa";
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { SnackbarCloseReason } from '@mui/material/Snackbar';
 import ProductModel from "../../../model/ProductModel";
+import {Link} from "react-router-dom";
 
 interface ProductDialogProps {
     product: ProductModel;
@@ -151,7 +152,10 @@ const ProductDialog: React.FC<ProductDialogProps> = ({ product, open, onClose })
                             Add to Wishlist
                         </button>
                         <button className="btn  mt-2" style={{width: "200px", background: "#2A3663", color: "#fff"}}>
-                            view detail
+
+                            <Link to={`/products/${product.productId}`} style={{color: "#fff", textDecoration: "none"}}>
+                                View Details
+                            </Link>
                         </button>
                     </div>
                 </div>

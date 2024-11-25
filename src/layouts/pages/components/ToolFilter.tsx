@@ -76,20 +76,20 @@ const ToolFilter: React.FC<ToolFilterProps> = (props) => {
 	}, []);
 
 	return (
-		<div className='d-flex align-items-center justify-content-between'>
+		<div className='d-flex container toolFilterReal align-items-center justify-content-between'>
 			<div className='row' style={{ flex: 1 }}>
 				<div className='col-lg-6 col-md-12 col-sm-12'>
 					<div className='d-flex align-items-center justify-content-lg-start justify-content-md-center justify-content-sm-center'>
 						{/* Genre */}
 						<FormControl sx={{ m: 1, minWidth: 120 }} size='small'>
 							<InputLabel id='demo-simple-select-helper-label'>
-								Thể loại sách
+								Category
 							</InputLabel>
 							<Select
 								labelId='demo-simple-select-helper-label'
 								id='demo-simple-select-helper'
 								value={props.idGenre ? props.idGenre + "" : ""}
-								label='Thể loại sách'
+								label='Product category'
 								autoWidth
 								onChange={handleChangeGenre}
 								sx={{ minWidth: "150px" }}
@@ -110,7 +110,7 @@ const ToolFilter: React.FC<ToolFilterProps> = (props) => {
 						{/* Filter */}
 						<FormControl sx={{ m: 1, minWidth: 120 }} size='small'>
 							<InputLabel id='demo-simple-select-helper-label'>
-								Sắp xếp theo
+								Sort by
 							</InputLabel>
 							<Select
 								labelId='demo-simple-select-helper-label'
@@ -124,11 +124,11 @@ const ToolFilter: React.FC<ToolFilterProps> = (props) => {
 								<MenuItem value=''>
 									<em>None</em>
 								</MenuItem>
-								<MenuItem value={1}>Tên sách A - Z</MenuItem>
-								<MenuItem value={2}>Tên sách Z - A</MenuItem>
+								<MenuItem value={1}>Name product A - Z</MenuItem>
+								<MenuItem value={2}>Name product Z - A</MenuItem>
 								<MenuItem value={3}>
 									<span className='d-inline-flex align-items-center'>
-										Giá tăng dần
+										Rising price
 										<Icon
 											sx={{
 												flex: "1",
@@ -141,13 +141,13 @@ const ToolFilter: React.FC<ToolFilterProps> = (props) => {
 								</MenuItem>
 								<MenuItem value={4}>
 									<span className='d-inline-flex align-items-center'>
-										Giá giảm dần
+										Declining prices
 										<Icon sx={{ flex: "1", color: red[500] }}>
 											trending_down
 										</Icon>
 									</span>
 								</MenuItem>
-								<MenuItem value={5}>Sách bán chạy nhất</MenuItem>
+								<MenuItem value={5}>Best Selling Products</MenuItem>
 							</Select>
 						</FormControl>
 					</div>
@@ -160,7 +160,7 @@ const ToolFilter: React.FC<ToolFilterProps> = (props) => {
 							<TextField
 								size='small'
 								id='outlined-search'
-								label='Tìm kiếm theo tên sách'
+								label='Search...'
 								type='search'
 								value={keySearchTemp}
 								onChange={onSetKeySearch}
@@ -181,7 +181,7 @@ const ToolFilter: React.FC<ToolFilterProps> = (props) => {
 								variant='standard'
 								htmlFor='uncontrolled-native'
 							>
-								Hiện sản phẩm
+
 							</InputLabel>
 							<NativeSelect
 								defaultValue={props.size}
@@ -189,9 +189,9 @@ const ToolFilter: React.FC<ToolFilterProps> = (props) => {
 									props.setSize(parseInt(e.target.value));
 								}}
 							>
-								<option value={12}>12 sản phẩm</option>
-								<option value={24}>24 sản phẩm</option>
-								<option value={48}>48 sản phẩm</option>
+								<option value={12}>12 products</option>
+								<option value={24}>24 products</option>
+								<option value={48}>48 products</option>
 							</NativeSelect>
 						</FormControl>
 					</div>

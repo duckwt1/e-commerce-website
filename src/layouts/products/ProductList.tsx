@@ -96,7 +96,7 @@ const ProductList: React.FC<ProductListProps> = (props) => {
 
 	if (loading) {
 		return (
-			<div className='container-book container-fluid mb-5 py-5 px-5 bg-light'>
+			<div className='container-book container-fluid mb-5 py-5 px-5 '>
 				<div className='row'>
 					<div className='col-md-6 col-lg-3 mt-3'>
 						<Skeleton
@@ -151,14 +151,14 @@ const ProductList: React.FC<ProductListProps> = (props) => {
 	}
 
 	return (
-		<div className='container-book container-fluid mb-5 pb-5 px-5 bg-light'>
+		<div className='container-book container-fluid mb-5 pb-5 px-5 ' style={{background:"white"}}>
 			{!props.paginable && (
 				<>
-					<h2 className='mt-4 px-3 py-3 mb-0'>TẤT CẢ</h2>
+					<h2 className='mt-4 px-3 py-3 mb-0'>VIEW ALL</h2>
 					<hr className='mt-0' />
 				</>
 			)}
-			<div className='row'>
+			<div className='row  ' style={{ display: "flex", width:"100%" }}>
 				<div className='col-lg-2 col-md-12 mb-3'>
 					{/* Filter component goes here */}
 					<div className='filter-bar'>
@@ -180,7 +180,6 @@ const ProductList: React.FC<ProductListProps> = (props) => {
 					</div>
 					{props.paginable ? (
 						<>
-							<hr className='mt-5' style={{ color: "#aaa" }} />
 							<Pagination
 								currentPage={currentPage}
 								totalPages={totalPages}
@@ -195,7 +194,7 @@ const ProductList: React.FC<ProductListProps> = (props) => {
 									size='large'
 									className='text-primary mt-5 w-25'
 								>
-									Xem Thêm
+									View more
 								</Button>
 							</div>
 						</Link>

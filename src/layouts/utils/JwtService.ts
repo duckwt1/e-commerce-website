@@ -8,6 +8,8 @@ interface JwtPayload {
     email: string;
     status: boolean;
     iat: number;
+    avatar: string;
+    name: string
 }
 
 export function isTokenExpired(token: string) {
@@ -31,13 +33,6 @@ export function isToken() {
     return false;
 }
 
-// export function getAvatarByToken() {
-//     const token = localStorage.getItem('token');
-//     if (token) {
-//         const decodedToken = jwtDecode<JwtPayload>(token);
-//         return decodedToken.avatar;
-//     }
-// }
 
 // export function getNameByToken() {
 //     const token = localStorage.getItem('token');
@@ -54,13 +49,32 @@ export function getUsernameByToken() {
     }
 }
 
+export function getAvatarByToken() {
+    const token = localStorage.getItem('token');
+    if (token) {
+        const decodedToken = jwtDecode(token) as JwtPayload;
+        return decodedToken.avatar;
+    }
+}
+
+export function getNameByToken() {
+    const token = localStorage.getItem('token');
+    if (token) {
+        const decodedToken = jwtDecode(token) as JwtPayload;
+        return decodedToken.name;
+    }
+}
+
+
+
 export function getIdUserByToken() {
     const token = localStorage.getItem('token');
     if (token) {
-        const decodedToken = jwtDecode<JwtPayload>(token);
+        const decodedToken = jwtDecode(token) as JwtPayload;
         return decodedToken.id;
     }
 }
+
 
 export function getEmailByToken(): string | undefined {
     const token = localStorage.getItem("token");

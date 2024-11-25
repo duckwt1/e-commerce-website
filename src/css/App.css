@@ -832,3 +832,16 @@ width: 80%;margin: 0 auto;}
 
 /*LOGIN PAGE*/
 .loginPage {display: flex;justify-content: center;align-items: center;text-align: start ;flex-direction: column;}
+
+
+.toolFilter {
+
+  padding-top: 2rem;
+    padding-bottom: 2rem;
+
+}
+.toolFilterReal {
+  background: #ffffff;
+  padding:1rem;
+border-radius: 10px;
+}

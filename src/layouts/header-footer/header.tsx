@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Searchbar from "./components/searchbar";
 import {SiTicktick} from "react-icons/si";
@@ -57,7 +58,7 @@ export default function Header() {
                             {/*</li>*/}
                             {/* <!-- Shopping Cart --> */}
                             <Link className='text-reset  nav-link ms-4 me-1' to='/cart'>
-                                <IoMdCart size={30} color={'#306b94'}/>
+                                        <IoMdCart size={30} color={'#306b94'}/>
                                 <span className='badge rounded-pill badge-notification bg-danger'>
 							{totalCart ? totalCart : ""}
 						</span>

@@ -14,7 +14,7 @@ import { AuthProvider } from "./layouts/utils/AuthContext";
 import { ConfirmProvider } from "material-ui-confirm";
 import ProductDetail from "./layouts/products/ProductDetail";
 import {getAllImageByProduct} from "./api/ImageAPI";
-import {getProductById} from "./api/ProductAPI";
+import {getAllProduct, getProductById} from "./api/ProductAPI";
 import {ForgotPassword} from "./layouts/user/ForgotPassword";
 import ProfilePage from "./layouts/user/ProfilePage";
 import { ToastContainer } from 'react-toastify';
@@ -23,6 +23,8 @@ import ResetPassword from "./layouts/user/ResetPassword";
 import ChangePassword from "./layouts/user/ChangePassword";
 import ActiveAccount from "./layouts/user/ActiveAccount";
 import FilterPage from './layouts/pages/FilterPage';
+import CartPage from "./layouts/pages/CartPage";
+import FavoriteProductsList from "./layouts/products/FavoriteProductsList";
 
 const MyRoutes = () => {
     const [reloadAvatar, setReloadAvatar] = useState(0);
@@ -61,7 +63,9 @@ const MyRoutes = () => {
     const hideHeaderFooter = listHideHeaderFooter.includes(location.pathname);
 
 
-
+    getProductById(1).then((res) => {
+        console.log(res);
+    });
 
     return (
         <div className="App">
@@ -77,6 +81,8 @@ const MyRoutes = () => {
                 <Route path='/search' element={<FilterPage />} />
                 <Route path="/" element={<Homepage />} />
                 <Route path='products/:idProduct' element={<ProductDetail />} />
+                <Route path='/my-favorite-books' element={<FavoriteProductsList />}/>
+                <Route path='/cart' element={<CartPage />} />
                 <Route path="/policy" element={<PolicyPage />} />
                 <Route path='/register' element={<RegisterPage />} />
                 <Route path='/login' element={<LoginPage />} />

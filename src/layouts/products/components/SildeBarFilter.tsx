@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../../css/ProductList.css";
 
 interface FilterSidebarProps {
@@ -43,12 +43,28 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
         },
     };
 
+    const [minPrice, setMinPrice] = useState(0);
+    const [maxPrice, setMaxPrice] = useState(1000); // Set default max price as per your range
+
+    const handleMinPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = Number(e.target.value);
+        setMinPrice(value);
+        onPriceChange(value, maxPrice);
+    }
+
+
+    const handleMaxPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = Number(e.target.value);
+        setMaxPrice(value);
+        onPriceChange(minPrice, value);
+    };
+
     return (
-        <div className="filter-sidebar bg-light p-4">
-            <h5 className="mb-4">Product Categories</h5>
+        <div className="filter-sidebar  pt-4 "  style={{background:"white"}}>
+            <h5 className="mt-2" style={{textAlign: "start"}}>Product Categories</h5>
             <ul className="list-unstyled">
                 {Object.keys(categories).map((key) => (
-                    <li key={key}>
+                    <li key={key} className={"d-flex"}>
                         <input
                             type="radio"
                             name="category"
@@ -63,29 +79,40 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
                 ))}
             </ul>
 
-            <hr className="my-4" />
+            <hr className="my-4"/>
 
-            <h5 className="mb-4">Filter by Price</h5>
-            <div className="d-flex justify-content-between mb-3">
-                <input
-                    type="number"
-                    className="form-control me-2"
-                    placeholder="Min Price"
-                    onChange={(e) => onPriceChange(Number(e.target.value), undefined)}
-                />
-                <input
-                    type="number"
-                    className="form-control ms-2"
-                    placeholder="Max Price"
-                    onChange={(e) => onPriceChange(undefined, Number(e.target.value))}
-                />
+            <h5 className="mb-4" style={{textAlign: "start"}}>Filter by Price</h5>
+            <div className="d-flex mb-3" style={{marginLeft:"-20px"}}>
+                <div>
+                    <label style={{marginLeft:"-20px"}}>Min Price: {minPrice}</label>
+                    <input
+                        type="range"
+                        className="form-control"
+                        min={0}
+                        max={maxPrice} // Max price should be the upper limit
+                        value={minPrice}
+                        onChange={handleMinPriceChange}
+                    />
+                </div>
+
+                <div>
+                    <label>Max Price: {maxPrice}</label>
+                    <input
+                        type="range"
+                        className="form-control"
+                        min={minPrice} // Min price should be the lower limit
+                        max={1000} // Set the maximum price range
+                        value={maxPrice}
+                        onChange={handleMaxPriceChange}
+                    />
+                </div>
             </div>
 
-            <hr className="my-4" />
+            <hr className="my-4"/>
 
-            <h5 className="mb-4">Filter by Rating</h5>
+            <h5 className="mb-4 title-filter" style={{textAlign: "start"}}>Filter by Rating</h5>
             <ul className="list-unstyled">
-                <li>
+                <li className={"d-flex"}>
                     <input
                         type="radio"
                         name="rating"
@@ -96,7 +123,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
                         ★★★★★
                     </label>
                 </li>
-                <li>
+                <li className={"d-flex"}>
                     <input
                         type="radio"
                         name="rating"
@@ -107,7 +134,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
                         ★★★★☆
                     </label>
                 </li>
-                <li>
+                <li className={"d-flex"}>
                     <input
                         type="radio"
                         name="rating"
@@ -118,7 +145,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
                         ★★★☆☆
                     </label>
                 </li>
-                <li>
+                <li className={"d-flex"}>
                     <input
                         type="radio"
                         name="rating"
@@ -129,7 +156,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
                         ★★☆☆☆
                     </label>
                 </li>
-                <li>
+                <li className={"d-flex"}>
                     <input
                         type="radio"
                         name="rating"

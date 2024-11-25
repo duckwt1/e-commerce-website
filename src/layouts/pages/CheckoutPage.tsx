@@ -7,7 +7,7 @@ import {
 	TextField,
 } from "@mui/material";
 import React, { FormEvent, useEffect, useState } from "react";
-import { BookHorizontal } from "../products/components/ProductHorizontalProps";
+import { ProductHorizontal } from "../products/components/ProductHorizontalProps";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CartItemModel from "../../model/CartItemModel";
 import { get1User } from "../../api/UserApi";
@@ -308,7 +308,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = (props) => {
 							<div className='col-2 text-center'>Tổng tiền</div>
 						</div>
 						{props.cartList.map((cartItem) => (
-							<BookHorizontal
+							<ProductHorizontal
 								key={cartItem.idCart}
 								cartItem={cartItem}
 							/>
