@@ -45,7 +45,7 @@ export const UserForm: React.FC<UserFormProps> = (props) => {
 		phoneNumber: "",
 		name: "",
 		avatar: "",
-		role: NaN
+		role: ""
 	});
 	const [avatar, setAvatar] = useState<File | null>(null);
 	const [previewAvatar, setPreviewAvatar] = useState("");
@@ -117,7 +117,7 @@ export const UserForm: React.FC<UserFormProps> = (props) => {
 							phoneNumber: "",
 							name: "",
 							avatar: "",
-							role: NaN
+							role: ""
 						});
 						setAvatar(null);
 						setPreviewAvatar("");
@@ -372,7 +372,7 @@ export const UserForm: React.FC<UserFormProps> = (props) => {
 										onChange={(e: any) =>
 											setUser({
 												...user,
-												role: e.target.value as number,
+												role: e.target.value,
 											})
 										}
 									>

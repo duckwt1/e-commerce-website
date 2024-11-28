@@ -1,5 +1,5 @@
 import React from "react";
-import BookCartList from "../products/ProductCartList";
+import BookCartList from "../products/ProductList";
 import useScrollToTop from "../../hooks/ScrollToTop";
 
 interface CartPageProps {}

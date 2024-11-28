@@ -59,7 +59,7 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
         idUser: 0,
         birthDate: new Date(),
         address: "",
-        purchaseAddress: "",
+        // purchaseAddress: "",
         email: "",
         firstname: "",
         lastname: "",
@@ -124,6 +124,8 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
                         birthDate: validDateOfBirth,
                         role: role,
                     });
+
+                    console.log("Role: " + role);
 
                     setPreviewAvatar(userData.avatar);
                     console.log("User data loaded:", userData);
@@ -380,7 +382,7 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
 
     const visibleTabs = {
         order: user.role == "ROLE_USER" ? false : true,
-        isShopCreated : user.role == "ROLE_SELLER" ? false : true,
+        isShopCreated: user.role == "ROLE_SELLER" ? false : true,
 
     };
 
@@ -461,7 +463,9 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
                                         <Tab label='Personal Information' value='1'/>
                                         <Tab label='Change Password' value='3'/>
                                         <Tab label='Order' value='2'/>
-                                        <Tab label='Register Shop' value='4'/>
+
+                                        {user.role == "ROLE_USER" &&  <Tab label='Register Shop' value='4'/>}
+
                                         {/*{user.role == "ROLE_USER" && <Tab label='Order' value='2'/>}*/}
                                         {/*{visibleTabs.isShopCreated && <Tab label='Register Shop' value='4'/>}*/}
                                         {/*{user.role == "ROLE_SELLER" && <Tab label='Shop Management' value='5'/>}*/}
