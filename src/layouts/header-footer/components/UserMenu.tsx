@@ -66,7 +66,7 @@ const UserMenu = () => {
                         Wishlist
                     </Link>
                 </MenuItem>
-                {getRoleByToken() === "ROLE_USER" && (
+                {(getRoleByToken() === "ROLE_SELLER" || getRoleByToken() === "ROLE_MANAGER") && (
                     <MenuItem onClick={() => handleClose()}>
                         <Link to="/admin/dashboard" className='dropdown-item'>
                             Management

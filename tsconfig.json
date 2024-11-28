@@ -1,5 +1,10 @@
 {
   "compilerOptions": {
+    "typeRoots": ["node_modules/@types"],
+    "paths": {
+      "chart.js": ["node_modules/chart.js"],
+      "react-chartjs-2": ["node_modules/react-chartjs-2"]
+    },
     "target": "es5",
     "lib": [
       "dom",

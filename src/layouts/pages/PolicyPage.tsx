@@ -5,7 +5,8 @@ const PolicyPage: React.FC = () => {
 	useScrollToTop(); // Scroll to top when this component is loaded
 
 	return (
-		<div className='container-fluid policyPage my-5 bg-super-light p-4 rounded'>
+		<div className={"container-fluid rounded"} style={{background: "#fff", marginTop: "-50px"}}>
+		<div className='container-fluid policyPage my-5 bg-super-light p-5 rounded' >
 			<h1>RETURN / EXCHANGE / REFUND POLICY</h1><br/><br/>
 			<p>
 				We always appreciate the trust and support of our customers when shopping at{" "}
@@ -446,6 +447,7 @@ const PolicyPage: React.FC = () => {
 			</table>
 			<p>&nbsp;</p>
 		</div>
+	</div>
 	);
 };
 

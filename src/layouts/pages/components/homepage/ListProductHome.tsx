@@ -48,7 +48,7 @@ export default  function ListProductHome() {
 
                         </div>
                         <div className={'banner'}>
-                        <img src={"/bannerlarge.png"} alt={"Nature"} style={{paddingBottom: '20px', marginTop: '-20px', width: '100%'}}></img>
+                        <img src={"/bannerlarge.png"} alt={"Nature"} style={{paddingBottom: '20px', marginTop: '30px', width: '100%'}}></img>
                         </div>
                         <div className={'hotcontainer'}> <ListHotProduct/></div>
 

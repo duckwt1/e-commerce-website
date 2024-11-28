@@ -84,13 +84,13 @@ export async function getHotProduct(): Promise<resultInterface> {
     return getProduct(endpoint);
 }
 
-export async function getNewBook(): Promise<resultInterface> {
-    const endpoint: string = `${endpointBE}/books?sort=idBook,desc&size=4`;
+export async function getNewProduct(): Promise<resultInterface> {
+    const endpoint: string = `${endpointBE}/product?sort=idProduct,desc&size=4`;
     return getProduct(endpoint);
 }
 
-export async function get3BestSellerBooks(): Promise<ProductModel[]> {
-    const endpoint: string = `${endpointBE}/books?sort=soldQuantity,desc&size=3`;
+export async function get3BestSellerProducts(): Promise<ProductModel[]> {
+    const endpoint: string = `${endpointBE}/product?sort=soldQuantity,desc&size=3`;
     let productList = await getProduct(endpoint);
 
     let newBookList = await Promise.all(productList.productList.map(async (product: ProductModel) => {
@@ -210,18 +210,18 @@ export async function getProductByIdCartItem(idCart: number): Promise<ProductMod
     }
 }
 
-// export async function getTotalNumberOfBooks(): Promise<number> {
-//     const endpoint = `${endpointBE}/book/get-total`;
-//     try {
-//         const response = await requestAdmin(endpoint);
-//         if (response) {
-//             return response;
-//         }
-//     } catch (error) {
-//         throw new Error("Lỗi không gọi được endpoint lấy tổng cuốn sách\n" + error);
-//     }
-//     return 0;
-// }
+export async function getTotalNumberOfProducts(): Promise<number> {
+    const endpoint = `${endpointBE}/product/get-total`;
+    try {
+        const response = await requestAdmin(endpoint);
+        if (response) {
+            return response;
+        }
+    } catch (error) {
+        throw new Error("Lỗi không gọi được endpoint lấy tổng cuốn sách\n" + error);
+    }
+    return 0;
+}
 
 
 

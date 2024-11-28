@@ -1,8 +1,10 @@
 import React from "react";
 import './../../css/Footer.css';
 
-
-const Footer = () => {
+interface FooterProps {
+    className?: string;
+}
+const Footer: React.FC<FooterProps> = ({ className }) => {
     // Mảng các danh mục sản phẩm
     const categories = [
         {
@@ -98,9 +100,9 @@ const Footer = () => {
 
     ];
     return (
-        <footer className='footer text-center ' >
+        <footer className={className} style={{backgroundColor: '#06264d'}}>
             {/* <!-- Grid container --> */}
-            <div className='container-fluid' style={{padding:'0'}}>
+            <div className='container-fluid' style={{padding: '0'}}>
                 {/* <!-- Section: Social media --> */}
                 {/* <!-- Section: Social media --> */}
 
@@ -109,14 +111,22 @@ const Footer = () => {
                     <div className={"container-fluid"}>
                         <div className={"row"}>
                             <div className={"subcrise col-lg-7 col-md-12"}>
-                                <p className={"p1"} style={{color:'#fff', fontSize:'20px', fontFamily:'revert'}}>$20 discount for your first order </p>
-                                <h5 className={"pb-2"} style={{color:'#fff', fontSize:'44px', fontFamily:'sans-serif',fontWeight:'inherit'}}>Join our newsletter and get...</h5>
+                                <p className={"p1"} style={{color: '#fff', fontSize: '20px', fontFamily: 'revert'}}>$20
+                                    discount for your first order </p>
+                                <h5 className={"pb-2"} style={{
+                                    color: '#fff',
+                                    fontSize: '44px',
+                                    fontFamily: 'sans-serif',
+                                    fontWeight: 'inherit'
+                                }}>Join our newsletter and get...</h5>
                                 <div className={"subcriseContent"}>
-                                <p className={"p1"} style={{color:'#fff', fontSize:'20px',fontFamily:'revert',}}>Join our email subscription now to get updates on
-                                    promotions and coupons.
-                                    Stay up to date with the latest news and
-                                    products</p>
-                            </div>
+                                    <p className={"p1"}
+                                       style={{color: '#fff', fontSize: '20px', fontFamily: 'revert',}}>Join our email
+                                        subscription now to get updates on
+                                        promotions and coupons.
+                                        Stay up to date with the latest news and
+                                        products</p>
+                                </div>
                                 <form className={"d-flex"}>
                                     <input
                                         type="email"
@@ -129,7 +139,9 @@ const Footer = () => {
                                 </form>
                             </div>
                             <div className={"col-lg-5 col-md-12"}>
-                                <img src={"https://fullstack-ecommerce.netlify.app/static/media/newsletter.5931358dd220a40019fc.png"} alt="footerbanner" className={"w-100"}/>
+                                <img
+                                    src={"https://fullstack-ecommerce.netlify.app/static/media/newsletter.5931358dd220a40019fc.png"}
+                                    alt="footerbanner" className={"w-100"}/>
                             </div>
                         </div>
                     </div>
@@ -213,19 +225,26 @@ const Footer = () => {
                         <h3 className={"h31"}>DEALHUB - Fast, Quality, Affordable</h3>
                         <p className={"p31"}>
                             DEALHUB has it all. With millions of products from reputable brands and stores,
-                            thousands of items ranging from smartphones to fresh fruits and vegetables, along with the super-fast delivery service DEALHUBNOW,
+                            thousands of items ranging from smartphones to fresh fruits and vegetables, along with the
+                            super-fast delivery service DEALHUBNOW,
                             DEALHUB offers you an online shopping experience that starts with trust.
                             Moreover, at DEALHUB, you can easily access a myriad of other conveniences,
-                            such as purchasing prepaid cards, paying electricity and water bills, and various insurance services.
+                            such as purchasing prepaid cards, paying electricity and water bills, and various insurance
+                            services.
                         </p>
                         <p className={"p31"}>
                             Promotions and deals are abundant. If you want to hunt for great prices,
-                            DEALHUB has shocking prices every day just for you! If you are a fan of official brands and stores, they are waiting for you.
-                            No need to search for free shipping codes, as DEALHUB already offers millions of products in the Freeship+ program, with no limit on orders,
-                            saving you valuable time. Buy the DEALHUBNOW savings package to receive 100% free shipping within 2 hours and the same day,
-                            or purchase the premium DEALHUBNOW package to get 100% free shipping applicable to 100% of products in all provinces of Vietnam.
+                            DEALHUB has shocking prices every day just for you! If you are a fan of official brands and
+                            stores, they are waiting for you.
+                            No need to search for free shipping codes, as DEALHUB already offers millions of products in
+                            the Freeship+ program, with no limit on orders,
+                            saving you valuable time. Buy the DEALHUBNOW savings package to receive 100% free shipping
+                            within 2 hours and the same day,
+                            or purchase the premium DEALHUBNOW package to get 100% free shipping applicable to 100% of
+                            products in all provinces of Vietnam.
                             Want to save even more? DEALHUBCARD is available,
-                            a credit card that offers a 15% cashback on all transactions (with a maximum cashback of 600,000 VND per month).
+                            a credit card that offers a 15% cashback on all transactions (with a maximum cashback of
+                            600,000 VND per month).
                         </p>
                     </div>
 
@@ -251,11 +270,12 @@ const Footer = () => {
                     <div className="row">
                         {categories.map((category) => (
                             <div className="col-lg-2 col-md-4 col-sm-6 col-xs-2" key={category.id}>
-                                <h5 className={'pb-2 pt-4'} style={{color:"#f3ab2b", fontWeight:"600"}}>{category.name}</h5>
+                                <h5 className={'pb-2 pt-4'}
+                                    style={{color: "#f3ab2b", fontWeight: "600"}}>{category.name}</h5>
                                 <ul className="list-unstyled">
                                     {category.products.map((product, index) => (
                                         <li key={index}>
-                                            <a href="#" style={{color:"#e0dddd"}}>{product}</a>
+                                            <a href="#" style={{color: "#e0dddd"}}>{product}</a>
                                         </li>
                                     ))}
                                 </ul>

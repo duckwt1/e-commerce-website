@@ -25,16 +25,20 @@ import ActiveAccount from "./layouts/user/ActiveAccount";
 import FilterPage from './layouts/pages/FilterPage';
 import CartPage from "./layouts/pages/CartPage";
 import FavoriteProductsList from "./layouts/products/FavoriteProductsList";
+import DashboardPage from './admin/Dashboard';
+import { Error404Page } from './layouts/pages/404Page';
+import { Slidebar } from './admin/components/Slidebar';
 
 const MyRoutes = () => {
     const [reloadAvatar, setReloadAvatar] = useState(0);
     const [isSticky, setIsSticky] = useState(false);
     const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+    const [isNavbarVisible, setIsNavbarVisible] = useState(true);
     const [showScrollButton, setShowScrollButton] = useState(false);
     let lastScrollY = 0;
 
     const location = useLocation();  // Lấy URL hiện tại
-
+    const isAdminPath = location.pathname.startsWith("/admin");
     useEffect(() => {
         const handleScroll = () => {
             const header = document.getElementsByClassName("header")[0] as HTMLElement | undefined;
@@ -42,8 +46,13 @@ const MyRoutes = () => {
             if (!header || !navbar) return;
 
             const sticky = header.offsetHeight;
-            if (window.scrollY > lastScrollY) setIsHeaderVisible(false); // Scrolling down
-            else setIsHeaderVisible(true); // Scrolling up
+            if (window.scrollY > lastScrollY) {
+                setIsHeaderVisible(true); // Scrolling down
+                setIsNavbarVisible(false); // Hide navbar
+            } else {
+                setIsHeaderVisible(true); // Scrolling up
+                setIsNavbarVisible(false); // Hide navbar
+            }
             lastScrollY = window.scrollY;
 
             setIsSticky(window.scrollY > sticky);
@@ -62,18 +71,17 @@ const MyRoutes = () => {
     const listHideHeaderFooter = ['/login', '/register', '/forgot-password', '/change-password'];
     const hideHeaderFooter = listHideHeaderFooter.includes(location.pathname);
 
+    // Determine if the current route is the homepage
+    const isHomepage = location.pathname === '/';
 
-    getProductById(1).then((res) => {
-        console.log(res);
-    });
 
+    
     return (
         <div className="App">
             {!hideHeaderFooter && (
                 <>
                     <div className={`header ${isHeaderVisible ? 'visible' : 'hidden'}`}><Header /></div>
-                    <div className={`navbar ${isSticky ? 'sticky' : ''}`} style={{ padding: '0' }}><Navigation /></div>
-
+                    <div className={`navbar ${isSticky ? 'sticky' : ''} ${isNavbarVisible ? 'visible' : 'hidden'}`} style={{ padding: '0' }}><Navigation /></div>
                 </>
             )}
             <Routes>
@@ -97,7 +105,29 @@ const MyRoutes = () => {
                     <FaArrowAltCircleUp />
                 </button>
             )}
-            {!hideHeaderFooter && <Footer />}
+            {!hideHeaderFooter && <Footer className={isHomepage ? 'homepage-footer' : ''} />}
+
+            {/* Admin */}
+            {isAdminPath && (
+                <div className='row overflow-hidden w-100'>
+                    <div className='col-2 col-md-3 col-lg-2'>
+                        <Slidebar />
+                    </div>
+                    <div className='col-10 col-md-9 col-lg-10'>
+                        <Routes>
+                            <Route path='/admin' element={<DashboardPage />} />
+                            <Route
+                                path='/admin/dashboard'
+                                element={<DashboardPage />}
+                            />
+
+                            {isAdminPath && (
+                                <Route path='*' element={<Error404Page />} />
+                            )}
+                        </Routes>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

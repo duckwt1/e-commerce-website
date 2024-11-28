@@ -1,10 +1,22 @@
-/*FOOTER*/
-footer
-{ margin-top: 2320px;
-    margin-bottom: 0;width:
-        100%;display: flex;justify-content: center;align-items: center;flex-direction: column;
-    color: #ffffff; overflow-x: hidden;
-    background: linear-gradient(135deg, #4b0000, #b71d1d, #ffff);
+/*!*FOOTER*!*/
+/**/
+/*{ margin-top: 2320px;*/
+/*    margin-bottom: 0;width:*/
+/*        100%;display: flex;justify-content: center;align-items: center;flex-direction: column;*/
+/*    color: #ffffff;
+*/
+/*    background: linear-gradient(135deg, #4b0000, #b71d1d, #ffff);*/
+/*}*/
+
+
+.homepage-footer {
+    margin-top: 2370px;
+}
+footer{
+overflow-x: hidden;
+    color: #fff;
+    bottom: 0;
+
 }
 .footerContent {margin-bottom: 10px;
  }

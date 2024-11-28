@@ -10,6 +10,8 @@ body {font-family: 'Roboto','Fira Sans', sans-serif;margin: 0;padding: 0;box-siz
   background: linear-gradient(135deg, #8f0e0e, #5d0a13);
 }
 
+
+
 .App {text-align: center;color: #000000;}
 .App-logo {height: 40vmin;pointer-events: none;}
 
@@ -340,7 +342,9 @@ nav .navPart2 .subcategory-item a:hover {
     height: 100vh;
 
     text-align: center;
-  margin-top: 2280px;
+  margin-top: 2450px;
+  /*position: fixed;*/
+  /*top: 100%;*/
 
 
 
@@ -729,6 +733,8 @@ margin-bottom: 10px ;
    margin-right: 25px;
 }
 .subslide {
+    padding-top: 20px;
+  margin-bottom: 50px;
   height: 300px;
 }
 
@@ -845,3 +851,6 @@ width: 80%;margin: 0 auto;}
   padding:1rem;
 border-radius: 10px;
 }
+
+
+

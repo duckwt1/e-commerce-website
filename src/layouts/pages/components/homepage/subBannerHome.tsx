@@ -26,13 +26,7 @@ const images = [
         buttonText: "Buy Now",
         buttonLink: "#",
     },
-    {
-        src: "https://res.cloudinary.com/dkgonwhvj/image/upload/v1731428226/1731428223813_New_Project_20.jpg",
-        title: "Kids Fashion Sale",
-        description: "Stylish & Trendy Fashion",
-        buttonText: "Buy Now",
-        buttonLink: "#",
-    },
+
 ];
 
 const Carousel: React.FC = () => {

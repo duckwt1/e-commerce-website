@@ -59,7 +59,7 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
         idUser: 0,
         birthDate: new Date(),
         address: "",
-        purchaseAddress: "",
+        // purchaseAddress: "",
         email: "",
         firstname: "",
         lastname: "",
@@ -124,6 +124,8 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
                         birthDate: validDateOfBirth,
                         role: role,
                     });
+
+                    console.log("Role: " + role);
 
                     setPreviewAvatar(userData.avatar);
                     console.log("User data loaded:", userData);
@@ -380,7 +382,7 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
 
     const visibleTabs = {
         order: user.role == "ROLE_USER" ? false : true,
-        isShopCreated : user.role == "ROLE_SELLER" ? false : true,
+        isShopCreated: user.role == "ROLE_SELLER" ? false : true,
 
     };
 
@@ -461,7 +463,9 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
                                         <Tab label='Personal Information' value='1'/>
                                         <Tab label='Change Password' value='3'/>
                                         <Tab label='Order' value='2'/>
-                                        <Tab label='Register Shop' value='4'/>
+
+                                        {user.role === "ROLE_USER" &&  <Tab label='Register Shop' value='4'/>}
+
                                         {/*{user.role == "ROLE_USER" && <Tab label='Order' value='2'/>}*/}
                                         {/*{visibleTabs.isShopCreated && <Tab label='Register Shop' value='4'/>}*/}
                                         {/*{user.role == "ROLE_SELLER" && <Tab label='Shop Management' value='5'/>}*/}
@@ -482,20 +486,15 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
                                                 }}
                                             >
                                                 <Tooltip
+                                                    style={{  padding: "10px"}}
                                                     title='Edit Information'
-                                                    placement='bottom-end'
-                                                >
+                                                    placement='bottom-end'>
                                                     <Button
                                                         variant='contained'
                                                         type='button'
                                                         className='rounded-pill'
-                                                        onClick={() =>
-                                                            setModifiedStatus(!modifiedStatus)
-                                                        }
-                                                    >
-                                                        <EditOutlined
-                                                            sx={{width: "24px"}}
-                                                        />
+                                                        onClick={() => setModifiedStatus(!modifiedStatus)}>
+                                                        <EditOutlined sx={{width: "24px"}}/>
                                                     </Button>
                                                 </Tooltip>
                                             </div>
@@ -512,7 +511,10 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
                                                                firstname: e.target.value,
                                                            })
                                                            } disabled={modifiedStatus ? false : true}
-                                                           className='input-field'/>
+                                                           InputProps={{
+                                                               style: { paddingTop: '20px' } // Adjust the padding as needed
+                                                           }}
+                                                           className='input-field tabb1'/>
                                                 <TextField fullWidth
                                                            error={errorPhoneNumber.length > 0 ? true : false}
                                                            helperText={errorPhoneNumber}
@@ -528,33 +530,50 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
                                                                );
                                                            }}
                                                            disabled={modifiedStatus ? false : true}
-                                                           className='input-field'
-                                                />
+                                                           InputProps={{
+                                                               style: { paddingTop: '20px' } // Adjust the padding as needed
+                                                           }}
+                                                           className='input-field tabb1'/>
                                             </div>
                                             <div className='col-sm-12 col-md-6 col-lg-4'>
                                                 <TextField required fullWidth label='Username'
-                                                           value={user.name} disabled={true} className='input-field'
+                                                           value={user.name} disabled={true} className='input-field tabb1'
+                                                           InputProps={{
+                                                               style: { paddingTop: '20px' } // Adjust the padding as needed
+                                                           }}
                                                 />
                                                 <TextField required fullWidth label='Last Name' value={user.lastname}
                                                            onChange={(e) =>
                                                                setUser({...user, lastname: e.target.value,})
                                                            }
+                                                           InputProps={{
+                                                               style: { paddingTop: '20px' } // Adjust the padding as needed
+                                                           }}
                                                            disabled={modifiedStatus ? false : true}
-                                                           className='input-field'
+                                                           className='input-field tabb1'
                                                 />
                                                 <TextField required fullWidth label='Address' value={user.address}
                                                            onChange={(e) =>
                                                                setUser({...user, address: e.target.value,})}
                                                            disabled={modifiedStatus ? false : true}
+                                                           InputProps={{
+                                                               style: { paddingTop: '20px' } // Adjust the padding as needed
+                                                           }}
                                                            className='input-field'
                                                 />
                                             </div>
                                             <div className='col-sm-12 col-md-6 col-lg-4'>
                                                 <TextField required fullWidth label='Email' value={user.email}
-                                                           className='input-field'
-                                                           disabled={true} InputProps={{readOnly: true,}}/>
-                                                <TextField required fullWidth className='input-field'
+                                                           className='input-field tabb1'
+                                                           InputProps={{
+                                                               style: { paddingTop: '20px' } // Adjust the padding as needed
+                                                           }}
+                                                           disabled={true} />
+                                                <TextField required fullWidth className='input-field tabb1'
                                                            label='Date of Birth'
+                                                           InputProps={{
+                                                               style: { paddingTop: '20px' } // Adjust the padding as needed
+                                                           }}
                                                            style={{width: "100%"}} type='date' value={
                                                     user.birthDate
                                                         .toISOString()
@@ -648,6 +667,9 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
                                             helperText={errorNewPassword} required={true} fullWidth type='password'
                                             label='New Password'
                                             placeholder='Enter new password' value={newPassword}
+                                            InputProps={{
+                                                style: { paddingTop: '20px' } // Adjust the padding as needed
+                                            }}
                                             onChange={handlePasswordChange}
                                             onBlur={(e) => {
                                                 checkPassword(setErrorNewPassword, e.target.value);
@@ -663,6 +685,9 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
                                             type='password'
                                             label='Confirm New Password'
                                             placeholder='Re-enter new password'
+                                            InputProps={{
+                                                style: { paddingTop: '20px' } // Adjust the padding as needed
+                                            }}
                                             value={repeatPassword}
                                             onChange={handleRepeatPasswordChange}
                                             onBlur={(e) => {
@@ -672,16 +697,14 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
                                                     newPassword
                                                 );
                                             }}
-                                            className='input-field'
+                                            className='input-field tabb1'
                                         />
                                         <div className='text-center my-3'>
                                             <Button
                                                 fullWidth
                                                 variant='outlined'
                                                 type='submit'
-                                                sx={{width: "50%", padding: "10px"}}
-                                            >
-                                                Save Changes
+                                                sx={{width: "50%", padding: "10px"}}>Save Changes
                                             </Button>
                                         </div>
                                     </form>
@@ -689,35 +712,36 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
                                 <TabPanel value='4'>
 
                                     <form onSubmit={handleRegisterShop}>
-                                        <TextField
-                                            label="Shop Name"
-                                            value={shopName}
+                                        <TextField label="Shop Name" value={shopName}
                                             onChange={(e) => setShopName(e.target.value)}
-                                            required
-                                            fullWidth
+                                            required fullWidth
+                                                   InputProps={{
+                                                       style: { paddingTop: '20px' } // Adjust the padding as needed
+                                                   }}
                                         />
                                         <TextField
                                             label="Shop Address"
                                             value={shopAddress}
                                             onChange={(e) => setShopAddress(e.target.value)}
-                                            required
-                                            fullWidth
+                                            required fullWidth
+                                            InputProps={{
+                                                style: { paddingTop: '20px' } // Adjust the padding as needed
+                                            }}
                                         />
                                         <TextField
                                             label="Contact Number"
                                             value={shopContact}
                                             onChange={(e) => setShopContact(e.target.value)}
-                                            required
-                                            fullWidth
+                                            required fullWidth
+                                            InputProps={{
+                                                style: { paddingTop: '20px' } // Adjust the padding as needed
+                                            }}
                                         />
                                         {errorMessage && <p style={{color: "red"}}>{errorMessage}</p>}
                                         <div className='text-center my-3'>
                                             <Button
-                                                fullWidth
-                                                variant='outlined'
-                                                type='submit'
-                                                sx={{width: "50%", padding: "10px"}}
-                                            >
+                                                fullWidth variant='outlined'
+                                                type='submit' sx={{width: "50%", padding: "10px"}}>
                                                 Register Now
                                             </Button>
                                         </div>

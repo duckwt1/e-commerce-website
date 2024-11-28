@@ -153,220 +153,227 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = (props) => {
 	return (
 		<>
 			{!isSuccessPayment ? (
-				<form onSubmit={handleSubmit}>
-					<div className='container bg-light my-3 rounded-3 p-3'>
-						<strong className='fs-6'>ĐỊA CHỈ GIAO HÀNG</strong>
-						<hr />
-						<div className='row'>
-							<div className='col-lg-6 col-md-6 col-sm-12'>
-								<TextField
-									required={true}
-									fullWidth
-									type='text'
-									label='Họ và tên người nhận'
-									value={fullName}
-									onChange={(e) => setFullName(e.target.value)}
-									className='input-field'
-								/>
-								<TextField
-									error={errorPhoneNumber.length > 0 ? true : false}
-									helperText={errorPhoneNumber}
-									required={true}
-									fullWidth
-									type='text'
-									label='Số điện thoại'
-									value={phoneNumber}
-									onChange={(e) => setPhoneNumber(e.target.value)}
-									onBlur={(e: any) => {
-										checkPhoneNumber(
-											setErrorPhoneNumber,
-											e.target.value
-										);
-									}}
-									className='input-field'
-								/>
-							</div>
-							<div className='col-lg-6 col-md-6 col-sm-12'>
-								<TextField
-									required={true}
-									fullWidth
-									type='text'
-									label='Email'
-									value={user?.email}
-									disabled
-									className='input-field'
-								/>
-								<TextField
-									required={true}
-									fullWidth
-									type='text'
-									label='Địa chỉ nhận hàng'
-									value={deliveryAddress}
-									onChange={(e) => setDeliveryAddress(e.target.value)}
-									className='input-field'
-								/>
-							</div>
-						</div>
-					</div>
-					<div className='container bg-light my-3 rounded-3 p-3'>
-						<strong className='fs-6'>PHƯƠNG THỨC THANH TOÁN</strong>
-						<hr />
-						<FormControl>
-							<RadioGroup
-								aria-labelledby='demo-controlled-radio-buttons-group'
-								name='controlled-radio-buttons-group'
-								value={payment}
-								onChange={handleChangePayment}
-							>
-								<FormControlLabel
-									value={1}
-									control={<Radio />}
-									label={
-										<div
-											style={{
-												display: "flex",
-												alignItems: "center",
+				<div className={"d-flex"} style={{ width: "90%", margin: "auto" }}>
+					<form onSubmit={handleSubmit} style={{backgroundColor: "white", display: "flex", justifyContent: "center",}}>
+						<div className={"col-lg-5 pt-5"}>
+							<div className="container my-3 rounded-3 p-3">
+								<strong className="fs-6">SHIPPING ADDRESS</strong>
+								<hr />
+								<div className="row">
+									<div className="col-lg-6 col-md-6 col-sm-12">
+										<TextField
+											required={true}
+											fullWidth
+											type="text"
+											label="Recipient's Full Name"
+											value={fullName}
+											onChange={(e) => setFullName(e.target.value)}
+											className="input-field"
+										/>
+										<TextField
+											error={errorPhoneNumber.length > 0 ? true : false}
+											helperText={errorPhoneNumber}
+											required={true}
+											fullWidth
+											type="text"
+											label="Phone Number"
+											value={phoneNumber}
+											onChange={(e) => setPhoneNumber(e.target.value)}
+											onBlur={(e: any) => {
+												checkPhoneNumber(setErrorPhoneNumber, e.target.value);
 											}}
-										>
-											<img
-												src='https://cdn0.fahasa.com/skin/frontend/base/default/images/payment_icon/ico_cashondelivery.svg?q=10311'
-												alt='Cash on Delivery'
-												style={{
-													width: "40px",
-													marginRight: "10px",
-												}}
-											/>
-											Thanh toán tiền mặt khi nhận hàng (COD)
-										</div>
-									}
-								/>
+											className="input-field"
+										/>
+									</div>
+									<div className="col-lg-6 col-md-6 col-sm-12">
+										<TextField
+											required={true}
+											fullWidth
+											type="text"
+											label="Email"
+											value={user?.email}
+											disabled
+											className="input-field"
+										/>
+										<TextField
+											required={true}
+											fullWidth
+											type="text"
+											label="Delivery Address"
+											value={deliveryAddress}
+											onChange={(e) =>
+												setDeliveryAddress(e.target.value)
+											}
+											className="input-field"
+										/>
+									</div>
+								</div>
+							</div>
+							<div className="container my-3 rounded-3 p-3">
+								<strong className="fs-6">PAYMENT METHOD</strong>
+								<hr />
+								<FormControl>
+									<RadioGroup
+										aria-labelledby="demo-controlled-radio-buttons-group"
+										name="controlled-radio-buttons-group"
+										value={payment}
+										onChange={handleChangePayment}
+									>
+										<FormControlLabel
+											value={1}
+											control={<Radio />}
+											label={
+												<div
+													style={{
+														display: "flex",
+														alignItems: "center",
+													}}
+												>
+													<img
+														src="https://cdn0.fahasa.com/skin/frontend/base/default/images/payment_icon/ico_cashondelivery.svg?q=10311"
+														alt="Cash on Delivery"
+														style={{
+															width: "40px",
+															marginRight: "10px",
+														}}
+													/>
+													Cash on Delivery (COD)
+												</div>
+											}
+										/>
 
-								<FormControlLabel
-									value={2}
-									control={<Radio />}
-									label={
-										<div
-											style={{
-												display: "flex",
-												alignItems: "center",
-											}}
-										>
-											<img
-												src='https://cdn0.fahasa.com/skin/frontend/base/default/images/payment_icon/ico_vnpay.svg?q=10311'
-												alt='Cash on Delivery'
-												style={{
-													width: "40px",
-													marginRight: "10px",
-												}}
-											/>
-											Thanh toán bằng VNPAY
-										</div>
-									}
+										<FormControlLabel
+											value={2}
+											control={<Radio />}
+											label={
+												<div
+													style={{
+														display: "flex",
+														alignItems: "center",
+													}}
+												>
+													<img
+														src="https://cdn0.fahasa.com/skin/frontend/base/default/images/payment_icon/ico_vnpay.svg?q=10311"
+														alt="VNPAY"
+														style={{
+															width: "40px",
+															marginRight: "10px",
+														}}
+													/>
+													Pay with VNPAY
+												</div>
+											}
+										/>
+									</RadioGroup>
+								</FormControl>
+							</div>
+							<div className="container my-3 rounded-3 p-3">
+								<strong className="fs-6">DISCOUNT CODE</strong>
+								<hr />
+								<div className="d-flex align-items-end w-50">
+									<TextField
+										className="w-50"
+										id="standard-basic"
+										label="Enter promo code (if any):"
+										variant="standard"
+										value={""}
+									/>
+									<Button className="ms-3" variant="outlined">
+										Apply
+									</Button>
+								</div>
+							</div>
+							<div className="container my-3 rounded-3 p-3">
+								<strong className="fs-6">NOTES</strong>
+								<hr />
+								<TextField
+									className="w-100"
+									id="standard-basic"
+									label="Notes"
+									variant="outlined"
+									multiline
+									minRows={3}
+									maxRows={4}
+									value={note}
+									onChange={(e) => setNote(e.target.value)}
 								/>
-							</RadioGroup>
-						</FormControl>
-					</div>
-					<div className='container bg-light my-3 rounded-3 p-3'>
-						<strong className='fs-6'>MÃ KHUYẾN GIẢM GIÁ</strong>
-						<hr />
-						<div className='d-flex align-items-end w-50'>
-							<TextField
-								className='w-50'
-								id='standard-basic'
-								label='Mã khuyến mãi (nếu có): '
-								variant='standard'
-								value={""}
-							/>
-							<Button className='ms-3' variant='outlined'>
-								Áp dụng
-							</Button>
+							</div>
 						</div>
-					</div>
-					<div className='container bg-light my-3 rounded-3 p-3'>
-						<strong className='fs-6'>GHI CHÚ</strong>
-						<hr />
-						<TextField
-							className='w-100'
-							id='standard-basic'
-							label='Ghi chú'
-							variant='outlined'
-							multiline
-							minRows={3}
-							maxRows={4}
-							value={note}
-							onChange={(e) => setNote(e.target.value)}
-						/>
-					</div>
-					<div className='container bg-light my-3 rounded-3 p-3'>
-						<strong className='fs-6'>KIỂM TRA LẠI ĐƠN HÀNG</strong>
-						<hr />
-						<div className='row my-3'>
-							<div className='col'>
-								<span className='ms-3'>Sản phẩm</span>
+
+
+
+
+						<div className={"col-lg-6 pt-5"} style={{ marginLeft: "50px" }}>
+							<div className="container my-3 rounded-3 p-3">
+								<strong className="fs-6">ORDER SUMMARY</strong>
+								<hr />
+								<div className="row my-3">
+									<div className="col">
+										<span className="ms-3">Product</span>
+									</div>
+									<div className="col-2 text-center">Quantity</div>
+									<div className="col-2 text-center">Total</div>
+								</div>
+								{props.cartList.map((cartItem) => (
+									<ProductHorizontal
+										key={cartItem.idCart}
+										cartItem={cartItem}
+									/>
+								))}
 							</div>
-							<div className='col-2 text-center'>Số lượng</div>
-							<div className='col-2 text-center'>Tổng tiền</div>
 						</div>
-						{props.cartList.map((cartItem) => (
-							<ProductHorizontal
-								key={cartItem.idCart}
-								cartItem={cartItem}
-							/>
-						))}
-					</div>
-					<footer
-						className='fixed-bottom bottom-0 shadow-4-strong bg-light'
-						style={{ height: "175px" }}
-					>
-						<div className='container my-3'>
-							<div className='row'>
-								<div className='me-3 col text-end'>Thành tiền</div>
-								<div className='ms-3 col-2 text-end'>
-									{props.totalPriceProduct.toLocaleString("vi-vn")} đ
+						<footer className="container fixed-bottom bottom-0 shadow-4-strong"
+								style={{height: "200px", backgroundColor: "white", color: "black",borderRadius: "10px", border : "3px solid red"}}>
+							<div  className={"p-3 pt-4"} style={{ backgroundColor: "white", width: "100%" }}>
+								<div className="row">
+									<div className="me-3 col text-end">Subtotal</div>
+									<div className="ms-3 col-2 text-end">
+										{props.totalPriceProduct.toLocaleString("en-US")} $
+									</div>
 								</div>
-							</div>
-							<div className='row'>
-								<div className='me-3 col text-end'>Phí vận chuyển</div>
-								<div className='ms-3 col-2 text-end'>0 đ</div>
-							</div>
-							<div className='row'>
-								<div className='me-3 col text-end'>
-									<strong>Tổng số tiền (gồm VAT)</strong>
+								<div className="row">
+									<div className="me-3 col text-end">Shipping Fee</div>
+									<div className="ms-3 col-2 text-end">0 $</div>
 								</div>
-								<div className='ms-3 col-2 text-end text-danger fs-5'>
-									<strong>
-										{props.totalPriceProduct.toLocaleString("vi-vn")}{" "}
-										đ
-									</strong>
+								<div className="row">
+									<div className="me-3 col text-end">
+										<strong>Total (including VAT)</strong>
+									</div>
+									<div className="ms-3 col-2 text-end text-danger fs-5">
+										<strong>
+											{props.totalPriceProduct.toLocaleString("en-US")} $
+										</strong>
+									</div>
 								</div>
-							</div>
-							<hr className='mt-3' />
-							<div className='row'>
-								<div className='col d-flex align-items-center'>
+								<hr className="mt-3" />
+								<div className="row">
+									<div className="col d-flex align-items-center">
 									<span
 										style={{ cursor: "pointer" }}
 										onClick={() => props.setIsCheckout(false)}
 									>
 										<ArrowBackIcon />
-										<strong className='ms-2'>Quay về giỏ hàng</strong>
+										<strong className="ms-2">Back to Cart</strong>
 									</span>
-								</div>
-								<div className='col-4'>
-									<Button
-										type='submit'
-										variant='contained'
-										sx={{ width: "100%" }}
-									>
-										Xác nhận thanh toán
-									</Button>
+									</div>
+									<div className="col-4">
+										<Button
+											type="submit"
+											variant="contained"
+											sx={{ width: "100%" }}
+										>
+											Confirm Payment
+										</Button>
+									</div>
 								</div>
 							</div>
-						</div>
-					</footer>
-				</form>
+						</footer>
+					</form>
+				</div>
 			) : (
 				<CheckoutSuccess />
 			)}
 		</>
-	);
+
+);
 };

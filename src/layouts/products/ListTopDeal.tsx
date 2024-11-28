@@ -7,6 +7,7 @@ import { IoIosArrowRoundForward } from "react-icons/io";
 
 import {Skeleton} from "@mui/material";
 import {getHotProduct} from "../../api/ProductAPI";
+import {Link} from "react-router-dom";
 
 const ListBestSeller: React.FC = () => {
     const [products, setProducts] = React.useState<ProductModel[]>([]);
@@ -95,9 +96,7 @@ const ListBestSeller: React.FC = () => {
                         best-selling products on DEALHUB</p>
                 </div>
                 <div className={"line2"}>
-                    <Button className={"btn btnviewall btn-primary mt-3"}>View all
-                        <IoIosArrowRoundForward />
-                    </Button>
+                        <Link to="/search" className={"btn btnviewall btn-primary mt-3"}>View all <IoIosArrowRoundForward /></Link>
                 </div>
             </div>
 

@@ -142,7 +142,7 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 			}
 		}
 		localStorage.setItem("cart", JSON.stringify(cartList));
-		toast.success("Thêm vào giỏ hàng thành công");
+		toast.success("Added to cart successfully!");
 		setTotalCart(cartList.length);
 	};
 
@@ -204,7 +204,7 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 	if (erroring) {
 		return (
 			<div>
-				<h1>Gặp lỗi: {erroring}</h1>
+				<h1>Error: {erroring}</h1>
 			</div>
 		);
 	}
@@ -212,16 +212,19 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 	if (product === null) {
 		return (
 			<div>
-				<h1>Sản phẩm không tồn tại </h1>
+				<h1>Product does not exist</h1>
 			</div>
 		);
 	}
+
+
 
 	return (
 		<>
 			{!isCheckout ? (
 				<>
-					<div className='container p-2 bg-white my-3 rounded'>
+
+				<div className='container p-2 bg-white my-3 rounded'>
 						<div className='row mt-4 mb-4'>
 							<div className='col-lg-4 col-md-4 col-sm-12'>
 								<Carousel
@@ -294,7 +297,7 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 												fontSize: "16px",
 											}}
 										>
-                                            Đã bán
+                                            Sold
                                         </span>
 										<span className='fw-bold ms-2'>
                                             {product.soldQuantity}
@@ -304,12 +307,12 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 								<div className='price'>
                                     <span className='discounted-price text-danger me-3'>
                                         <strong style={{ fontSize: "32px" }}>
-                                            {product.sellPrice?.toLocaleString()}đ
+                                            {product.sellPrice?.toLocaleString()}$
                                         </strong>
                                     </span>
 									<span className='original-price small me-3'>
                                         <strong>
-                                            <del>{product.listPrice?.toLocaleString()}đ</del>
+                                            <del>{product.listPrice?.toLocaleString()}$</del>
                                         </strong>
                                     </span>
 									<h4 className='my-0 d-inline-block'>
@@ -320,13 +323,13 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 								</div>
 								<div className='mt-3'>
 									<p>
-										Vận chuyển tới:{" "}
-										<strong>Quận Bình Thạnh, TP.HCM</strong>{" "}
+										Shipping to:{" "}
+										<strong>P. Thanh Bình, Q. Hải Châu, TP. Đà Nẵng</strong>{" "}
 										<span
 											className='ms-3 text-primary'
 											style={{ cursor: "pointer" }}
 										>
-                                            Thay đổi
+                                            Change
                                         </span>
 									</p>
 									<div className='d-flex align-items-center mt-3'>
@@ -335,13 +338,13 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 											height='20'
 											alt='free ship'
 										/>
-										<span className='ms-3'>Miễn phí vận chuyển</span>
+										<span className='ms-3'>Free ship</span>
 									</div>
 								</div>
 								<div className='d-flex align-items-center mt-3'>
-									<strong className='me-5'>Số lượng: </strong>
+									<strong className='me-5'>Quantity: </strong>
 									<span className='ms-4'>
-                                        {product.quantity} sản phẩm có sẵn
+                                        {product.quantity} Available Products
                                     </span>
 								</div>
 								<div className='mt-4 d-flex align-items-center'>
@@ -352,7 +355,7 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 											className='me-3'
 											color='error'
 										>
-											Hết hàng
+											Sold out
 										</Button>
 									) : (
 										<>
@@ -363,7 +366,7 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 												className='me-3'
 												onClick={() => handleAddProduct(product)}
 											>
-												Thêm vào giỏ hàng
+												Add to cart
 											</Button>
 											<Button
 												variant='contained'
@@ -371,7 +374,7 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 												className='ms-3'
 												onClick={() => handleBuyNow(product)}
 											>
-												Mua ngay
+												Buy now
 											</Button>
 										</>
 									)}
@@ -380,12 +383,12 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 						</div>
 					</div>
 					<div className='container p-4 bg-white my-3 rounded'>
-						<h5 className='my-3'>Mô tả sản phẩm</h5>
+						<h5 className='my-3'>Product Description</h5>
 						<hr />
 						<TextEllipsis text={product.description + ""} limit={1000} />
 					</div>
 					<div className='container p-4 bg-white my-3 rounded'>
-						<h5 className='my-3'>Khách hàng đánh giá</h5>
+						<h5 className='my-3'>Customer Reviews</h5>
 						<hr />
 					</div>
 				</>
