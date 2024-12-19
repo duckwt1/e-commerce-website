@@ -142,7 +142,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = (props) => {
 					setCartList([]);
 					setTotalCart(0);
 				}
-				toast.success("Thanh toán thành công");
+				toast.success("Successful payment");
 			})
 			.catch((error) => {
 				console.log(error);

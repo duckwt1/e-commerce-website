@@ -15,6 +15,7 @@ export default function Header() {
     const { totalCart, setTotalCart, setCartList } = useCartItem();
     const { setLoggedIn } = useAuth();
     const navigate = useNavigate();
+
     return (
         <nav className="header navbar navbar-expand-lg navbar-light bg-light" style={{paddingBottom: '0', paddingTop: '0'}}>
             <div className="top1 container-fluid d-flex justify-content-center align-items-center"

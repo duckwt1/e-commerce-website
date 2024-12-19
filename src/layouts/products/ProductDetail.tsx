@@ -19,6 +19,8 @@ import TextEllipsis from "./components/TextEllipsis";
 import { getProductById } from "../../api/ProductAPI";
 import { Carousel } from "react-responsive-carousel";
 import ReactSimpleImageViewer from "react-simple-image-viewer";
+import {getReviewsByProductId} from "../../api/ReviewApi";
+import ReviewModel from "../../model/ReviewModel";
 
 interface BookDetailProps {}
 
@@ -83,43 +85,21 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 		let isExistProduct = cartList.find(
 			(cartItem) => cartItem.product.productId === newProduct.productId
 		);
+		console.log("productId: "+newProduct.productId);
 		if (isExistProduct) {
 			isExistProduct.quantity += quantity;
-			if (isToken()) {
-				const request = {
-					idCart: isExistProduct.idCart,
-					quantity: isExistProduct.quantity,
-				};
-				const token = localStorage.getItem("token");
-				fetch(endpointBE + `/cart-item/update-item`, {
-					method: "PUT",
-					headers: {
-						Authorization: `Bearer ${token}`,
-						"content-type": "application/json",
-					},
-					body: JSON.stringify(request),
-				}).catch((err) => console.log(err));
-			}
+			// ...UPDATE DATABASE
 		} else {
 			if (isToken()) {
 				try {
-					const request = [
-						{
-							quantity: quantity,
-							product: newProduct,
-							idUser: getIdUserByToken(),
-						},
-					];
 					const token = localStorage.getItem("token");
-					const response = await fetch(
-						endpointBE + "/cart-item/add-item",
-						{
+					const userId = getIdUserByToken();
+					const response = await fetch(endpointBE + `/api/cart/${userId}/add?productId=${newProduct.productId}&quantity=1`, {
 							method: "POST",
 							headers: {
 								Authorization: `Bearer ${token}`,
 								"content-type": "application/json",
 							},
-							body: JSON.stringify(request),
 						}
 					);
 
@@ -174,6 +154,23 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 		setIsCheckout(!isCheckout);
 		setTotalPriceProduct(newProduct.sellPrice * quantity);
 	}
+	const [reviews, setReviews] = useState<ReviewModel[] | null>(null);
+	const [loadingReviews, setLoadingReviews] = useState(true);
+
+	// Lấy danh sách đánh giá dựa trên id sản phẩm
+	useEffect(() => {
+		if (idProductNumber) {
+			getReviewsByProductId(idProductNumber)
+				.then((response) => {
+					setReviews(response);
+					setLoadingReviews(false);
+				})
+				.catch((error) => {
+					console.error("Error loading reviews: ", error);
+					setLoadingReviews(false);
+				});
+		}
+	}, [idProductNumber]);
 
 	if (loading) {
 		return (
@@ -268,21 +265,24 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 							</div>
 							<div className='col-lg-8 col-md-8 col-sm-12 px-5'>
 								<h2>{product.name}</h2>
-								<div className='d-flex align-items-center'>
+								<div className='d-flex align-items-center mt-5'>
 									<p className='me-5'>
-										Thể loại:{" "}
+
 										<strong>
 											{/*{genres?.map((genre) => genre.nameGenre + " ")}*/}
+											SELLER: <strong style={{color:"darkblue"}}>{"   QUANG VIET STORE"}</strong>
 										</strong>
 									</p>
 									<p className='ms-5'>
-										SELLER: <strong>{"Seller name"}</strong>
+
 									</p>
 								</div>
 								<div className='d-flex align-items-center'>
 									<div className='d-flex align-items-center'>
-										<p className='text-danger ms-2 mb-0'>
-											({product.avgRating})
+										<p className='text-danger  mb-0'>
+
+											★★★★☆
+
 										</p>
 									</div>
 									<div className='d-flex align-items-center'>
@@ -304,24 +304,24 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
                                         </span>
 									</div>
 								</div>
-								<div className='price'>
-                                    <span className='discounted-price text-danger me-3'>
+								<div className='price mt-3'>
+                                    <span className='discounted-price text-danger  me-3'>
                                         <strong style={{ fontSize: "32px" }}>
                                             {product.sellPrice?.toLocaleString()}$
                                         </strong>
                                     </span>
-									<span className='original-price small me-3'>
+									<span className='original-price  me-3'>
                                         <strong>
-                                            <del>{product.listPrice?.toLocaleString()}$</del>
+                                            <del>{product.listPrice=product.sellPrice*1.2} $</del>
                                         </strong>
                                     </span>
 									<h4 className='my-0 d-inline-block'>
                                         <span className='badge bg-danger'>
-                                            {product.quantity === 0 ? "Hết hàng" : ""}
+                                            {product.quantity === 0 ? "Sold out" : ""}
                                         </span>
 									</h4>
 								</div>
-								<div className='mt-3'>
+								<div className='mt-4' style={{textAlign:"start"}}>
 									<p>
 										Shipping to:{" "}
 										<strong>P. Thanh Bình, Q. Hải Châu, TP. Đà Nẵng</strong>{" "}
@@ -338,16 +338,16 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 											height='20'
 											alt='free ship'
 										/>
-										<span className='ms-3'>Free ship</span>
+										<span className='ms-3 mt-3'>Free ship</span>
 									</div>
 								</div>
 								<div className='d-flex align-items-center mt-3'>
-									<strong className='me-5'>Quantity: </strong>
-									<span className='ms-4'>
+									<strong className='me-2'>Quantity: </strong>
+									<span className='ms-1'>
                                         {product.quantity} Available Products
                                     </span>
 								</div>
-								<div className='mt-4 d-flex align-items-center'>
+								<div className='mt-5 d-flex align-items-center'>
 									{product.quantity === 0 ? (
 										<Button
 											variant='outlined'
@@ -382,14 +382,39 @@ const ProductDetail: React.FC<BookDetailProps> = (props) => {
 							</div>
 						</div>
 					</div>
-					<div className='container p-4 bg-white my-3 rounded'>
-						<h5 className='my-3'>Product Description</h5>
+					<div className='container p-4 bg-white my-3 rounded' style={{textAlign:"justify"}}>
+						<h3 className='my-3'>Product Description</h3>
 						<hr />
-						<TextEllipsis text={product.description + ""} limit={1000} />
+						<TextEllipsis text={product.description+""} limit={90000} />
 					</div>
-					<div className='container p-4 bg-white my-3 rounded'>
-						<h5 className='my-3'>Customer Reviews</h5>
+					<div className='container p-4 bg-white my-3 rounded'  style={{textAlign:"justify"}}>
+						<h3 className='my-3'>Customer Reviews</h3>
 						<hr />
+						{loadingReviews ? (
+							<div className='d-flex justify-content-center'>
+								<Skeleton
+									variant='rectangular'
+									width={200}
+									height={100}
+								/>
+							</div>
+						) : (
+							<>
+								{reviews?.map((review) => (
+									<div key={review.idReview} className='mb-3'>
+										<div className='d-flex align-items-center'>
+											<p className='me-3'>
+												<strong>{review.idReview}</strong>
+											</p>
+											<p className='text-secondary'>
+												{review.timestamp}
+											</p>
+										</div>
+										<p>{review.content}</p>
+									</div>
+								))}
+							</>
+						)}
 					</div>
 				</>
 			) : (

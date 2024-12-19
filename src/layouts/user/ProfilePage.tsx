@@ -153,6 +153,7 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
             const errorText = await response.text();
             throw new Error(`Error: ${response.status} ${response.statusText} - ${errorText}`);
         }
+        console.log("Response: ", response);
         return response.json();
     }
 
@@ -713,8 +714,8 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
 
                                     <form onSubmit={handleRegisterShop}>
                                         <TextField label="Shop Name" value={shopName}
-                                            onChange={(e) => setShopName(e.target.value)}
-                                            required fullWidth
+                                                   onChange={(e) => setShopName(e.target.value)}
+                                                   required fullWidth
                                                    InputProps={{
                                                        style: { paddingTop: '20px' } // Adjust the padding as needed
                                                    }}

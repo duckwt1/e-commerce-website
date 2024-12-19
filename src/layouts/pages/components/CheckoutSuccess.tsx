@@ -6,20 +6,17 @@ export const CheckoutSuccess = () => {
 	return (
 		<div className='container bg-light my-3 rounded-3 p-3'>
 			<div className='d-flex align-items-center justify-content-center flex-column p-5'>
-				<img
-					src='https://cdn0.fahasa.com/skin/frontend/base/default/images/order_status/ico_successV2.svg?q=10311'
-					alt='success'
-				/>
+				<img src='https://cdn0.fahasa.com/skin/frontend/base/default/images/order_status/ico_successV2.svg?q=10311' alt='success' />
 				<h2 className='my-3 text-success'>
-					Đơn hàng của bạn đã được tiếp nhận
+					Your order has been received
 				</h2>
-				<p className='mb-2'>Cảm ơn bạn đã mua sản phẩm của chúng tôi</p>
+				<p className='mb-2'>Thank you for purchasing our product</p>
 				<p className='mb-2'>
-					Bạn sẽ sớm nhận được email xác nhận đơn hàng từ chúng tôi
+					You will receive an order confirmation email from us shortly
 				</p>
 				<Link to={"/search"}>
 					<Button variant='contained' className='my-3'>
-						Tiếp tục mua sắm
+						Continue shopping
 					</Button>
 				</Link>
 			</div>

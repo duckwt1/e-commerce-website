@@ -17,14 +17,18 @@ const Top3BestSeller = () => {
 				console.log(error);
 			});
 	}, []);
+
+
+
+
 	return (
 		<table className='table table-striped table-hover'>
 			<thead>
 				<tr>
 					<th scope='col'>ID</th>
-					<th scope='col'>ẢNH</th>
-					<th scope='col'>TÊN SÁCH</th>
-					<th scope='col'>ĐÃ BÁN</th>
+					<th scope='col'>THUMNAIL</th>
+					<th scope='col'>NAME</th>
+					<th scope='col'>SOLD</th>
 				</tr>
 			</thead>
 			<tbody>

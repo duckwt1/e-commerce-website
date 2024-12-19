@@ -32,7 +32,7 @@ const RequireAdmin = <P extends object>(
 			const role = decodedToken.role;
 
 			// Kiểm tra quyền
-			if (role !== "ADMIN") {
+			if (role !== "ROLE_MANAGER") {
 				navigate("/error-403");
 			}
 		}, [navigate]);

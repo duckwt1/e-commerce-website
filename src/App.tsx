@@ -28,6 +28,10 @@ import FavoriteProductsList from "./layouts/products/FavoriteProductsList";
 import DashboardPage from './admin/Dashboard';
 import { Error404Page } from './layouts/pages/404Page';
 import { Slidebar } from './admin/components/Slidebar';
+import {getAllcategorys} from "./api/CategoryAPI";
+import {getCartAllByIdUser } from "./api/CartApi";
+import {getRoleByIdUser} from "./api/RoleApi";
+import {getRoleByToken} from "./layouts/utils/JwtService";
 
 const MyRoutes = () => {
     const [reloadAvatar, setReloadAvatar] = useState(0);
@@ -75,10 +79,10 @@ const MyRoutes = () => {
     const isHomepage = location.pathname === '/';
 
 
-    
+
     return (
         <div className="App">
-            {!hideHeaderFooter && (
+            {!hideHeaderFooter && !isAdminPath && (
                 <>
                     <div className={`header ${isHeaderVisible ? 'visible' : 'hidden'}`}><Header /></div>
                     <div className={`navbar ${isSticky ? 'sticky' : ''} ${isNavbarVisible ? 'visible' : 'hidden'}`} style={{ padding: '0' }}><Navigation /></div>
@@ -105,7 +109,7 @@ const MyRoutes = () => {
                     <FaArrowAltCircleUp />
                 </button>
             )}
-            {!hideHeaderFooter && <Footer className={isHomepage ? 'homepage-footer' : ''} />}
+            {!hideHeaderFooter && !isAdminPath && <Footer className={isHomepage ? 'homepage-footer' : ''} />}
 
             {/* Admin */}
             {isAdminPath && (

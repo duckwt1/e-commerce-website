@@ -86,6 +86,12 @@ const BookProps: React.FC<BookProps> = ({ product }) => {
                             </Tooltip>
                         </h5>
                     </Link>
+
+                    {/*description*/}
+                    <span className={"mt-3"} style={{ fontSize: "14px", color: "#aaa" }}>
+                                  {product.description.length > 50 ? product.description.substring(0, 50) + "..." : product.description}
+                            </span>
+
                     <div className="price mb-3 d-flex align-items-center justify-content-between">
                         <div className="d-flex align-items-center">
                             <span className="discounted-price text-danger mt-2">
@@ -96,7 +102,10 @@ const BookProps: React.FC<BookProps> = ({ product }) => {
                                     <del>{product.listPrice?.toLocaleString()} $</del>
                                 </span>
                             )}
+
                         </div>
+
+
                         <span className="ms-2" style={{ fontSize: "12px", color: "#aaa" }}>
                             Sold {product.soldQuantity}
                         </span>

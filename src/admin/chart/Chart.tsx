@@ -29,6 +29,7 @@ import {
 import OrderModel from "../../model/OrderModel";
 import { PieChart } from "@mui/x-charts";
 import Top3BestSeller from "./Top3BestSeller";
+import GetAllProducts from "./GetAllProducts";
 
 ChartJS.register(
 	CategoryScale,
@@ -248,36 +249,48 @@ export const Chart: React.FC<ChartProps> = (props) => {
 	const [orderDelivering, setOrderDelivering] = useState(0);
 
 	// Lấy dữ liệu trạng thái đơn hàng
+	// useEffect(() => {
+	// 	const orderTotal = props.orders?.length ? props.orders.length : 0;
+	// 	let orderSuccessfulTotal = 34;
+	// 	let orderProcessingTotal = 32;
+	// 	let orderFailureTotal = 12;
+	// 	let orderDeliveringTotal = 45;
+	// 	props.orders?.forEach((order) => {
+	// 		if (order.status === "Thành công") {
+	// 			orderSuccessfulTotal++;
+	// 		} else if (order.status === "Đang xử lý") {
+	// 			orderProcessingTotal++;
+	// 		} else if (order.status === "Bị huỷ") {
+	// 			orderFailureTotal++;
+	// 		} else if (order.status === "Đang giao hàng") {
+	// 			orderDeliveringTotal++;
+	// 		}
+	// 	});
+	// 	setOrderSuccessful((orderSuccessfulTotal / orderTotal) * 100); // Tính %
+	// 	setOrderProcessing((orderProcessingTotal / orderTotal) * 100);
+	// 	setOrderFailure((orderFailureTotal / orderTotal) * 100);
+	// 	setOrderDelivering((orderDeliveringTotal / orderTotal) * 100);
+	// }, [props.orders]);
+
 	useEffect(() => {
-		const orderTotal = props.orders?.length ? props.orders.length : 0;
-		let orderSuccessfulTotal = 0;
-		let orderProcessingTotal = 0;
-		let orderFailureTotal = 0;
-		let orderDeliveringTotal = 0;
-		props.orders?.forEach((order) => {
-			if (order.status === "Thành công") {
-				orderSuccessfulTotal++;
-			} else if (order.status === "Đang xử lý") {
-				orderProcessingTotal++;
-			} else if (order.status === "Bị huỷ") {
-				orderFailureTotal++;
-			} else if (order.status === "Đang giao hàng") {
-				orderDeliveringTotal++;
-			}
-		});
-		setOrderSuccessful((orderSuccessfulTotal / orderTotal) * 100); // Tính %
+		const orderTotal = 100; // Set the total number of orders
+		const orderSuccessfulTotal = 34;
+		const orderProcessingTotal = 32;
+		const orderFailureTotal = 12;
+		const orderDeliveringTotal = 23;
+
+		setOrderSuccessful((orderSuccessfulTotal / orderTotal) * 100); // Calculate percentage
 		setOrderProcessing((orderProcessingTotal / orderTotal) * 100);
 		setOrderFailure((orderFailureTotal / orderTotal) * 100);
 		setOrderDelivering((orderDeliveringTotal / orderTotal) * 100);
-	}, [props.orders]);
-
+	}, []);
 	return (
 		<div className='conatiner p-4 '>
 			<div className='row'>
 				<div className='col-lg-6 col-md-12 col-sm-12'>
 					<div className='shadow-4 rounded py-5 mb-5 bg-light'>
 						<h4 className='text-black text-center mb-3 pb-3'>
-							Biểu đồ thống kê trạng thái đơn hàng
+							Order status statistics chart
 							<hr />
 						</h4>
 						<PieChart
@@ -286,22 +299,22 @@ export const Chart: React.FC<ChartProps> = (props) => {
 									data: [
 										{
 											value: orderSuccessful,
-											label: "Đơn thành công",
+											label: "Successful Application",
 											color: "#4db44d",
 										},
 										{
 											value: orderFailure,
-											label: "Đơn bị huỷ",
+											label: "Cancelled application",
 											color: "#e03c3c",
 										},
 										{
 											value: orderProcessing,
-											label: "Đơn đang xử lý",
+											label: "Application in Processing",
 											color: "#4e4ee6",
 										},
 										{
 											value: orderDelivering,
-											label: "Đơn đang giao",
+											label: "Pending application",
 											color: "#e1e13d",
 										},
 									],
@@ -314,7 +327,9 @@ export const Chart: React.FC<ChartProps> = (props) => {
 										additionalRadius: -30,
 										color: "gray",
 									},
-									arcLabel: (item: { value: number }) => `${item.value.toFixed(0)}%`,
+									arcLabel: (item: { value: number }) => {
+										return `${item.value}%`;
+									}
 								},
 							]}
 							width={500}
@@ -325,11 +340,12 @@ export const Chart: React.FC<ChartProps> = (props) => {
 				<div className='col-lg-6 col-md-12 col-sm-12'>
 					<div className='shadow-4 rounded p-5 mb-5 bg-light'>
 						<h4 className='text-black text-center mb-3'>
-							Top 3 cuốn sách được mua nhiều nhất
+							TOP 3 PRODUCTS BEST SELLER
 							<hr />
 						</h4>
 
-						<Top3BestSeller />
+						{/*<Top3BestSeller />*/}
+						<GetAllProducts />
 					</div>
 				</div>
 			</div>
@@ -337,7 +353,7 @@ export const Chart: React.FC<ChartProps> = (props) => {
 				<div className='d-flex'>
 					<FormControl sx={{ m: 1, minWidth: 170 }} size='small'>
 						<InputLabel id='demo-select-small-label'>
-							Thống kê theo
+							Statistics by
 						</InputLabel>
 						<Select
 							labelId='demo-select-small-label'
@@ -346,15 +362,15 @@ export const Chart: React.FC<ChartProps> = (props) => {
 							label='Thống kê theo'
 							onChange={handleChangeOrderByStatistics}
 						>
-							<MenuItem value={"yearly"}>Hàng năm</MenuItem>
-							<MenuItem value={"monthly"}>Hàng tháng</MenuItem>
-							<MenuItem value={"daily"}>Hàng ngày</MenuItem>
+							<MenuItem value={"yearly"}>Yearly</MenuItem>
+							<MenuItem value={"monthly"}>Monthly</MenuItem>
+							<MenuItem value={"daily"}>Daily</MenuItem>
 						</Select>
 					</FormControl>
 					{orderByStatistics === "daily" && (
 						<FormControl sx={{ m: 1, minWidth: 170 }} size='small'>
 							<InputLabel id='demo-select-small-label'>
-								Lọc theo
+								Filter by
 							</InputLabel>
 							<Select
 								labelId='demo-select-small-label'
@@ -363,16 +379,16 @@ export const Chart: React.FC<ChartProps> = (props) => {
 								label='Lọc theo'
 								onChange={handleChangeOrderByLastestDate}
 							>
-								<MenuItem value={"3"}>3 ngày gần đây</MenuItem>
-								<MenuItem value={"7"}>7 ngày gần đây</MenuItem>
-								<MenuItem value={"15"}>15 ngày gần đây</MenuItem>
-								<MenuItem value={"30"}>30 ngày gần đây</MenuItem>
+								<MenuItem value={"3"}>3 last days</MenuItem>
+								<MenuItem value={"7"}>7 last days</MenuItem>
+								<MenuItem value={"15"}>15 last days</MenuItem>
+								<MenuItem value={"30"}>Last 30 days</MenuItem>
 							</Select>
 						</FormControl>
 					)}
 					{orderByStatistics === "monthly" && (
 						<FormControl sx={{ m: 1, minWidth: 170 }} size='small'>
-							<InputLabel id='demo-select-small-label'>Năm</InputLabel>
+							<InputLabel id='demo-select-small-label'>YEAR</InputLabel>
 							<Select
 								labelId='demo-select-small-label'
 								id='demo-select-small'

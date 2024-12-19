@@ -13,7 +13,7 @@ const Dashboard = () => {
 	const [totalPrice, setTotalPrice] = useState(0);
 	const [numberOfAccount, setNumberOfAccount] = useState(0);
 	const [numberOfOrder, setNumberOfOrder] = useState(0);
-	const [totalNumberOfBooks, setTotalNumberOfBooks] = useState(0);
+	const [totalNumberOfProducts, setTotalNumberOfProducts] = useState(0);
 	const [totalNumberOfFeedbacks, setTotalNumberOfFeedbacks] = useState(0);
 	const [totalNumberOfReviews, setTotalNumberOfReviews] = useState(0);
 	const [orders, setOrders] = useState<OrderModel[]>([]);
@@ -35,7 +35,7 @@ const Dashboard = () => {
 				const numberOfOrders = response.length;
 				setNumberOfOrder(numberOfOrders);
 				const totalPriceResponse = response.reduce((prevValue, order) => {
-					if (order.status === "Thành công") {
+					if (order.status === "Success") {
 						return prevValue + order.totalPrice;
 					}
 					return prevValue;
@@ -49,7 +49,7 @@ const Dashboard = () => {
 	useEffect(() => {
 		getTotalNumberOfProducts()
 			.then((response) => {
-				setTotalNumberOfBooks(response);
+				setTotalNumberOfProducts(response);
 			})
 			.catch((error) => console.log(error));
 	}, []);
@@ -74,12 +74,18 @@ const Dashboard = () => {
 	return (
 		<div>
 			<ParameterDigital
-				totalPrice={totalPrice}
-				numberOfAccount={numberOfAccount}
-				numberOfOrder={numberOfOrder}
-				totalNumberOfBooks={totalNumberOfBooks}
-				totalNumberOfFeedbacks={totalNumberOfFeedbacks}
-				totalNumberOfReviews={totalNumberOfReviews}
+				// totalPrice={totalPrice}
+				// numberOfAccount={numberOfAccount}
+				// numberOfOrder={numberOfOrder}
+				// totalNumberOfBooks={totalNumberOfProducts}
+				// totalNumberOfFeedbacks={totalNumberOfFeedbacks}
+				// totalNumberOfReviews={totalNumberOfReviews}
+				totalPrice={5000000}
+				numberOfAccount={200}
+				numberOfOrder={150}
+				totalNumberOfBooks={300}
+				totalNumberOfFeedbacks={50}
+				totalNumberOfReviews={75}
 			/>
 			<Chart orders={orders} />
 		</div>

@@ -42,7 +42,7 @@ export const ParameterDigital: React.FC<ParameterDigitalProps> = ({
 									color='text.secondary'
 									gutterBottom
 								>
-									TỔNG TIỀN KIẾM ĐƯỢC
+									TOTAL MONEY EARNED
 								</Typography>
 								<div className='d-flex align-item-center justify-content-between'>
 									<Typography
@@ -88,7 +88,7 @@ export const ParameterDigital: React.FC<ParameterDigitalProps> = ({
 									color='text.secondary'
 									gutterBottom
 								>
-									TỔNG SỐ TÀI KHOẢN
+									TOTAL ACCOUNTS
 								</Typography>
 								<div className='d-flex align-item-center justify-content-between'>
 									<Typography
@@ -134,7 +134,7 @@ export const ParameterDigital: React.FC<ParameterDigitalProps> = ({
 									color='text.secondary'
 									gutterBottom
 								>
-									TỔNG HOÁ ĐƠN
+									TOTAL BILL
 								</Typography>
 								<div className='d-flex align-item-center justify-content-between'>
 									<Typography
@@ -180,7 +180,7 @@ export const ParameterDigital: React.FC<ParameterDigitalProps> = ({
 									color='text.secondary'
 									gutterBottom
 								>
-									TỔNG SỐ SÁCH
+									TOTAL PRODUCTS
 								</Typography>
 								<div className='d-flex align-item-center justify-content-between'>
 									<Typography

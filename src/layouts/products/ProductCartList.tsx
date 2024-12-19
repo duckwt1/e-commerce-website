@@ -1,37 +1,39 @@
 import React, { useEffect, useState } from "react";
 import ProductCartProps from "./components/ProductCartProps";
 import { Button } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { CheckoutPage } from "../pages/CheckoutPage";
 import { isToken } from "../utils/JwtService";
 import { useCartItem } from "../utils/CartItemContext";
+import { getCartAllByIdUser } from "../../api/CartApi";
 
-interface BookCartListProps {}
-
-const ProductCartList: React.FC<BookCartListProps> = () => {
-	const { setTotalCart, cartList, setCartList } = useCartItem();
+const ProductCartList: React.FC = () => {
+	const { setTotalCart, setCartList, cartList } = useCartItem();
 	const [totalPriceProduct, setTotalPriceProduct] = useState(0);
 
+	// Fetch cart items when component mounts
 	useEffect(() => {
-		const total = cartList.reduce((totalPrice, cartItem) => {
-			return totalPrice + cartItem.quantity * cartItem.product.sellPrice;
-		}, 0);
-		setTotalPriceProduct(total);
-		setTotalCart(cartList.length);
-	}, [cartList, setTotalCart]); // Khúc này đang bị overloading
+		const fetchCart = async () => {
+			try {
+				const cartItems = await getCartAllByIdUser();
+				setCartList(cartItems); // Update the cart list
+			} catch (error) {
+				console.error("Failed to fetch cart items:", error);
+			}
+		};
 
-	const navigation = useNavigate();
-	// Xử lý xoá sách
-	function handleRemoveBook(productId: number) {
-		const newCartList = cartList.filter(
-			(cartItem) => cartItem.product.productId !== productId
+		fetchCart();
+	}, [setCartList]);
+
+	// Recalculate total price whenever the cartList changes
+	useEffect(() => {
+		const total = cartList.reduce(
+			(sum, cartItem) => sum + (cartItem.product.sellPrice || 0) * cartItem.quantity,
+			0
 		);
-		localStorage.setItem("cart", JSON.stringify(newCartList));
-		setCartList(newCartList);
-		setTotalCart(newCartList.length);
-		toast.success("Delete product successfully");
-	}
+		setTotalPriceProduct(total);
+	}, [cartList]);
 
 	// Thanh toán
 	const [isCheckout, setIsCheckout] = useState(false);
@@ -65,16 +67,14 @@ const ProductCartList: React.FC<BookCartListProps> = () => {
 						}
 					>
 						{/* Bên trái */}
-						<h2 className='mt-2 px-3 py-3 mb-0'>
-							Cart <span>({cartList.length} Product)</span>
-						</h2>
+
 						<div className='col-lg-8 col-md-12 col-sm-12 '>
 							<div className='container-book bg-light '>
 								<div className='row px-4 py-3'>
 									<div className='col'> Product</div>
 									<div className='col-3 text-center'>Quantity</div>
-									<div className='col-2 text-center'>Số tiền</div>
-									<div className='col-2 text-center'>Thao tác</div>
+									<div className='col-2 text-center'>PRICE</div>
+									<div className='col-2 text-center'>ACTION</div>
 								</div>
 							</div>
 							<div className='container-book bg-light mt-3 px-3'>
@@ -83,7 +83,7 @@ const ProductCartList: React.FC<BookCartListProps> = () => {
 										return (
 											<ProductCartProps
 												cartItem={cartItem}
-												handleRemoveBook={handleRemoveBook}
+												handleRemoveBook={setTotalCart}
 												key={cartItem.product.productId}
 											/>
 										);
@@ -101,7 +101,7 @@ const ProductCartList: React.FC<BookCartListProps> = () => {
 								<span>Total:</span>
 								<span>
 									<strong>
-										{totalPriceProduct.toLocaleString()} đ
+										{totalPriceProduct.toLocaleString()} $
 									</strong>
 								</span>
 							</div>
@@ -112,7 +112,7 @@ const ProductCartList: React.FC<BookCartListProps> = () => {
 								</span>
 								<span className='text-danger fs-5'>
 									<strong>
-										{totalPriceProduct.toLocaleString()} đ
+										{totalPriceProduct.toLocaleString()} $
 									</strong>
 								</span>
 							</div>
@@ -127,7 +127,7 @@ const ProductCartList: React.FC<BookCartListProps> = () => {
 										toast.warning(
 											"Bạn cần đăng nhập để thực hiện chức năng này"
 										);
-										navigation("/login");
+										// navigation.navigate("/login");
 									}
 								}}
 							>

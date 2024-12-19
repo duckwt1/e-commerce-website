@@ -4,24 +4,26 @@ import { request } from "./Request";
 
 interface resultInterface {
    categoryList: CategoryModel[];
-   category: CategoryModel;
+   category: CategoryModel | null;
 }
 
 async function getCategory(endpoint: string): Promise<resultInterface> {
-   // Gọi phương thức request()
    const response = await request(endpoint);
 
+   const categoryList: CategoryModel[] = response.map((categoryData: any) => {
+      const idCategory = categoryData.id;
+      const name = categoryData.name;
+      const description = categoryData.description;
+      const thumbnail = categoryData.thumbnail;
 
-   const categoryList: any = response._embedded.categorys.map((categoryData: any) => ({
-      ...categoryData,
-   }))
+      return new CategoryModel(idCategory, name);
+   });
 
-   return { categoryList: categoryList, category: response.category };
+   return { categoryList: categoryList, category: null };
 }
 
 export async function getAllcategorys(): Promise<resultInterface> {
-   const endpoint = endpointBE + "/category?sort=idcategory";
-
+   const endpoint = endpointBE + "/api/category/get-all";
    return getCategory(endpoint);
 }
 
@@ -33,7 +35,6 @@ export async function get1Category(idcategory: number): Promise<resultInterface>
 }
 
 export async function getCategoryByIdProduct(idBook: number): Promise<resultInterface> {
-   const endpoint = endpointBE + `/books/${idBook}/listcategorys`;
-
+   const endpoint = endpointBE + `/propduct/${idBook}/listcategorys`;
    return getCategory(endpoint);
 }

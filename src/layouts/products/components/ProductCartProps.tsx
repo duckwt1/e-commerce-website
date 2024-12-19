@@ -1,18 +1,17 @@
-/* eslint-disable @typescript-eslint/no-redeclare */
-import { Skeleton, Tooltip } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { Skeleton, Tooltip } from "@mui/material";
 import { Link } from "react-router-dom";
 import TextEllipsis from "./text-ellipsis/TextEllipsis";
 import SelectQuantity from "./select-quantity/SelectQuantity";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import CartItemModel from "../../../model/CartItemModel";
-import { getAllImageByProduct } from "../../../api/ImageAPI";
-import ImageModel from "../../../model/ImageModel";
 import { useConfirm } from "material-ui-confirm";
 import { isToken } from "../../utils/JwtService";
 import { endpointBE } from "../../utils/Constant";
 import { useCartItem } from "../../utils/CartItemContext";
 import { toast } from "react-toastify";
+import { getAllImageByProduct } from "../../../api/ImageAPI";
+import ImageModel from "../../../model/ImageModel";
+import CartItemModel from "../../../model/CartItemModel";
 
 interface ProductCartProps {
 	cartItem: CartItemModel;
@@ -21,10 +20,8 @@ interface ProductCartProps {
 
 const ProductCartProps: React.FC<ProductCartProps> = (props) => {
 	const { setCartList } = useCartItem();
-
 	const confirm = useConfirm();
 
-	// Tạo các biến
 	const [quantity, setQuantity] = useState(
 		props.cartItem.product.quantity !== undefined
 			? props.cartItem.quantity > props.cartItem.product.quantity
@@ -59,7 +56,6 @@ const ProductCartProps: React.FC<ProductCartProps> = (props) => {
 			.catch(() => {});
 	}
 
-	// Lấy ảnh ra từ BE
 	useEffect(() => {
 		getAllImageByProduct(props.cartItem.product.productId)
 			.then((response) => {
@@ -72,14 +68,12 @@ const ProductCartProps: React.FC<ProductCartProps> = (props) => {
 			});
 	}, [props.cartItem.product.productId]);
 
-	// Loading ảnh thumbnail
 	let dataImage;
 	if (imageList[0]) {
 		const thumbnail = imageList.filter((i) => i.isThumbnail === true);
 		dataImage = thumbnail[0].urlImage || thumbnail[0].urlImage;
 	}
 
-	// Xử lý tăng số lượng
 	const add = () => {
 		if (quantity) {
 			if (
@@ -87,40 +81,32 @@ const ProductCartProps: React.FC<ProductCartProps> = (props) => {
 				(props.cartItem.product.quantity ? props.cartItem.product.quantity : 1)
 			) {
 				setQuantity(quantity + 1);
-				handleModifiedQuantity(props.cartItem.product.productId, 1);
+
 			} else {
 				toast.warning("Số lượng tồn kho không đủ");
 			}
 		}
 	};
 
-	// Xử lý giảm số lượng
 	const reduce = () => {
 		if (quantity) {
-			// Nếu số lượng về không thì xoá sản phẩm đó
 			if (quantity - 1 === 0) {
 				handleConfirm();
 			} else if (quantity > 1) {
 				setQuantity(quantity - 1);
-				handleModifiedQuantity(props.cartItem.product.productId, -1);
+
 			}
 		}
 	};
 
-	// Xử lý cập nhật lại quantity trong localstorage / database
-	function handleModifiedQuantity(idProduct: number, quantity: number) {
+	function handleModifiedQuantity(idProduct: number, quantityChange: number) {
 		const cartData: string | null = localStorage.getItem("cart");
 		const cart: CartItemModel[] = cartData ? JSON.parse(cartData) : [];
-		// cái isExistBook này sẽ tham chiếu đến cái cart ở trên, nên khi update thì cart nó cũng update theo
 		let isExistProduct = cart.find(
 			(cartItem) => cartItem.product.productId === idProduct
 		);
-		// Thêm 1 sản phẩm vào giỏ hàng
 		if (isExistProduct) {
-			// nếu có rồi thì sẽ tăng số lượng
-			isExistProduct.quantity += quantity;
-
-			// Cập nhật trong db
+			isExistProduct.quantity += quantityChange;
 			if (isToken()) {
 				const token = localStorage.getItem("token");
 				fetch(endpointBE + `/cart-item/update-item`, {
@@ -136,9 +122,8 @@ const ProductCartProps: React.FC<ProductCartProps> = (props) => {
 				}).catch((err) => console.log(err));
 			}
 		}
-		// Cập nhật lại
 		localStorage.setItem("cart", JSON.stringify(cart));
-		setCartList(cart);
+		setCartList([...cart]);
 	}
 
 	if (loading) {
@@ -156,6 +141,7 @@ const ProductCartProps: React.FC<ProductCartProps> = (props) => {
 			</>
 		);
 	}
+
 	return (
 		<>
 			<div className='col'>
@@ -171,28 +157,28 @@ const ProductCartProps: React.FC<ProductCartProps> = (props) => {
 					<div className='d-flex flex-column pb-2'>
 						<Link to={`/book/${props.cartItem.product.productId}`}>
 							<Tooltip title={props.cartItem.product.name} arrow>
-								<span className='d-inline'>
-									<TextEllipsis
-										text={props.cartItem.product.name + " "}
-										limit={38}
-									/>
-								</span>
+                <span className='d-inline'>
+                  <TextEllipsis
+					  text={props.cartItem.product.name + " "}
+					  limit={38}
+				  />
+                </span>
 							</Tooltip>
 						</Link>
 						<div className='mt-auto'>
-							<span className='discounted-price text-danger'>
-								<strong style={{ fontSize: "22px" }}>
-									{props.cartItem.product.sellPrice.toLocaleString()}đ
-								</strong>
-							</span>
+              <span className='discounted-price text-danger'>
+                <strong style={{ fontSize: "22px" }}>
+                  {(props.cartItem.product.sellPrice || 0)} $
+                </strong>
+              </span>
 							<span
 								className='original-price ms-3 small'
 								style={{ color: "#000" }}
 							>
-								<del>
-									{props.cartItem.product.listPrice.toLocaleString()}đ
-								</del>
-							</span>
+                <del>
+                  {(props.cartItem.product.listPrice || 0)} $
+                </del>
+              </span>
 						</div>
 					</div>
 				</div>
@@ -208,11 +194,11 @@ const ProductCartProps: React.FC<ProductCartProps> = (props) => {
 				/>
 			</div>
 			<div className='col-2 text-center my-auto'>
-				<span className='text-danger'>
-					<strong>
-						{(quantity * props.cartItem.product.sellPrice).toLocaleString()}đ
-					</strong>
-				</span>
+        <span className='text-danger'>
+          <strong>
+            {(quantity * (props.cartItem.product.sellPrice || 0))}$
+          </strong>
+        </span>
 			</div>
 			<div className='col-2 text-center my-auto'>
 				<Tooltip title={"Xoá sản phẩm"} arrow>

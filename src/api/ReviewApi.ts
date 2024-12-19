@@ -30,3 +30,42 @@ export async function getTotalNumberOfReviews(): Promise<number> {
    }
    return 0;
 }
+
+export const getReviewsByProductId = async (idProduct: number): Promise<ReviewModel[]> => {
+   return new Promise((resolve) => {
+      setTimeout(() => {
+         resolve([
+            {
+               idReview: 1,
+               content: "Great product! Highly recommend.",
+               ratingPoint: 5,
+               timestamp: "2024-11-30",
+            },
+            {
+                idReview: 2,
+                content: "Good product, fast delivery.",
+                ratingPoint: 4,
+                timestamp: "2024-11-29",
+                },
+                {
+                idReview: 3,
+                content: "Average product, expected better.",
+                ratingPoint: 3,
+                timestamp: "2024-11-28",
+            },
+            {
+                idReview: 4,
+                content: "Poor product, not worth the price.",
+                ratingPoint: 2,
+                timestamp: "2024-11-27",
+            },
+            {
+                idReview: 5,
+                content: "Terrible product, do not buy.",
+                ratingPoint: 1,
+                timestamp: "2024-11-26",
+            },
+         ]);
+      }, 1000); // Giả lập thời gian chờ API
+   });
+};
