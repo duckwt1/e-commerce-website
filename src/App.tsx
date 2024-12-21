@@ -1,21 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import './css/App.css';
 import Footer from "./layouts/header-footer/Footer";
 import Header from "./layouts/header-footer/header";
 import PolicyPage from "./layouts/pages/PolicyPage";
-import Homepage from "./layouts/pages/homepage"
+import Homepage from "./layouts/pages/homepage";
 import Navigation from "./layouts/header-footer/components/Navigation";
 import { FaArrowAltCircleUp } from "react-icons/fa";
 import RegisterPage from "./layouts/user/RegisterPage";
 import LoginPage from "./layouts/user/LoginPage";
 import { CartItemProvider } from './layouts/utils/CartItemContext';
-import { AuthProvider } from "./layouts/utils/AuthContext";
+import { AuthProvider, useAuth } from "./layouts/utils/AuthContext";
 import { ConfirmProvider } from "material-ui-confirm";
 import ProductDetail from "./layouts/products/ProductDetail";
-import {getAllImageByProduct} from "./api/ImageAPI";
-import {getAllProduct, getProductById} from "./api/ProductAPI";
-import {ForgotPassword} from "./layouts/user/ForgotPassword";
+import { ForgotPassword } from "./layouts/user/ForgotPassword";
 import ProfilePage from "./layouts/user/ProfilePage";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -28,10 +26,7 @@ import FavoriteProductsList from "./layouts/products/FavoriteProductsList";
 import DashboardPage from './admin/Dashboard';
 import { Error404Page } from './layouts/pages/404Page';
 import { Slidebar } from './admin/components/Slidebar';
-import {getAllcategorys} from "./api/CategoryAPI";
-import {getCartAllByIdUser } from "./api/CartApi";
-import {getRoleByIdUser} from "./api/RoleApi";
-import {getRoleByToken} from "./layouts/utils/JwtService";
+import { endpointBE } from "./layouts/utils/Constant";
 
 const MyRoutes = () => {
     const [reloadAvatar, setReloadAvatar] = useState(0);
@@ -41,8 +36,11 @@ const MyRoutes = () => {
     const [showScrollButton, setShowScrollButton] = useState(false);
     let lastScrollY = 0;
 
-    const location = useLocation();  // Lấy URL hiện tại
+    const location = useLocation();
     const isAdminPath = location.pathname.startsWith("/admin");
+    const { setLoggedIn } = useAuth();
+    const navigate = useNavigate();
+
     useEffect(() => {
         const handleScroll = () => {
             const header = document.getElementsByClassName("header")[0] as HTMLElement | undefined;
@@ -71,14 +69,57 @@ const MyRoutes = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    // Kiểm tra URL hiện tại để không hiển thị Header và Footer trên trang đăng nhập
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            setLoggedIn(true); // Set login state
+        }
+    }, [setLoggedIn]);
+
+    const handleLogin = async (email: string, password: string) => {
+        try {
+            const response = await fetch(`${endpointBE}/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem('token', data.token); // Store token in localStorage
+                setLoggedIn(true);
+                navigate('/'); // Redirect to home or dashboard
+            } else {
+                throw new Error('Login failed');
+            }
+        } catch (error) {
+            console.error('Login error:', error);
+        }
+    };
+
+    const fetchUserData = async () => {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${endpointBE}/auth/get-user`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            // Handle user data
+        } else {
+            throw new Error('Failed to fetch user data');
+        }
+    };
+
     const listHideHeaderFooter = ['/login', '/register', '/forgot-password', '/change-password'];
     const hideHeaderFooter = listHideHeaderFooter.includes(location.pathname);
-
-    // Determine if the current route is the homepage
     const isHomepage = location.pathname === '/';
-
-
 
     return (
         <div className="App">
@@ -104,6 +145,7 @@ const MyRoutes = () => {
                 <Route path={'/change-password'} element={<ChangePassword/>}></Route>
                 <Route path='/activate-account/:email/:activationCode' element={<ActiveAccount/>}></Route>
             </Routes>
+
             {showScrollButton && (
                 <button onClick={scrollToTop} className="scroll-to-top">
                     <FaArrowAltCircleUp />
@@ -111,7 +153,6 @@ const MyRoutes = () => {
             )}
             {!hideHeaderFooter && !isAdminPath && <Footer className={isHomepage ? 'homepage-footer' : ''} />}
 
-            {/* Admin */}
             {isAdminPath && (
                 <div className='row overflow-hidden w-100'>
                     <div className='col-2 col-md-3 col-lg-2'>
@@ -120,14 +161,8 @@ const MyRoutes = () => {
                     <div className='col-10 col-md-9 col-lg-10'>
                         <Routes>
                             <Route path='/admin' element={<DashboardPage />} />
-                            <Route
-                                path='/admin/dashboard'
-                                element={<DashboardPage />}
-                            />
-
-                            {isAdminPath && (
-                                <Route path='*' element={<Error404Page />} />
-                            )}
+                            <Route path='/admin/dashboard' element={<DashboardPage />} />
+                            {isAdminPath && <Route path='*' element={<Error404Page />} />}
                         </Routes>
                     </div>
                 </div>

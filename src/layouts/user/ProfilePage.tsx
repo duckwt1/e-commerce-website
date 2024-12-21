@@ -101,6 +101,14 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
     const [shopContact, setShopContact] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
 
+    // Call this function after updating the avatar
+    const notifyAvatarChange = () => {
+        const event = new CustomEvent('avatarChanged');
+        window.dispatchEvent(event);
+        console.log("Avatar changed");
+    };
+
+
     // Fetch user data
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -178,36 +186,38 @@ const ProfilePage: React.FC<ProfilePageProps> = (props) => {
             setDataAvatar(selectedFile); // Store the actual File object
             setIsUploadAvatar(true);
             props.setReloadAvatar(Math.random());
+            notifyAvatarChange();
         }
     }
 
     function handleSubmitAvatar() {
         const token = localStorage.getItem("token");
-        const formData = new FormData(); // Create a FormData object
+        const formData = new FormData();
         if (dataAvatar) {
-            formData.append("file", dataAvatar); // Append the File object
-            formData.append("name", user.name); // Append the name or any identifier
+            formData.append("file", dataAvatar);
+            formData.append("name", user.name);
 
             toast.promise(
                 fetch(endpointBE + "/api/upload", {
                     method: "POST",
                     headers: {
                         Authorization: `Bearer ${token}`,
-                        // No need to set 'Content-Type' header, it will be set automatically
                     },
-                    body: formData, // Send the FormData object
+                    body: formData,
                 })
                     .then((response) => {
                         if (response.ok) {
-                            return response.text(); // Get the image URL from the response
+                            return response.text();
                         }
                         throw new Error('Network response was not ok.');
                     })
                     .then((imageUrl) => {
                         toast.success("Change avatar successfully");
-                        setPreviewAvatar(imageUrl); // Update the preview with the new avatar URL
+                        setPreviewAvatar(imageUrl);
                         setIsUploadAvatar(false);
                         props.setReloadAvatar(Math.random());
+                        notifyAvatarChange();
+                        window.location.reload(); // Reload lại trang
                     })
                     .catch((error) => {
                         toast.error("Change avatar failed");

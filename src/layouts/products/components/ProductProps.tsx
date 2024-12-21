@@ -64,6 +64,7 @@ const BookProps: React.FC<BookProps> = ({ product }) => {
                     </div>
                 )}
                 <ProductDialog product={product} open={open} onClose={handleClose} />
+
                 {product.discountPercent > 0 && (
                     <h4 className="my-0 d-inline-block position-absolute end-0" style={{ top: "15px" }}>
                         {product.quantity === 0 ? (
